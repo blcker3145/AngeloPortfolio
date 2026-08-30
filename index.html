@@ -1,0 +1,3371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angelo Felipe — Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --preto: #000000;
+    --branco: #ffffff;
+    --neutro-100: #f5f5f5;
+    --neutro-200: #e5e5e5;
+    --neutro-400: #a3a3a3;
+    --laranja-500: #ff5900;
+    --laranja-400: #ff7a33;
+    --neutro-600: #525252;
+    --neutro-800: #1a1a1a;
+    --borda: #c7c7c7;
+  }
+
+  *{ box-sizing: border-box; margin: 0; padding: 0; }
+
+  html{ scroll-behavior: smooth; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+  }
+
+  body{
+    background: var(--preto);
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* toda dobra com âncora (a Navbar e o rodapé pulam pra ela) precisa
+     dessa folga: sem isso o título fica escondido atrás da nav, que é
+     sticky e sobrepõe o topo da seção */
+  section[id]{
+    scroll-margin-top: 115px;
+  }
+
+  .hero{
+    background: var(--preto);
+    padding: 38px 100px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 38px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero > *:not(.hero-bg){
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV · fica fora da hero, fixa (sticky) em todas as dobras */
+  .header-wrap{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 40px 100px 0;
+  }
+
+  .nav{
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    border-radius: 100px;
+    padding: 13px 40px;
+    margin-bottom: 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.015) 100%);
+    border: 1px solid rgba(255,255,255,0.14);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 8px 24px rgba(0,0,0,0.35);
+    overflow: hidden;
+    transition: background-color .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+
+  .nav::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(160px 100px at 15% 0%, rgba(255,255,255,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .nav > *{
+    position: relative;
+  }
+
+  .badge{
+    display: flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 9px;
+    background: #1e1e1e;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 85px;
+    padding: 5px 16px 5px 5px;
+    transition: background-color .3s ease, border-color .3s ease;
+  }
+
+  .badge img{
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: block;
+  }
+
+  .badge span{
+    font-family: 'Archivo', sans-serif;
+    font-weight: 500;
+    font-size: 9.4px;
+    letter-spacing: 0.05em;
+    color: #f4f2ed;
+    white-space: nowrap;
+    transition: color .3s ease;
+  }
+
+  .nav-links{
+    display: flex;
+    gap: 28px;
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--neutro-100);
+    white-space: nowrap;
+  }
+
+  .nav-links a{
+    color: inherit;
+    text-decoration: none;
+    transition: color .2s ease;
+  }
+
+  .nav-links a:hover{
+    color: var(--laranja-400);
+  }
+
+  .btn-secondary{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--borda);
+    border-radius: 100px;
+    padding: 12px 21px;
+    font-weight: 600;
+    font-size: 10.5px;
+    color: var(--neutro-100);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color .3s ease, border-color .3s ease;
+  }
+
+  /* NAV · tema claro — liga sozinho quando a dobra atrás da nav (fixa no
+     topo) é clara (Método, Perguntas). Sem isso o texto branco da nav
+     some contra um fundo quase branco. O JS só troca essa classe; toda
+     a mudança visual é CSS. */
+  .header-wrap--claro .nav{
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.015) 100%);
+    border-color: rgba(0,0,0,0.12);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 8px 24px rgba(0,0,0,0.1);
+  }
+
+  .header-wrap--claro .badge{
+    background: var(--neutro-100);
+    border-color: rgba(0,0,0,0.08);
+  }
+
+  .header-wrap--claro .badge span{
+    color: var(--neutro-800);
+  }
+
+  .header-wrap--claro .nav-links{
+    color: var(--neutro-800);
+  }
+
+  .header-wrap--claro .btn-secondary{
+    color: var(--neutro-800);
+    border-color: rgba(0,0,0,0.25);
+  }
+
+  .header-wrap--claro .nav::before{
+    background: radial-gradient(160px 100px at 15% 0%, rgba(0,0,0,0.06), transparent 70%);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .nav, .badge, .badge span, .btn-secondary{ transition: none; }
+  }
+
+  /* =========================================
+     CURSOR FOLLOWER · rastro de luz
+
+     Um ponto pequeno de luz com cauda, POR CIMA do ponteiro normal do
+     sistema — não substitui o cursor, só acompanha ele.
+
+     São vários pontinhos numa corrente: o primeiro persegue o cursor e
+     cada um dos outros persegue o ANTERIOR, nunca o cursor. O atraso
+     vai se acumulando ao longo da corrente e é isso que desenha o
+     rastro — sem precisar guardar histórico de posições.
+
+     Cada ponto encolhe e apaga conforme se afasta da cabeça (tamanho e
+     opacidade vêm inline do JS, calculados pela posição na corrente).
+
+     Sem `mix-blend-mode`: `screen` faria um brilho lindo nas dobras
+     escuras mas sumiria por completo nas duas claras (Método e
+     Perguntas). Com o degradê radial saindo de um miolo quase branco
+     pro laranja, a luz lê nas duas.
+  ========================================= */
+  .cursor-trail{
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;   /* nunca rouba clique nem hover de nada */
+    opacity: 0;
+    transition: opacity .4s ease;
+  }
+
+  .cursor-trail.is-visivel{ opacity: 1; }
+
+  .cursor-trail i{
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+      rgba(255,214,170,.95) 0%,
+      rgba(255,140,50,.75) 30%,
+      rgba(255,89,0,.35) 55%,
+      rgba(255,89,0,0) 72%);
+    will-change: transform;
+  }
+
+  /* HERO CONTENT */
+  .hero-content{
+    width: 100%;
+    max-width: 1240px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 64px;
+  }
+
+  .hero-text{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 58px;
+    max-width: 590px;
+  }
+
+  .logo{
+    width: 138px;
+    height: auto;
+  }
+
+  .hero-text h1{
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 54px;
+    line-height: 1.05;
+    color: var(--branco);
+  }
+
+  .hero-text p.lead{
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.35;
+    color: var(--neutro-100);
+  }
+
+  .ctas{
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .btn-primary{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    height: 58px;
+    padding: 0 32px;
+    border-radius: 26px;
+    border-bottom: 1px solid var(--laranja-500);
+    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+    background: linear-gradient(18deg, rgb(14,0,0) 24.5%, rgb(18,1,0) 36.8%, rgb(34,7,0) 49.3%, rgb(93,9,0) 59.8%, rgb(193,11,0) 68.9%, var(--laranja-500) 80.5%, rgb(225,154,102) 97.2%);
+    background-size: 220% 220%;
+    animation: btnGradient 6s ease-in-out infinite;
+    transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease;
+    color: var(--neutro-200);
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .btn-primary img{
+    width: 24px;
+    height: 24px;
+  }
+
+  .ctas .btn-secondary{
+    padding: 18px 32px;
+    font-size: 16px;
+  }
+
+  /* HERO IMAGE */
+  .hero-photo{
+    position: relative;
+    width: 460px;
+    height: 704px;
+    border-radius: 26px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .hero-photo img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-photo .tag{
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--neutro-100);
+    border-radius: 77px;
+    padding: 12px 25px;
+    white-space: nowrap;
+  }
+
+  .hero-photo .tag span{
+    font-weight: 500;
+    font-size: 10px;
+    color: #ffbd99;
+  }
+
+  /* NUMEROS */
+  .numeros{
+    width: 100%;
+    max-width: 1182px;
+    display: flex;
+    gap: 30px;
+  }
+
+  .numero{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    padding: 19px 30px;
+    height: 128px;
+    position: relative;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.008) 100%);
+    border: 1px solid rgba(255,255,255,0.09);
+    backdrop-filter: blur(11px);
+    -webkit-backdrop-filter: blur(11px);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(0,0,0,0.22);
+    overflow: hidden;
+  }
+
+  .numero::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(120px 80px at 20% 0%, rgba(255,255,255,0.07), transparent 70%);
+    pointer-events: none;
+  }
+
+  .numero strong{
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1.1;
+    color: var(--neutro-200);
+  }
+
+  .numero p{
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.35;
+    color: #737373;
+  }
+
+  /* =========================================
+     ENTRADA DOS TEXTOS + INTERAÇÕES
+  ========================================= */
+
+  /* sobe e aparece */
+  @keyframes revealUp{
+    from{ opacity: 0; transform: translateY(20px); }
+    to  { opacity: 1; transform: none; }
+  }
+
+  /* a linha do título sobe de dentro da máscara */
+  @keyframes revealLine{
+    from{ transform: translateY(105%); }
+    to  { transform: none; }
+  }
+
+  /* degradê do botão laranja em movimento contínuo */
+  @keyframes btnGradient{
+    0%  { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100%{ background-position: 0% 50%; }
+  }
+
+  .header-wrap .nav,
+  .hero-text .logo,
+  .hero-text p.lead,
+  .hero-text .ctas,
+  .hero-photo,
+  .numeros .numero{
+    opacity: 0;
+    animation: revealUp .85s cubic-bezier(.22,.61,.36,1) forwards;
+  }
+
+  .header-wrap .nav             { animation-delay: .05s; }
+  .hero-text .logo              { animation-delay: .18s; }
+  .hero-photo                   { animation-delay: .35s; }
+  .hero-text p.lead             { animation-delay: .62s; }
+  .hero-text .ctas              { animation-delay: .74s; }
+  .numeros .numero:nth-child(1) { animation-delay: .88s; }
+  .numeros .numero:nth-child(2) { animation-delay: .96s; }
+  .numeros .numero:nth-child(3) { animation-delay: 1.04s; }
+
+  /* título revelado linha a linha.
+     o padding/margin compensados dão espaço pro "ç" sem cortar na máscara */
+  .hero-text h1 .line{
+    display: block;
+    overflow: hidden;
+    padding-bottom: .08em;
+    margin-bottom: -.08em;
+  }
+
+  .hero-text h1 .line > span{
+    display: block;
+    transform: translateY(105%);
+    animation: revealLine .9s cubic-bezier(.22,.61,.36,1) forwards;
+  }
+
+  .hero-text h1 .line:nth-child(1) > span{ animation-delay: .25s; }
+  .hero-text h1 .line:nth-child(2) > span{ animation-delay: .37s; }
+  .hero-text h1 .line:nth-child(3) > span{ animation-delay: .49s; }
+
+  /* destaque laranja do título */
+  .hero-text h1 .hl{ color: var(--laranja-500); }
+
+  /* botão laranja */
+  .btn-primary:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(255,89,0,.30), 0 4px 4px rgba(0,0,0,.25);
+    animation-duration: 2.5s;      /* degradê acelera no hover */
+  }
+
+  .btn-primary img{
+    transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  .btn-primary:hover img{
+    transform: scale(1.14) rotate(-8deg);
+  }
+
+  /* botões de contorno */
+  .btn-secondary{
+    transition: transform .35s cubic-bezier(.22,.61,.36,1),
+                border-color .35s ease,
+                background-color .35s ease;
+  }
+
+  .btn-secondary:hover{
+    transform: translateY(-2px);
+    border-color: #fff;
+    background-color: rgba(255,255,255,.06);
+  }
+
+  .btn-secondary .arrow{
+    display: inline-block;
+    transition: transform .35s cubic-bezier(.22,.61,.36,1);
+  }
+
+  .btn-secondary:hover .arrow{
+    transform: translateX(5px);
+  }
+
+  /* sem animação = tudo visível na hora (senão o texto ficaria invisível) */
+  @media (prefers-reduced-motion: reduce){
+    .header-wrap .nav,
+    .hero-text .logo,
+    .hero-text p.lead,
+    .hero-text .ctas,
+    .hero-photo,
+    .numeros .numero{
+      opacity: 1;
+      animation: none;
+    }
+    .hero-text h1 .line > span{ transform: none; animation: none; }
+    .btn-primary{ animation: none; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px){
+    .header-wrap{ padding: 24px 24px 0; }
+    .hero{ padding: 38px 24px 60px; }
+    .nav{ padding: 12px 20px; }
+    .nav-links{ display: none; }
+    .hero-content{ flex-direction: column-reverse; }
+    .hero-text{ max-width: 100%; align-items: center; text-align: center; }
+    .hero-text h1{ font-size: 40px; }
+    .hero-text p.lead{ font-size: 17px; }
+    .ctas{ flex-wrap: wrap; justify-content: center; }
+    .hero-photo{ width: 100%; max-width: 460px; height: 560px; }
+    .numeros{ flex-direction: column; height: auto; }
+    .numero{ height: auto; padding: 12px 0; }
+    .stats{ flex-direction: column; gap: 40px; padding: 60px 24px; }
+    .stat p.stat-num{ font-size: 72px; }
+  }
+
+  /* SEGUNDA DOBRA · NÚMEROS DE IMPACTO */
+  .stats-section{
+    background: var(--preto);
+    padding: 80px 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stats{
+    display: flex;
+    gap: 74px;
+  }
+
+  .stat{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .stat-num-canvas{
+    display: block;
+  }
+
+  .stat p{
+    font-weight: 400;
+    font-size: 21px;
+    color: var(--neutro-100);
+    white-space: nowrap;
+  }
+
+  /* =========================================
+     TERCEIRA DOBRA · DOR
+
+     O bloco visual é compacto — exatamente o espaçamento do Figma —
+     e fica PINADO (position: sticky) parado no centro da tela.
+     Por trás dele, a seção é mais alta que 100vh: é esse espaço extra,
+     invisível, que dá "corda" pro scroll. Enquanto o usuário rola por
+     ele, o JS troca qual item está com a leitura selecionada, sem
+     nunca esticar o layout que aparece na tela.
+  ========================================= */
+  .dor-section{
+    background: var(--preto);
+    position: relative;
+  }
+
+  .dor-pin{
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 100px;
+  }
+
+  .dor-inner{
+    width: 100%;
+    max-width: 1240px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .dor-title{
+    font-weight: 700;
+    font-size: 29px;
+    line-height: 1.1;
+    color: var(--neutro-100);
+  }
+
+  .dor-list{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .dor-item{
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .dor-bar{
+    flex-shrink: 0;
+    width: 4px;
+    height: 47px;
+    border-radius: 100px;
+    background: var(--neutro-600);
+    transition: background-color .5s ease, box-shadow .5s ease;
+  }
+
+  .dor-text{
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.35;
+    color: var(--neutro-400);
+    transition: font-size .45s cubic-bezier(.22,.61,.36,1), color .45s ease;
+  }
+
+  .dor-item.is-active .dor-bar{
+    background: var(--laranja-500);
+    box-shadow: 0 0 16px rgba(255,89,0,.5);
+  }
+
+  .dor-item.is-active .dor-text{
+    font-size: 38px;
+    color: var(--neutro-100);
+  }
+
+  /* sem scroll-pin pra quem pede menos movimento: bloco estático,
+     primeiro item já selecionado */
+  .dor-section.no-scrub{ height: auto !important; }
+  .dor-section.no-scrub .dor-pin{ position: static; min-height: 0; }
+
+  @media (prefers-reduced-motion: reduce){
+    .dor-bar, .dor-text{ transition: none; }
+  }
+
+  @media (max-width: 1100px){
+    .dor-pin{ padding: 60px 24px; }
+    .dor-title{ font-size: 24px; }
+    .dor-item.is-active .dor-text{ font-size: 26px; }
+  }
+
+  /* QUARTA DOBRA · O QUE VOCÊ RECEBE (frentes)
+     Figma: quadro de 1440x1024, conteúdo centralizado verticalmente nele */
+  .frentes-section{
+    background:
+      linear-gradient(122deg, var(--preto) 30%, rgb(14,7,3) 76.6%, var(--laranja-400) 128%);
+    padding: 80px 100px;
+    min-height: 1024px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .frentes-inner{
+    width: 100%;
+    max-width: 1240px;
+    display: flex;
+    flex-direction: column;
+    gap: 84px;
+  }
+
+  .frentes-header{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .frentes-kicker{
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 1.35;
+    color: var(--neutro-100);
+  }
+
+  .frentes-header h2{
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1.1;
+    color: var(--laranja-500);
+  }
+
+  .frentes-list{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .frente{
+    display: flex;
+    align-items: flex-start;
+    gap: 48px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--borda);
+  }
+
+  .frente-index{
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--laranja-400);
+    white-space: nowrap;
+  }
+
+  .frente-texto{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--neutro-100);
+  }
+
+  .frente-texto h3{
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.2;
+  }
+
+  .frente-texto p{
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.35;
+  }
+
+  /* caixa do ícone: tilt 3D que segue o mouse (JS calcula o ângulo),
+     mais um brilho radial que acompanha o cursor por cima do degradê */
+  .frente-icone{
+    flex-shrink: 0;
+    width: 200px;
+    height: 120px;
+    border-radius: 26px;
+    border-bottom: 1px solid var(--laranja-500);
+    box-shadow: 0 4px 4px rgba(0,0,0,0.25);
+    background: linear-gradient(37deg, rgb(14,0,0) 24.5%, rgb(18,1,0) 36.8%, rgb(34,7,0) 49.3%, rgb(93,9,0) 59.8%, rgb(193,11,0) 68.9%, var(--laranja-500) 80.5%, rgb(225,154,102) 97.2%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform .5s cubic-bezier(.22,.61,.36,1), box-shadow .5s ease;
+    will-change: transform;
+  }
+
+  .frente-icone::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(160px circle at var(--mx,50%) var(--my,50%), rgba(255,183,110,.85), rgba(255,110,0,.45) 45%, transparent 72%);
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity .4s ease;
+    pointer-events: none;
+  }
+
+  .frente-icone.is-hover{
+    box-shadow: 0 14px 30px rgba(255,89,0,.35), 0 4px 4px rgba(0,0,0,0.25);
+  }
+
+  .frente-icone.is-hover::after{
+    opacity: 1;
+  }
+
+  .frente-icone img{
+    width: 42px;
+    height: 42px;
+    transform: translateZ(24px);
+    transition: transform .5s cubic-bezier(.22,.61,.36,1);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .frente-icone, .frente-icone img{ transition: none !important; }
+  }
+
+  @media (max-width: 1100px){
+    .frentes-section{ padding: 60px 24px; min-height: 0; }
+    .frentes-header h2{ font-size: 32px; }
+    .frente{ flex-wrap: wrap; gap: 20px; }
+    .frente-texto{ order: 1; flex: 1 1 100%; }
+    .frente-index{ order: 0; }
+    .frente-icone{ order: 2; width: 100%; height: 100px; }
+  }
+
+  /* =========================================
+     QUINTA DOBRA · TRABALHO SELECIONADO
+
+     Os cards somam mais largura que a área visível (1607 vs 1240),
+     então a fileira rola na horizontal. A barrinha embaixo é o
+     indicador de posição — some a barra nativa e usa essa no lugar.
+  ========================================= */
+  .proj-section{
+    background: var(--preto);
+    padding: 80px 100px;
+    min-height: 868px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .proj-inner{
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 68px;
+  }
+
+  .proj-header{
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .proj-header h2{
+    font-weight: 600;
+    font-size: 44px;
+    line-height: 1.1;
+    color: var(--neutro-100);
+  }
+
+  .proj-header p{
+    font-weight: 500;
+    font-size: 17.4px;
+    line-height: 1.35;
+    color: #737373;
+  }
+
+  .proj-scroll{
+    display: flex;
+    gap: 28px;
+    overflow-x: auto;
+    scrollbar-width: none;          /* Firefox */
+    -ms-overflow-style: none;
+    cursor: grab;
+    /* deixa o card sangrar até a borda da tela ao rolar */
+    padding-bottom: 4px;
+  }
+
+  .proj-scroll::-webkit-scrollbar{ display: none; }
+  .proj-scroll.is-dragging{ cursor: grabbing; }
+  .proj-scroll.is-dragging a{ pointer-events: none; }
+
+  .proj-card{
+    flex-shrink: 0;
+    width: 397.33px;
+    display: flex;
+    flex-direction: column;
+    gap: 42px;
+    will-change: width;
+    transition: width .65s cubic-bezier(.16,.84,.24,1);
+  }
+
+  /* card selecionado: mesma altura de miniatura (240px), mas dobra de largura */
+  .proj-card--active{
+    width: 756px;
+  }
+
+  .proj-card--active .proj-meta{ gap: 72px; }
+  .proj-card--active .proj-col{ flex: 0 0 auto; }
+
+  .proj-thumb{
+    display: block;
+    height: 240px;
+    border-radius: 26px;
+    overflow: hidden;
+  }
+
+  .proj-thumb img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .6s cubic-bezier(.22,.61,.36,1);
+  }
+
+  .proj-card:hover .proj-thumb img{ transform: scale(1.05); }
+
+  /* as imagens dessa dobra são colagens de posts — mostrar a fileira
+     de cima (onde está o conteúdo principal), não o centro do grid */
+  .proj-section--social .proj-thumb img{ object-position: top; }
+
+  .proj-meta{
+    display: flex;
+    gap: 42px;
+    transition: gap .65s cubic-bezier(.16,.84,.24,1);
+  }
+
+  .proj-col{
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .proj-rule{
+    height: 1px;
+    background: var(--borda);
+    margin: 30px 0;
+  }
+
+  .proj-name{
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.2;
+    color: var(--laranja-400);
+    white-space: nowrap;
+  }
+
+  .proj-sub{
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--neutro-100);
+  }
+
+  .proj-tags{
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.35;
+    color: #737373;
+    white-space: nowrap;
+  }
+
+  .proj-link{
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.35;
+    color: var(--neutro-100);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .proj-link .arrow{
+    display: inline-block;
+    transition: transform .35s cubic-bezier(.22,.61,.36,1);
+  }
+
+  .proj-card:hover .proj-link .arrow{ transform: translateX(5px); }
+
+  .proj-cta{
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .btn-light{
+    display: inline-flex;
+    align-items: center;
+    border-radius: 100px;
+    padding: 18px 32px;
+    background: var(--neutro-100);
+    color: var(--preto);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.35;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease;
+  }
+
+  .btn-light:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(255,255,255,.16);
+  }
+
+  .proj-cta .btn-secondary{
+    padding: 18px 32px;
+    font-size: 16px;
+  }
+
+  /* trilho de progresso do carrossel — arrastável, controla o scroll dos cards */
+  .proj-track{
+    flex: 1;
+    min-width: 200px;
+    height: 28px;
+    border: 1px solid #930a00;
+    border-radius: 100px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  .proj-track-thumb{
+    position: absolute;
+    top: 50%;
+    left: 7px;
+    width: 30px;
+    height: 13.9px;
+    margin-top: -6.95px;
+    border-radius: 26px;
+    border-bottom: 1px solid var(--laranja-500);
+    box-shadow: 0 3px 6.1px -2px var(--laranja-500);
+    background: linear-gradient(30deg, rgb(14,0,0) 24.5%, rgb(18,1,0) 36.8%, rgb(34,7,0) 49.3%, rgb(93,9,0) 59.8%, rgb(193,11,0) 68.9%, var(--laranja-500) 80.5%, rgb(225,154,102) 97.2%);
+    cursor: grab;
+    transition: transform .2s ease;
+  }
+
+  .proj-track-thumb:active{ cursor: grabbing; transform: scaleY(1.15); }
+
+  @media (prefers-reduced-motion: reduce){
+    .proj-thumb img, .proj-link .arrow, .proj-card{ transition: none; }
+  }
+
+  @media (max-width: 1100px){
+    .proj-section{ padding: 60px 24px; min-height: 0; }
+    .proj-header h2{ font-size: 32px; }
+    /* mobile: card único de largura fixa, sem o efeito de expandir ao selecionar */
+    .proj-card,
+    .proj-card--active{ width: 300px; }
+    .proj-card--active .proj-meta{ gap: 42px; }
+    .proj-card--active .proj-col{ flex: 1; }
+    .proj-track{ order: 3; flex-basis: 100%; }
+  }
+
+  /* =========================================
+     OITAVA DOBRA · MÉTODO ("Do pedido à entrega")
+
+     Mesmo mecanismo da dobra "Dor" (pin por scroll): a seção é bem mais
+     alta que a tela e o excesso vira "corda" de rolagem. `.pedido-pin`
+     fica grudado (sticky) enquanto essa corda é consumida. A diferença
+     pra dobra "Dor" é o que acontece nesse tempo: aqui os 4 cartões
+     ocupam o MESMO retângulo (empilhados via position:absolute) e cada
+     um sobe de baixo pra cima conforme a rolagem, cobrindo o anterior —
+     em vez de só trocar destaque de texto. O JS calcula o progresso e
+     aplica um translateY direto por cartão; zero scroll-jacking, é só
+     leitura de posição, igual a dobra "Dor" já fazia.
+  ========================================= */
+  .pedido-section{
+    background: #fff;
+    position: relative;
+  }
+
+  /* o brilho laranja mora no bloco GRUDADO, não na seção: a seção tem a
+     altura da "corda" de rolagem inteira, então um gradiente nela desliza
+     junto com o scroll. No pin ele fica parado enquanto a dobra está presa. */
+  .pedido-pin{
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 100px;
+    background: radial-gradient(1100px 1100px at 4% 68%, #ffdecc 0%, #ffe2d2 22%, #fffdfb 52%, #ffffff 100%);
+  }
+
+  .pedido-inner{
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-start;
+    gap: 94px;
+  }
+
+  .pedido-titulo{
+    flex-shrink: 0;
+    width: 444px;
+  }
+
+  .pedido-titulo h2{
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1.1;
+    color: #000;
+  }
+
+  /* o "slot" onde os 4 cartões se revezam: tem a altura de UM cartão, que é
+     a posição final deles. Sem `overflow: hidden` de propósito — quem espera
+     na fila fica estacionado abaixo da borda da tela (o JS calcula esse
+     ponto), então some naturalmente sem precisar de recorte. Recortar aqui
+     cortava o cartão pela metade justo enquanto ele subia. */
+  .pedido-etapas{
+    position: relative;
+    flex: 1;
+    min-width: 0;
+    max-width: 580px;
+    height: 300px;
+  }
+
+  .etapa{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 44px 28px 30px;
+    background: var(--neutro-100);
+    border: 3px solid var(--neutro-400);
+    border-radius: 26px;
+    /* fora da tela até o JS medir a distância real; ele reescreve em px */
+    transform: translateY(120vh);
+    will-change: transform;
+  }
+
+  /* o primeiro já nasce no lugar; os de trás entram por cima, nessa ordem */
+  .etapa:nth-child(1){ transform: translateY(0); z-index: 1; }
+  .etapa:nth-child(2){ z-index: 2; }
+  .etapa:nth-child(3){ z-index: 3; }
+  .etapa:nth-child(4){ z-index: 4; }
+
+  .etapa-numero{
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.35;
+    color: #737373;
+  }
+
+  .etapa h3{
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.2;
+    color: #000;
+  }
+
+  .etapa-texto{
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.35;
+    color: #000;
+  }
+
+  /* sem scroll-pin pra quem pede menos movimento: vira uma lista normal
+     empilhada, sem sticky e sem os cartões um em cima do outro */
+  .pedido-section.no-scrub{ height: auto !important; }
+  .pedido-section.no-scrub .pedido-pin{ position: static; min-height: 0; }
+  .pedido-section.no-scrub .pedido-inner{ align-items: flex-start; }
+  .pedido-section.no-scrub .pedido-etapas{
+    height: auto;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .pedido-section.no-scrub .etapa{ position: static; height: auto; transform: none !important; }
+
+  @media (prefers-reduced-motion: reduce){
+    .etapa{ transition: none; }
+  }
+
+  @media (max-width: 1100px){
+    .pedido-pin{ padding: 60px 24px; }
+    .pedido-inner{ flex-direction: column; align-items: flex-start; gap: 32px; }
+    .pedido-titulo{ width: 100%; }
+    .pedido-titulo h2{ font-size: 30px; }
+    /* em coluna, o eixo principal do flex vira vertical — sem isso o
+       `flex: 1` (que na versão desktop só mexe na largura) passaria a
+       zerar a altura do slot dos cartões */
+    /* mais alto aqui porque o texto do cartão quebra em mais linhas */
+    .pedido-etapas{ flex: none; width: 100%; max-width: 100%; height: 340px; }
+  }
+
+  /* =========================================
+     SÉTIMA DOBRA · SOBRE
+
+     Foto em estúdio à esquerda com três badges decorativas flutuando
+     (Figma/Claude/GitHub/H, mesma referência do Figma) e o cartão de
+     ocupação fixado embaixo — tudo posicionado em % do próprio
+     container da foto, pra reposicionar sozinho quando ela encolhe
+     no mobile em vez de precisar de um jogo de px por breakpoint.
+     Acima e abaixo, uma "régua" de texto com as ferramentas usadas.
+  ========================================= */
+  .sobre-section{
+    background: var(--preto);
+    padding: 80px 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .sobre-inner{
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .sobre-marquee{
+    width: 100%;
+    height: 23px;
+    overflow: hidden;
+  }
+
+  /* a trilha carrega o conteúdo REPETIDO duas vezes seguidas — por isso dá
+     pra andar 50% da própria largura e "colar" de volta no início sem
+     ninguém perceber o corte: as duas metades são idênticas */
+  .sobre-marquee-track{
+    width: max-content;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    animation: marqueeEsquerda 26s linear infinite;
+  }
+
+  .sobre-marquee--reverso .sobre-marquee-track{
+    animation-name: marqueeDireita;
+  }
+
+  @keyframes marqueeEsquerda{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+
+  @keyframes marqueeDireita{
+    from{ transform: translateX(-50%); }
+    to{ transform: translateX(0); }
+  }
+
+  .sobre-marquee span{
+    font-weight: 300;
+    font-size: 21px;
+    color: var(--neutro-600);
+    letter-spacing: -0.42px;
+    white-space: nowrap;
+  }
+
+  .sobre-marquee .dot{
+    flex-shrink: 0;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--laranja-500);
+    opacity: .7;
+  }
+
+  .sobre-content{
+    display: flex;
+    align-items: center;
+    gap: 64px;
+  }
+
+  .sobre-photo{
+    position: relative;
+    flex-shrink: 0;
+    width: 589px;
+    height: 776px;
+    border-radius: 26px;
+    overflow: hidden;
+  }
+
+  /* contorno em degradê (some conforme desce) em vez de uma linha sólida —
+     mesmo truque de "anel" usado no botão do Behance: um degradê cobrindo
+     todo o quadrado, com uma máscara que sobra só a casquinha de 1px */
+  .sobre-photo::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(160deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.14) 40%, rgba(255,255,255,0) 70%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .sobre-photo > img.sobre-foto{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* escurece a base da foto pra as badges e o cartão de ocupação lerem bem por cima */
+  .sobre-photo::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.04) 67%, rgba(0,0,0,0.9) 92%);
+    pointer-events: none;
+  }
+
+  .sobre-tools{
+    position: absolute;
+    left: 5.6%;
+    top: 3.29%;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* moldura é CSS (não faz parte do asset) nos quatro — é assim que dá
+     pra acender a cor da borda de verdade na animação, ícone por ícone */
+  .sobre-tool{
+    width: 36px;
+    height: 36px;
+    display: block;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid var(--neutro-100);
+    color: var(--neutro-100); /* controla o fill (currentColor) do desenho lá dentro */
+  }
+
+  .sobre-tool--figma{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sobre-tool--figma svg{
+    width: 9.5px;
+    height: 14px;
+  }
+
+  .sobre-cursor{
+    position: absolute;
+    left: 74.7%;
+    top: 41.95%;
+    width: 19%;
+    height: auto;
+    z-index: 1;
+    animation: cursorFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes cursorFloat{
+    0%, 100%{ transform: translateY(0); }
+    50%{ transform: translateY(-12px); }
+  }
+
+  /* o laranja desce a pilha de ferramentas, um ícone por vez: todos são
+     brancos por padrão e o da vez fica laranja INTEIRO (traço + moldura),
+     segurando a cor por um tempo antes de devolver pro branco.
+
+     Os quatro dividem o mesmo ciclo de 3.2s, cada um entrando 0.8s depois
+     do anterior — é essa defasagem que faz a luz "caminhar" pra baixo. */
+  @keyframes ferramentaAcende{
+    0%, 18%{
+      border-color: var(--laranja-500);
+      color: var(--laranja-500);
+      box-shadow: 0 0 14px rgba(255,89,0,.55);
+    }
+    30%, 100%{
+      border-color: var(--neutro-100);
+      color: var(--neutro-100);
+      box-shadow: none;
+    }
+  }
+
+  .sobre-tools > .sobre-tool{
+    animation: ferramentaAcende 3.2s linear infinite;
+  }
+
+  .sobre-tools > .sobre-tool:nth-child(1){ animation-delay: 0s; }
+  .sobre-tools > .sobre-tool:nth-child(2){ animation-delay: .8s; }
+  .sobre-tools > .sobre-tool:nth-child(3){ animation-delay: 1.6s; }
+  .sobre-tools > .sobre-tool:nth-child(4){ animation-delay: 2.4s; }
+
+  .sobre-ocupacao{
+    position: absolute;
+    left: 5.6%;
+    bottom: 3.29%;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .sobre-dot-verde{
+    flex-shrink: 0;
+    width: 11px;
+    height: 11px;
+    margin-top: 6px;
+    border-radius: 50%;
+    background: #72e587;
+    border: 1px solid #2c933f;
+    animation: dotOnline 1.8s ease-in-out infinite;
+  }
+
+  /* pisca pra um verde mais claro e solta um anel que expande e some —
+     leitura clássica de "status online" */
+  @keyframes dotOnline{
+    0%, 100%{
+      background: #72e587;
+      box-shadow: 0 0 0 0 rgba(114,229,135,.55);
+    }
+    50%{
+      background: #a8f5b8;
+      box-shadow: 0 0 0 5px rgba(114,229,135,0);
+    }
+  }
+
+  .sobre-ocupacao p{
+    line-height: 1.35;
+  }
+
+  .sobre-ocupacao .label{
+    font-weight: 400;
+    font-size: 15px;
+    color: var(--neutro-400);
+  }
+
+  .sobre-ocupacao .valor{
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--branco);
+  }
+
+  .sobre-texto{
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 32px;
+  }
+
+  .sobre-eyebrow{
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.35;
+    color: var(--laranja-500);
+  }
+
+  .sobre-texto h2{
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1.1;
+    color: var(--branco);
+  }
+
+  .sobre-texto h2 .hl{ color: var(--laranja-500); }
+
+  .sobre-paragrafos{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.35;
+    color: var(--neutro-100);
+  }
+
+  .sobre-paragrafos .destaque{
+    color: #ff9b66;
+    font-weight: 600;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .sobre-cursor, .sobre-tools > .sobre-tool, .sobre-dot-verde{ animation: none; }
+    /* sem o desfile, os quatro ficam no branco padrão */
+    .sobre-marquee-track{ animation: none; }
+  }
+
+  @media (max-width: 1100px){
+    .sobre-section{ padding: 60px 24px; }
+    .sobre-content{ flex-direction: column; }
+    .sobre-photo{ width: 100%; max-width: 460px; height: 606px; }
+    .sobre-texto h2{ font-size: 30px; }
+    .sobre-marquee span{ font-size: 15px; }
+  }
+
+  /* =========================================
+     NONA DOBRA · PERGUNTAS ("Antes de você perguntar")
+  ========================================= */
+  .perguntas-section{
+    background: var(--neutro-200);
+    padding: 80px 100px;
+  }
+
+  .perguntas-inner{
+    max-width: 1240px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .perguntas-inner > h2{
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1.1;
+    color: #000;
+  }
+
+  .pergunta{
+    border-radius: 26px;
+    background: var(--neutro-100);
+    transition: background-color .3s ease;
+  }
+
+  /* o cartão aberto fica em destaque — fundo escuro + ícone laranja aceso.
+     Só um fica aberto por vez (o JS fecha os outros ao abrir um novo). */
+  .pergunta--ativa{
+    background: var(--neutro-800);
+  }
+
+  /* passar o mouse num cartão fechado já prévia o visual de "aberto",
+     igual em todos eles — some ao clicar em outro lugar ou ao abrir */
+  .pergunta:not(.pergunta--ativa):hover{
+    background: var(--neutro-800);
+  }
+
+  .pergunta-toggle{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 60px;
+    width: 100%;
+    padding: 38px 50px;
+    background: none;
+    border: 0;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .pergunta-info{
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .pergunta-info h3{
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.25;
+    color: #000;
+    transition: color .3s ease;
+  }
+
+  .pergunta-info p{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.35;
+    color: var(--neutro-600);
+    padding-top: 10px;
+    transition: color .3s ease;
+  }
+
+  .pergunta--ativa .pergunta-info h3,
+  .pergunta--ativa .pergunta-info p,
+  .pergunta:not(.pergunta--ativa):hover .pergunta-info h3,
+  .pergunta:not(.pergunta--ativa):hover .pergunta-info p{
+    color: var(--neutro-100);
+  }
+
+  /* resposta escondida/revelada sem JS medir altura: a fatia do grid vai
+     de 0fr (sem altura, mesmo o texto existindo) pra 1fr (altura do
+     conteúdo). O <div> com overflow:hidden é o que faz o corte funcionar. */
+  .pergunta-resposta-track{
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .35s ease;
+  }
+
+  .pergunta-resposta-track > div{
+    overflow: hidden;
+  }
+
+  .pergunta--ativa .pergunta-resposta-track{
+    grid-template-rows: 1fr;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .pergunta,
+    .pergunta-info h3,
+    .pergunta-info p,
+    .pergunta-resposta-track{
+      transition: none;
+    }
+  }
+
+  /* caixa de acerto de 58×58 (igual ao Figma); o ícone ativo tem um
+     brilho/sombra que estoura essa caixa, então o svg dele é maior e
+     deslocado — a caixa em si não muda de tamanho */
+  .pergunta-icone{
+    position: relative;
+    flex-shrink: 0;
+    width: 58px;
+    height: 58px;
+  }
+
+  .pergunta-icone img{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 58px;
+    height: 58px;
+  }
+
+  .pergunta--ativa .pergunta-icone img{
+    top: 0;
+    left: -4px;
+    width: 66px;
+    height: 66px;
+  }
+
+  @media (max-width: 1100px){
+    .perguntas-section{ padding: 60px 24px; }
+    .perguntas-inner > h2{ font-size: 30px; }
+    .pergunta-toggle{ padding: 28px; gap: 24px; }
+    .pergunta-info h3{ font-size: 18px; }
+  }
+
+  @media (max-width: 640px){
+    .pergunta-toggle{ align-items: flex-start; }
+  }
+
+  /* =========================================
+     DÉCIMA DOBRA · CTA FINAL ("Me conta o que seu negócio precisa")
+
+     Mesmo degradê laranja-sobre-preto do botão primário (.btn-primary),
+     só que esticado pro fundo inteiro da seção. Os dois brilhos são
+     círculos com radial-gradient + blur — no Figma são PNGs de um
+     círculo sólido borrado; reproduzir via CSS evita baixar/servir dois
+     arquivos de imagem só pra um efeito de luz ambiente.
+  ========================================= */
+  /* frame do Figma: 1440×1024, padding 120 nos quatro lados. A largura
+     não vira um max-width travado — o fundo continua de ponta a ponta,
+     igual às outras dobras cheias (Hero, Método); 1440 é só o canvas
+     em que o frame foi desenhado. Altura e padding são o que o Figma
+     realmente especifica pro espaçamento e pra dobra ficar tão alta
+     quanto uma tela cheia. */
+  .cta-final{
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(54deg, rgb(14,0,0) 24.9%, rgb(18,1,0) 44.7%, rgb(34,7,0) 64.9%, rgb(93,9,0) 81.9%, rgb(193,11,0) 96.7%, var(--laranja-500) 115.4%, rgb(225,154,102) 142.4%);
+    padding: 120px;
+    min-height: 1024px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cta-final-glow{
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,89,0,.55) 0%, rgba(255,89,0,0) 70%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+
+  .cta-final-glow--esq{ width: 600px; height: 600px; top: -150px; left: -150px; }
+  .cta-final-glow--dir{ width: 500px; height: 500px; bottom: -120px; right: -80px; opacity: .7; }
+
+  .cta-final-inner{
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 56px;
+    max-width: 900px;
+    width: 100%;
+  }
+
+  .cta-final-texto{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    text-align: center;
+  }
+
+  .cta-final-texto h2{
+    font-weight: 700;
+    font-size: 72px;
+    line-height: 1.05;
+    color: var(--neutro-100);
+  }
+
+  .cta-final-texto p{
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--neutro-200);
+  }
+
+  .cta-final-ctas{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cta-final-ctas .btn-secondary{
+    padding: 18px 32px;
+    font-size: 16px;
+    border-color: var(--neutro-100);
+  }
+
+  .cta-final-nota{
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--neutro-400);
+    text-align: center;
+  }
+
+  @media (max-width: 1100px){
+    /* 1024px de altura mínima é demais numa tela de celular deitada
+       de lado — nesse tamanho a dobra volta a se ajustar ao conteúdo */
+    .cta-final{ padding: 90px 24px; min-height: 0; }
+    .cta-final-texto h2{ font-size: 44px; }
+    .cta-final-texto p{ font-size: 18px; }
+    /* nesse tamanho a quebra manual do desktop sobra uma "que" sozinha
+       numa linha — deixa o texto quebrar sozinho, do jeito que couber */
+    .cta-final-quebra{ display: none; }
+  }
+
+  @media (max-width: 640px){
+    .cta-final .btn-secondary{ white-space: normal; text-align: center; }
+  }
+
+  /* =========================================
+     SEXTA DOBRA · RODAPÉ
+
+     Mesmo padrão das subpáginas de case (badge + 4 colunas), só que
+     na grade de 1240px da home em vez dos 1600px das páginas de case.
+  ========================================= */
+  .rodape{
+    background: var(--preto);
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 80px 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .rodape-cols{
+    display: flex;
+    gap: 64px;
+    flex-wrap: wrap;
+  }
+
+  .rodape-col{
+    flex: 1;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .rodape-col h3{
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 1.35;
+    color: var(--branco);
+  }
+
+  .rodape-col ul{ list-style: none; }
+
+  .rodape-col li,
+  .rodape-col a{
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--neutro-100);
+    text-decoration: none;
+  }
+
+  .rodape-col a:hover{ color: var(--laranja-400); }
+
+  @media (max-width: 1100px){
+    .rodape{ padding: 60px 24px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="header-wrap">
+    <nav class="nav">
+      <div class="badge">
+        <img src="teste.site/assets/img/Imagens-Angelo.site/Badge/avatar.png.png" alt="Angelo Felipe">
+        <span>Angelo Felipe</span>
+      </div>
+      <div class="nav-links">
+        <a href="#trabalho">Trabalho</a>
+        <a href="#frentes">Frentes</a>
+        <a href="#metodo">Método</a>
+        <a href="#sobre">Sobre</a>
+      </div>
+      <a href="#" class="btn-secondary">Entrar em contato</a>
+    </nav>
+  </div>
+
+  <section class="hero">
+
+    <canvas class="hero-bg" aria-hidden="true"></canvas>
+
+    <div class="hero-content">
+      <div class="hero-text">
+        <img class="logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
+        <h1><span class="line"><span>Seu projeto precisa</span></span><span class="line"><span>estar alinhado <span class="hl">com</span></span></span><span class="line"><span class="hl">seu propósito</span></span></h1>
+        <p class="lead">Transforme a forma como sua marca é percebida, comunique o valor do que você oferece e atraia clientes que reconhecem o que sua empresa realmente vale.</p>
+        <div class="ctas">
+          <a href="#" class="btn-primary">
+            Solicitar orçamento
+            <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
+          </a>
+          <a href="#" class="btn-secondary">Ver o trabalho <span class="arrow">→</span></a>
+        </div>
+      </div>
+
+      <div class="hero-photo">
+        <img src="teste.site/assets/img/Imagens-Angelo.site/Frame%2011.png" alt="Angelo Felipe">
+      </div>
+    </div>
+
+    <div class="numeros">
+      <div class="numero">
+        <strong>Desde 2022</strong>
+        <p>no design</p>
+      </div>
+      <div class="numero">
+        <strong>40 a 60</strong>
+        <p>criativos por dia útil em rotina de agência</p>
+      </div>
+      <div class="numero">
+        <strong>2500</strong>
+        <p>projetos entregues</p>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="stats-section">
+    <div class="stats">
+      <div class="stat">
+        <canvas class="stat-num-canvas" data-text="+2.500" data-font-size="120"></canvas>
+        <p>peças entregues desde 2022</p>
+      </div>
+      <div class="stat">
+        <canvas class="stat-num-canvas" data-text="27.172" data-font-size="120"></canvas>
+        <p>views no Behance</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="dor-section">
+    <div class="dor-pin">
+      <div class="dor-inner">
+        <h2 class="dor-title">Seu negócio é bom. Seu material ainda não diz isso.</h2>
+        <div class="dor-list">
+          <div class="dor-item">
+            <span class="dor-bar"></span>
+            <p class="dor-text">A peça sai improvisada e quem vê percebe antes de ler o texto.</p>
+          </div>
+          <div class="dor-item">
+            <span class="dor-bar"></span>
+            <p class="dor-text">Cada material tem uma cara diferente e ninguém reconhece a marca de um post pro outro.</p>
+          </div>
+          <div class="dor-item">
+            <span class="dor-bar"></span>
+            <p class="dor-text">O site, quando existe, não fala a mesma língua do feed.</p>
+          </div>
+          <div class="dor-item">
+            <span class="dor-bar"></span>
+            <p class="dor-text">O concorrente cobra mais caro e mesmo assim é ele que fecha.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="frentes-section" id="frentes">
+    <div class="frentes-inner">
+      <div class="frentes-header">
+        <p class="frentes-kicker">Quatro frentes.</p>
+        <h2>Um padrão só.</h2>
+      </div>
+      <div class="frentes-list">
+        <div class="frente">
+          <span class="frente-index">/ 01</span>
+          <div class="frente-texto">
+            <h3>Identidade visual</h3>
+            <p>Símbolo, tipografia, paleta e as regras de uso. O documento que faz toda peça futura sair parecida com a sua marca, mesmo quando não sou eu fazendo.</p>
+          </div>
+          <div class="frente-icone">
+            <img src="teste.site/assets/Icons/Icons-Angelo.site/Navigation/Navigation.svg" alt="">
+          </div>
+        </div>
+        <div class="frente">
+          <span class="frente-index">/ 02</span>
+          <div class="frente-texto">
+            <h3>Site</h3>
+            <p>Landing page, site institucional, portfólio, e-commerce ou sistema web. Cada tipo com o escopo certo pro que seu negócio precisa hoje.</p>
+          </div>
+          <div class="frente-icone">
+            <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Conversation.svg" alt="">
+          </div>
+        </div>
+        <div class="frente">
+          <span class="frente-index">/ 03</span>
+          <div class="frente-texto">
+            <h3>Conteúdo pra redes sociais</h3>
+            <p>Carrossel, estático, PDF, banner, impresso. Avulso quando é pontual, em pacote quando a demanda é toda semana.</p>
+          </div>
+          <div class="frente-icone">
+            <img src="teste.site/assets/Icons/Icons-Angelo.site/Grid_Dots.svg" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="proj-section" id="trabalho">
+    <div class="proj-inner">
+
+      <div class="proj-header">
+        <h2>Trabalho selecionado</h2>
+        <p>Identidade · Landing page · Site institucional · Social media</p>
+      </div>
+
+      <div class="proj-scroll">
+
+        <div class="proj-card">
+          <a class="proj-thumb" href="case-ai-comet.html">
+            <img src="teste.site/assets/img/Imagens-Angelo.site/%5Bimg%5D%20thumb%20do%20projeto-3.png" alt="AI Comet — landing page e identidade">
+          </a>
+          <div class="proj-meta">
+            <div class="proj-col">
+              <p class="proj-name">AI COMET</p>
+              <span class="proj-rule"></span>
+              <p class="proj-tags">Identidade · UI · Landing page</p>
+            </div>
+            <div class="proj-col">
+              <p class="proj-sub">CRM COM IA NATIVA</p>
+              <span class="proj-rule"></span>
+              <a href="case-ai-comet.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <a class="proj-thumb" href="case-solar-ruby.html">
+            <img src="teste.site/assets/img/Imagens-Angelo.site/%5Bimg%5D%20thumb%20do%20projeto-5.png" alt="Solar Ruby — landing page">
+          </a>
+          <div class="proj-meta">
+            <div class="proj-col">
+              <p class="proj-name">SOLAR RUBY</p>
+              <span class="proj-rule"></span>
+              <p class="proj-tags">Landing page · UI</p>
+            </div>
+            <div class="proj-col">
+              <p class="proj-sub">ENERGIA SOLAR</p>
+              <span class="proj-rule"></span>
+              <a href="case-solar-ruby.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <a class="proj-thumb" href="case-hard-flow.html">
+            <img src="teste.site/assets/img/case-hard-flow/showcase.png" alt="Hard Flow — identidade, site e social media">
+          </a>
+          <div class="proj-meta">
+            <div class="proj-col">
+              <p class="proj-name">HARD FLOW</p>
+              <span class="proj-rule"></span>
+              <p class="proj-tags">Identidade · Site · Social media</p>
+            </div>
+            <div class="proj-col">
+              <p class="proj-sub">GROWTH MARKETING</p>
+              <span class="proj-rule"></span>
+              <a href="case-hard-flow.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="proj-cta">
+        <a href="#" class="btn-light">Quero algo assim pro meu negócio →</a>
+        <a href="#" class="btn-secondary">Portfólio completo no Behance →</a>
+        <div class="proj-track" role="slider" tabindex="0" aria-label="Progresso do carrossel de projetos" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <span class="proj-track-thumb"></span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SEXTA DOBRA · projetos para social media -->
+  <section class="proj-section proj-section--social">
+    <div class="proj-inner">
+
+      <div class="proj-header">
+        <h2>Projetos para Social Media</h2>
+        <p>Carrossel · Estático · Impressos</p>
+      </div>
+
+      <div class="proj-scroll">
+
+        <div class="proj-card">
+          <a class="proj-thumb" href="case-social-ai-comet.html">
+            <img src="teste.site/assets/img/social-media/thumb-ai-comet.png" alt="AI Comet — criativo para CRM">
+          </a>
+          <div class="proj-meta">
+            <div class="proj-col">
+              <p class="proj-name">AI COMET</p>
+              <span class="proj-rule"></span>
+              <p class="proj-tags">Social media · CRM</p>
+            </div>
+            <div class="proj-col">
+              <p class="proj-sub">CRIATIVO PARA CRM</p>
+              <span class="proj-rule"></span>
+              <a href="case-social-ai-comet.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <a class="proj-thumb" href="case-social-ativasolar.html">
+            <img src="teste.site/assets/img/social-media/thumb-ativasolar.png" alt="AtivaSolar — sistema de peças para redes sociais">
+          </a>
+          <div class="proj-meta">
+            <div class="proj-col">
+              <p class="proj-name">ATIVASOLAR</p>
+              <span class="proj-rule"></span>
+              <p class="proj-tags">Social media · Sistema de peças</p>
+            </div>
+            <div class="proj-col">
+              <p class="proj-sub">CRIATIVOS EM VOLUME</p>
+              <span class="proj-rule"></span>
+              <a href="case-social-ativasolar.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card">
+          <a class="proj-thumb" href="case-social-hive.html">
+            <img src="teste.site/assets/img/social-media/thumb-hive.png" alt="Hive — estudo de identidade">
+          </a>
+          <div class="proj-meta">
+            <div class="proj-col">
+              <p class="proj-name">HIVE</p>
+              <span class="proj-rule"></span>
+              <p class="proj-tags">Identidade · Aplicações</p>
+            </div>
+            <div class="proj-col">
+              <p class="proj-sub">ESTUDO DE IDENTIDADE</p>
+              <span class="proj-rule"></span>
+              <a href="case-social-hive.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="proj-cta">
+        <a href="#" class="btn-light">Quero algo assim pro meu negócio →</a>
+        <a href="#" class="btn-secondary">Portfólio completo no Behance →</a>
+        <div class="proj-track" role="slider" tabindex="0" aria-label="Progresso do carrossel de projetos para social media" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <span class="proj-track-thumb"></span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SÉTIMA DOBRA · sobre -->
+  <section class="sobre-section" id="sobre">
+    <div class="sobre-inner">
+
+      <div class="sobre-marquee" aria-hidden="true">
+        <div class="sobre-marquee-track">
+          <span>Figma</span><span class="dot"></span>
+          <span>Photoshop</span><span class="dot"></span>
+          <span>Ilustrador</span><span class="dot"></span>
+          <span>Claude</span><span class="dot"></span>
+          <span>Social media</span><span class="dot"></span>
+          <span>Figma</span><span class="dot"></span>
+          <span>Photoshop</span><span class="dot"></span>
+          <span>Ilustrador</span><span class="dot"></span>
+          <span>Claude</span><span class="dot"></span>
+          <span>Social media</span><span class="dot"></span>
+        </div>
+      </div>
+
+      <div class="sobre-content">
+
+        <div class="sobre-photo">
+          <img class="sobre-foto" src="teste.site/assets/img/sobre/foto-estudio.jpg" alt="Angelo Felipe em estúdio de fotografia">
+
+          <div class="sobre-tools">
+            <span class="sobre-tool sobre-tool--figma" aria-hidden="true">
+              <svg width="9.5" height="14" viewBox="0 0 9.33342 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.57546 0C1.14804 0 4.179e-05 1.19758 4.179e-05 2.66467C4.179e-05 3.55658 0.424709 4.34875 1.07746 4.83233C0.740936 5.08429 0.468171 5.41163 0.281058 5.78808C0.0939457 6.16454 -0.00230166 6.57962 4.179e-05 7C4.179e-05 7.8925 0.424709 8.68408 1.07746 9.16767C0.740936 9.41962 0.468171 9.74696 0.281058 10.1234C0.0939457 10.4999 -0.00230166 10.9149 4.179e-05 11.3353C4.179e-05 12.8024 1.14804 14 2.57546 14C4.00287 14 5.15087 12.8024 5.15087 11.3353V9.0825C5.60181 9.45893 6.17055 9.66517 6.75796 9.66525C8.18537 9.66467 9.33338 8.46708 9.33338 7C9.33572 6.57962 9.23947 6.16454 9.05236 5.78808C8.86525 5.41163 8.59248 5.08429 8.25596 4.83233C8.59248 4.58038 8.86525 4.25304 9.05236 3.87658C9.23947 3.50013 9.33572 3.08505 9.33338 2.66467C9.33338 1.19758 8.18537 0 6.75796 0H2.57546ZM0.967792 2.66467C0.967792 1.73658 1.69229 0.993417 2.57546 0.993417H4.18254V4.33592H2.57546C1.69229 4.33592 0.967792 3.59217 0.967792 2.66467ZM6.75796 4.33533H5.15087V0.992833H6.75796C7.64171 0.992833 8.36562 1.73658 8.36562 2.66467C8.36562 3.59217 7.64171 4.33533 6.75796 4.33533ZM0.968375 7C0.968375 6.0725 1.69288 5.32875 2.57604 5.32875H4.18312V8.67125H2.57546C1.69171 8.67125 0.968375 7.9275 0.968375 7ZM5.15029 7C5.15029 6.0725 5.87479 5.32875 6.75796 5.32875C7.64171 5.32875 8.36562 6.07192 8.36562 7C8.36562 7.9275 7.64171 8.67125 6.75796 8.67125C5.87421 8.67125 5.15029 7.9275 5.15029 7ZM0.968375 11.3353C0.968375 10.4078 1.69288 9.66467 2.57604 9.66467H4.18312V11.3353C4.18312 12.2634 3.45979 13.0066 2.57604 13.0066C1.69229 13.0066 0.968375 12.2634 0.968375 11.3353Z" fill="currentColor"/>
+              </svg>
+            </span>
+            <svg class="sobre-tool" width="36" height="36" viewBox="0 0 35.6774 35.6774" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M20.414 10.8386V15.0153L23.7886 16.9893V12.5589L20.414 10.8386ZM11.8886 10.8386V17.3935H22.864L19.5244 15.5578L15.1745 15.556V12.6026L11.8886 10.8386ZM20.414 23.0268V20.099L16.0308 20.0961C16.0349 20.1154 12.6358 18.2312 12.6358 18.2312L23.7886 18.2843V24.8386L20.414 23.0268ZM11.8886 18.7434V23.0268L15.1745 24.747V20.6707L11.8886 18.7434Z" fill="currentColor"/>
+            </svg>
+            <svg class="sobre-tool" width="36" height="36" viewBox="0 0 35.6774 35.6774" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M13.5885 20.1463L16.3406 18.6016L16.3867 18.4674L16.3401 18.3928H16.2059L15.7451 18.3648L14.173 18.3222L12.8097 18.2656L11.4885 18.1944L11.156 18.1239L10.8439 17.7132L10.876 17.5073L11.156 17.32L11.5556 17.355L12.4411 17.4157L13.7693 17.5073L14.7324 17.5644L16.1598 17.7132H16.3867L16.4182 17.621L16.3406 17.5644L16.2806 17.5073L14.9062 16.5763L13.4187 15.5916L12.6394 15.0246L12.2182 14.7382L12.0053 14.4687L11.9131 13.8807L12.2958 13.4595L12.8091 13.4945L12.9398 13.5301L13.4607 13.9303L14.5726 14.7913L16.0251 15.8605L16.2374 16.0379L16.3226 15.9772L16.3331 15.9352L16.2374 15.7754L15.4476 14.3485L14.6046 12.896L14.229 12.294L14.1298 11.9329C14.0924 11.7942 14.0722 11.6514 14.0697 11.5077L14.5061 10.9162L14.747 10.8386L15.3274 10.9168L15.5724 11.1291L15.9335 11.9545L16.5174 13.2536L17.4245 15.0211L17.6899 15.5449L17.8316 16.0303L17.8841 16.179H17.9769V16.0944L18.051 15.0993L18.1892 13.8772L18.3234 12.3051L18.3701 11.8618L18.5894 11.3309L19.0251 11.0439L19.3652 11.2073L19.6452 11.6069L19.6061 11.8659L19.4393 12.9456L19.1138 14.639L18.9009 15.7719H19.0251L19.1669 15.6307L19.7403 14.8689L20.704 13.6649L21.1286 13.1865L21.6245 12.6592L21.9436 12.4078H22.5456L22.9883 13.0664L22.79 13.7465L22.1699 14.5323L21.6566 15.1984L20.9198 16.1901L20.459 16.9834L20.5021 17.0476L20.6118 17.0359L22.2761 16.6824L23.1756 16.5191L24.2489 16.3354L24.7342 16.5617L24.7867 16.7921L24.596 17.2629L23.4486 17.5464L22.1028 17.8159L20.0985 18.2901L20.0734 18.3076L20.102 18.3432L21.005 18.4284L21.3911 18.4494H22.3361L24.0966 18.5806L24.5575 18.8851L24.8334 19.2573L24.7867 19.5402L24.0791 19.9019L23.1225 19.6749L20.8912 19.1441L20.1271 18.9522H20.0203V19.0164L20.6579 19.6394L21.8263 20.6952L23.2893 22.0544L23.3634 22.3915L23.1761 22.6569L22.9778 22.6284L21.6921 21.6618L21.1963 21.226L20.0734 20.281H19.9993V20.3802L20.2577 20.7588L21.6245 22.8127L21.6956 23.4427L21.5965 23.6486L21.2424 23.7729L20.8527 23.7017L20.0524 22.5794L19.227 21.3147L18.5614 20.1813L18.4797 20.2279L18.0866 24.4594L17.9022 24.6753L17.4776 24.8386L17.1235 24.5697L16.9356 24.1339L17.1235 23.2729L17.3498 22.1506L17.5341 21.2581L17.7004 20.1498L17.7996 19.7811L17.7926 19.7566L17.7109 19.7671L16.8756 20.9145L15.6039 22.6324L14.5982 23.7087L14.3573 23.8044L13.9396 23.5885L13.9781 23.2024L14.2121 22.8588L15.6039 21.0878L16.4433 19.9899L16.9852 19.3564L16.9817 19.2643H16.9496L13.2525 21.6653L12.5933 21.7504L12.3104 21.4844L12.3454 21.0493L12.4801 20.9075L13.5926 20.1422L13.5885 20.1463Z" fill="currentColor"/>
+            </svg>
+            <svg class="sobre-tool" width="36" height="36" viewBox="0 0 35.6774 35.6774" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M17.8388 10.8389C13.7743 10.8389 10.613 14.0002 10.613 18.0647C10.613 22.8066 14.9033 24.8389 15.5807 24.8389C16.0323 24.8389 16.0323 24.6131 16.0323 24.3873V23.2582C14.4517 23.7098 13.7743 22.8066 13.5485 22.1292C13.5485 22.1292 13.5485 21.9034 13.0969 21.4518C12.8711 21.226 11.9678 20.7744 12.8711 20.7744C13.5485 20.7744 14.0001 21.6776 14.0001 21.6776C14.6775 22.5808 15.5807 22.355 16.0323 22.1292C16.0323 21.6776 16.484 21.226 16.484 21.226C14.6775 21.0002 13.3227 20.3227 13.3227 17.8389C13.3227 16.9356 13.5485 16.2582 14.0001 15.8066C14.0001 15.8066 13.5485 14.9034 14.0001 13.7744C14.0001 13.7744 15.1291 13.7744 16.0323 14.6776C16.7098 14.226 18.9678 14.226 19.6452 14.6776C20.5485 13.7744 21.6775 13.7744 21.6775 13.7744C22.1291 15.355 21.6775 15.8066 21.6775 15.8066C22.1291 16.2582 22.3549 16.9356 22.3549 17.8389C22.3549 20.3227 20.7743 21.0002 19.1936 21.226C19.4194 21.4518 19.6452 21.9034 19.6452 22.5808V24.3873C19.6452 24.6131 19.6452 24.8389 20.0969 24.8389C20.7743 24.8389 25.0646 22.8066 25.0646 18.0647C25.0646 14.0002 21.9033 10.8389 17.8388 10.8389Z" fill="currentColor"/>
+            </svg>
+          </div>
+
+          <img class="sobre-cursor" src="teste.site/assets/Icons/Icons-Angelo.site/Sobre/cursor-angelo.svg" alt="">
+
+          <div class="sobre-ocupacao">
+            <span class="sobre-dot-verde"></span>
+            <div>
+              <p class="label">Ocupação:</p>
+              <p class="valor">UI/UX Web Designer</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sobre-texto">
+          <p class="sobre-eyebrow">Sobre</p>
+          <h2>Rodei agência. Hoje faço isso <span class="hl">pelo seu negócio.</span></h2>
+          <div class="sobre-paragrafos">
+            <p><span class="destaque">Comecei no design em 2022 e passei por 7 operações:</span> Thunder, XBrandBrasil, Performx, Maximus, Criarte, Studio W e Lumus.</p>
+            <p>Em algumas, produzia 40–60 peças por dia. Esse volume me ensinou o que nenhum curso ensina: como fazer uma marca parecer profissional em poucos segundos e transmitir confiança antes mesmo da primeira palavra.</p>
+            <p>Hoje, aplico isso em marcas onde cada detalhe do visual pode fazer a diferença.</p>
+          </div>
+          <a href="#" class="btn-primary">
+            Solicitar orçamento
+            <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
+          </a>
+        </div>
+
+      </div>
+
+      <div class="sobre-marquee sobre-marquee--reverso" aria-hidden="true">
+        <div class="sobre-marquee-track">
+          <span>Figma</span><span class="dot"></span>
+          <span>Photoshop</span><span class="dot"></span>
+          <span>Ilustrador</span><span class="dot"></span>
+          <span>Claude</span><span class="dot"></span>
+          <span>Social media</span><span class="dot"></span>
+          <span>Figma</span><span class="dot"></span>
+          <span>Photoshop</span><span class="dot"></span>
+          <span>Ilustrador</span><span class="dot"></span>
+          <span>Claude</span><span class="dot"></span>
+          <span>Social media</span><span class="dot"></span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- OITAVA DOBRA · método -->
+  <section class="pedido-section" id="metodo" data-nav="claro">
+    <div class="pedido-pin">
+      <div class="pedido-inner">
+
+        <div class="pedido-titulo">
+          <h2>Do pedido à entrega, sem enrolação.</h2>
+        </div>
+
+        <div class="pedido-etapas">
+          <div class="etapa">
+            <p class="etapa-numero">Etapa 01</p>
+            <h3>Você me conta o que precisa</h3>
+            <p class="etapa-texto">Preenche o formulário aqui embaixo com o que seu negócio precisa agora. Leva menos de um minuto.</p>
+          </div>
+          <div class="etapa">
+            <p class="etapa-numero">Etapa 02</p>
+            <h3>Eu te respondo no WhatsApp</h3>
+            <p class="etapa-texto">Com a mensagem já detalhada, eu retorno com prazo e valor certos pro seu caso. Sem tabela genérica.</p>
+          </div>
+          <div class="etapa">
+            <p class="etapa-numero">Etapa 03</p>
+            <h3>Alinhamos o projeto</h3>
+            <p class="etapa-texto">Referência, prazo e o que sua marca precisa comunicar. Aqui a gente decide junto antes de eu desenhar qualquer coisa.</p>
+          </div>
+          <div class="etapa">
+            <p class="etapa-numero">Etapa 04</p>
+            <h3>Você recebe pronto</h3>
+            <p class="etapa-texto">Arquivos nos formatos certos, prontos pra publicar ou pra subir no ar. Editáveis inclusos.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- NONA DOBRA · perguntas -->
+  <section class="perguntas-section" id="perguntas" data-nav="claro">
+    <div class="perguntas-inner">
+      <h2>Antes de você perguntar.</h2>
+
+      <div class="pergunta pergunta--ativa">
+        <button class="pergunta-toggle" type="button" aria-expanded="true">
+          <div class="pergunta-info">
+            <h3>Qual o prazo de entrega?</h3>
+            <div class="pergunta-resposta-track">
+              <div><p>Depende do escopo. Depois que eu vejo o que você mandou no formulário, te respondo com um prazo fechado antes de começar.</p></div>
+            </div>
+          </div>
+          <span class="pergunta-icone" aria-hidden="true">
+            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus-ativo.svg" alt="">
+          </span>
+        </button>
+      </div>
+
+      <div class="pergunta">
+        <button class="pergunta-toggle" type="button" aria-expanded="false">
+          <div class="pergunta-info">
+            <h3>Como funciona o pagamento?</h3>
+            <div class="pergunta-resposta-track">
+              <div><p>Metade na aprovação do orçamento e metade na entrega dos arquivos. Projetos maiores podem ser divididos por etapa.</p></div>
+            </div>
+          </div>
+          <span class="pergunta-icone" aria-hidden="true">
+            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
+          </span>
+        </button>
+      </div>
+
+      <div class="pergunta">
+        <button class="pergunta-toggle" type="button" aria-expanded="false">
+          <div class="pergunta-info">
+            <h3>Posso pedir uma peça só ou preciso fechar pacote?</h3>
+            <div class="pergunta-resposta-track">
+              <div><p>Pode pedir uma só. O pacote existe pra quem tem demanda recorrente e sai com valor melhor por peça.</p></div>
+            </div>
+          </div>
+          <span class="pergunta-icone" aria-hidden="true">
+            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
+          </span>
+        </button>
+      </div>
+
+      <div class="pergunta">
+        <button class="pergunta-toggle" type="button" aria-expanded="false">
+          <div class="pergunta-info">
+            <h3>Você atende fora do Rio?</h3>
+            <div class="pergunta-resposta-track">
+              <div><p>Atendo. Todo o processo acontece por WhatsApp e por arquivo, então localização não muda nada.</p></div>
+            </div>
+          </div>
+          <span class="pergunta-icone" aria-hidden="true">
+            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
+          </span>
+        </button>
+      </div>
+
+      <div class="pergunta">
+        <button class="pergunta-toggle" type="button" aria-expanded="false">
+          <div class="pergunta-info">
+            <h3>Você escreve o texto também?</h3>
+            <div class="pergunta-resposta-track">
+              <div><p>Escrevo. A copy entra junto com o layout, porque texto e imagem precisam dizer a mesma coisa. Se você já tem o texto pronto, eu adapto.</p></div>
+            </div>
+          </div>
+          <span class="pergunta-icone" aria-hidden="true">
+            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
+          </span>
+        </button>
+      </div>
+
+      <div class="pergunta">
+        <button class="pergunta-toggle" type="button" aria-expanded="false">
+          <div class="pergunta-info">
+            <h3>E se eu não gostar do resultado?</h3>
+            <div class="pergunta-resposta-track">
+              <div><p>Todo projeto inclui duas rodadas de ajuste. E a direção é aprovada por você antes de eu levar a arte pra frente.</p></div>
+            </div>
+          </div>
+          <span class="pergunta-icone" aria-hidden="true">
+            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
+          </span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DÉCIMA DOBRA · cta final -->
+  <section class="cta-final" id="comecar">
+    <div class="cta-final-glow cta-final-glow--esq" aria-hidden="true"></div>
+    <div class="cta-final-glow cta-final-glow--dir" aria-hidden="true"></div>
+    <div class="cta-final-inner">
+      <div class="cta-final-texto">
+        <h2>Me conta o que <br class="cta-final-quebra">seu negócio precisa.</h2>
+        <p>Você marca as opções, eu recebo tudo já organizado no WhatsApp e volto com prazo e valor certos pro seu caso.</p>
+      </div>
+      <div class="cta-final-ctas">
+        <a href="#" class="btn-primary">
+          Começar meu projeto
+          <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
+        </a>
+        <a href="#" class="btn-secondary">Prefere conversar antes? Chama no WhatsApp</a>
+      </div>
+      <p class="cta-final-nota">Sem cadastro e sem compromisso. Seus dados de contato só entram no último passo.</p>
+    </div>
+  </section>
+
+  <footer class="rodape">
+    <a class="badge" href="#">
+      <img src="teste.site/assets/img/Imagens-Angelo.site/Badge/avatar.png.png" alt="Angelo Felipe">
+      <span>Angelo Felipe</span>
+    </a>
+    <div class="rodape-cols">
+      <div class="rodape-col">
+        <h3>Angelo Felipe</h3>
+        <ul>
+          <li>Designer gráfico</li>
+          <li>Rio de Janeiro, RJ</li>
+        </ul>
+      </div>
+      <div class="rodape-col">
+        <h3>Navegar</h3>
+        <ul>
+          <li><a href="#trabalho">Trabalho</a></li>
+          <li><a href="case-ai-comet.html">Case AI Comet</a></li>
+          <li><a href="#metodo">Método</a></li>
+          <li><a href="#perguntas">Perguntas</a></li>
+        </ul>
+      </div>
+      <div class="rodape-col">
+        <h3>Onde me achar</h3>
+        <ul>
+          <li>@angelo.odesigner</li>
+          <li>behance.net/FanzeDesign</li>
+          <li>Solicitar orçamento</li>
+        </ul>
+      </div>
+      <div class="rodape-col">
+        <h3>Frentes</h3>
+        <ul>
+          <li>Identidade visual</li>
+          <li>Site</li>
+          <li>Conteúdo pra redes</li>
+          <li>Estruturação de perfil</li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+<script>
+/* =========================================
+   CARROSSÉIS DE PROJETO (trabalho selecionado, redes sociais, etc.)
+
+   Rolagem horizontal por arrastar os cards (além da roda/trackpad,
+   que o overflow-x já dá de graça) OU arrastando/clicando direto no
+   trilho vermelho — os dois controlam o mesmo scroll, em via dupla.
+   Enquanto rola, o card mais perto do centro visível ganha destaque
+   (escala maior) e o anterior volta ao tamanho padrão, animado.
+
+   Cada seção .proj-section roda uma cópia independente disso — o
+   estado (card ativo, se está arrastando, etc.) fica isolado por
+   seção, então dá pra ter várias na mesma página sem uma atrapalhar
+   a outra.
+========================================= */
+function configurarCarrossel(secao){
+  const scroller = secao.querySelector('.proj-scroll');
+  const track = secao.querySelector('.proj-track');
+  const thumb = secao.querySelector('.proj-track-thumb');
+  const cards = scroller ? [...scroller.querySelectorAll('.proj-card')] : [];
+  if(!scroller || !track || !thumb) return;
+
+  const PAD = 7; /* respiro do pino nas pontas do trilho */
+  let activeCard = null;
+
+  /* larguras "de repouso" de cada card (397.33 ou 756, nunca mudam) —
+     usadas pro cálculo de distância, pra não medir um card que está
+     no meio da própria transição de largura e criar um alvo móvel
+     (isso que causava o card ativo "brigando" entre dois candidatos
+     e travando a animação no meio do caminho). */
+  const LARGURA_PADRAO = 397.33;
+  const LARGURA_ATIVA = 756;
+  const HISTERESE = 40; /* px de vantagem que o novo candidato precisa ter pra assumir */
+
+  function cardAtivo(){
+    /* usa a posição de scroll como referência (não o centro visual fixo):
+       assim o último card também consegue "acender" no fim do trilho,
+       mesmo quando ele nunca chega a passar pelo centro da tela por
+       causa do card largo ocupar espaço demais. */
+    const scrollerLeft = scroller.getBoundingClientRect().left;
+    const gap = 28;
+    let cursor = 0;
+    const posicoes = cards.map((card) => {
+      const larguraRepouso = card === activeCard ? LARGURA_ATIVA : LARGURA_PADRAO;
+      const pos = { card, left: cursor };
+      cursor += larguraRepouso + gap;
+      return pos;
+    });
+    /* largura total "de repouso" (sem nenhum card ativo, ou com o atual) pra achar o máximo de scroll real */
+    const larguraTotalRepouso = cursor - gap;
+    const max = Math.max(0, larguraTotalRepouso - scroller.clientWidth);
+
+    let maisPerto = activeCard || cards[0], menorDist = Infinity;
+    posicoes.forEach(({ card, left }) => {
+      const largura = card === activeCard ? LARGURA_ATIVA : LARGURA_PADRAO;
+      const centroNatural = left + largura / 2 - scroller.clientWidth / 2;
+      const centroClamped = Math.max(0, Math.min(max, centroNatural));
+      const dist = Math.abs(centroClamped - scroller.scrollLeft);
+      if(dist < menorDist){ menorDist = dist; maisPerto = card; }
+    });
+
+    if(maisPerto !== activeCard){
+      /* só troca se o novo candidato realmente ganhar por uma margem —
+         evita ficar oscilando entre dois cards bem próximos do meio */
+      const distDoAtivo = activeCard
+        ? Math.abs(
+            Math.max(0, Math.min(max,
+              (posicoes.find(p => p.card === activeCard)?.left ?? 0) + LARGURA_ATIVA / 2 - scroller.clientWidth / 2
+            )) - scroller.scrollLeft
+          )
+        : Infinity;
+      if(!activeCard || (distDoAtivo - menorDist) > HISTERESE){
+        if(activeCard) activeCard.classList.remove('proj-card--active');
+        maisPerto.classList.add('proj-card--active');
+        activeCard = maisPerto;
+      }
+    }
+  }
+
+  let quadro = null;
+  function sync(){
+    const max = scroller.scrollWidth - scroller.clientWidth;
+    const progresso = max > 0 ? scroller.scrollLeft / max : 0;
+    const curso = track.clientWidth - thumb.offsetWidth - PAD * 2;
+    thumb.style.left = (PAD + progresso * Math.max(0, curso)) + 'px';
+    track.setAttribute('aria-valuenow', Math.round(progresso * 100));
+
+    /* joga a checagem do card ativo pro próximo quadro — suaviza
+       drags rápidos e evita recalcular várias vezes por frame */
+    if(quadro) cancelAnimationFrame(quadro);
+    quadro = requestAnimationFrame(cardAtivo);
+  }
+
+  scroller.addEventListener('scroll', sync, { passive: true });
+  window.addEventListener('resize', sync);
+  sync();
+  cardAtivo();
+
+  /* trilho: clicar ou arrastar o pino controla o scroll dos cards */
+  let arrastandoTrilho = false;
+
+  function scrollParaX(clientX){
+    const rectTrack = track.getBoundingClientRect();
+    const curso = track.clientWidth - thumb.offsetWidth - PAD * 2;
+    let x = clientX - rectTrack.left - thumb.offsetWidth / 2 - PAD;
+    x = Math.max(0, Math.min(Math.max(0, curso), x));
+    const progresso = curso > 0 ? x / curso : 0;
+    const max = scroller.scrollWidth - scroller.clientWidth;
+    scroller.scrollLeft = progresso * max;
+  }
+
+  thumb.addEventListener('pointerdown', (e) => {
+    arrastandoTrilho = true;
+    thumb.setPointerCapture(e.pointerId);
+    scrollParaX(e.clientX);
+  });
+
+  track.addEventListener('pointerdown', (e) => {
+    if(e.target === thumb) return;
+    scrollParaX(e.clientX);
+  });
+
+  window.addEventListener('pointermove', (e) => {
+    if(!arrastandoTrilho) return;
+    scrollParaX(e.clientX);
+  });
+
+  window.addEventListener('pointerup', () => { arrastandoTrilho = false; });
+
+  /* setas do teclado quando o trilho está focado */
+  track.addEventListener('keydown', (e) => {
+    const passo = scroller.clientWidth * 0.3;
+    if(e.key === 'ArrowRight'){ scroller.scrollLeft += passo; e.preventDefault(); }
+    if(e.key === 'ArrowLeft'){ scroller.scrollLeft -= passo; e.preventDefault(); }
+  });
+
+  /* arrastar pra rolar */
+  let arrastando = false, xInicial = 0, scrollInicial = 0;
+
+  scroller.addEventListener('pointerdown', (e) => {
+    if(e.pointerType === 'mouse' && e.button !== 0) return;
+    arrastando = true;
+    xInicial = e.clientX;
+    scrollInicial = scroller.scrollLeft;
+  });
+
+  scroller.addEventListener('pointermove', (e) => {
+    if(!arrastando) return;
+    const dx = e.clientX - xInicial;
+    /* só marca como "arrasto" depois de um limiar, senão mata o clique no link */
+    if(Math.abs(dx) > 4) scroller.classList.add('is-dragging');
+    scroller.scrollLeft = scrollInicial - dx;
+  });
+
+  function soltar(){
+    arrastando = false;
+    /* tira a trava do clique só no próximo tick, senão o clique do
+       fim do arrasto ainda dispara o link */
+    setTimeout(() => scroller.classList.remove('is-dragging'), 0);
+  }
+
+  scroller.addEventListener('pointerup', soltar);
+  scroller.addEventListener('pointercancel', soltar);
+  scroller.addEventListener('pointerleave', soltar);
+}
+
+document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
+</script>
+
+<script>
+/* =========================================
+   QUARTA DOBRA · caixas de ícone com tilt 3D
+
+   Cada caixa inclina sozinha, perseguindo o cursor: o mouse dentro
+   dela vira um ângulo de rotateX/rotateY (leve, poucos graus), dando
+   sensação de profundidade. O ícone lá dentro "flutua" um pouco mais
+   à frente (translateZ) que o resto do cartão, reforçando o 3D. Um
+   brilho radial acompanha o cursor por cima do degradê já existente.
+
+   Sem transição enquanto o mouse se move (senão o tilt fica "atrasado"
+   e parece borrachudo); a transição só entra ao sair, pra voltar
+   suave à posição neutra.
+========================================= */
+(function(){
+  const boxes = document.querySelectorAll('.frente-icone');
+  if(!boxes.length) return;
+
+  const podeIncliner = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!podeIncliner || reduceMotion) return;
+
+  const MAX_TILT = 16;      /* graus no canto — o giro máximo de verdade */
+  const PERSPECTIVE = 500;  /* menor = perspectiva mais acentuada */
+
+  boxes.forEach((box) => {
+    function onMove(e){
+      const rect = box.getBoundingClientRect();
+
+      /* posição do cursor dentro da caixa, de -1 (borda) a +1 (borda oposta),
+         com 0 no centro. o *2 é o que faz o canto chegar em MAX_TILT cheio */
+      const px = ((e.clientX - rect.left) / rect.width  - 0.5) * 2;
+      const py = ((e.clientY - rect.top)  / rect.height - 0.5) * 2;
+
+      /* o canto sob o cursor vem PRA FRENTE (em direção a quem olha),
+         então a caixa inclina "na direção do mouse" */
+      const rx = py * MAX_TILT;
+      const ry = -px * MAX_TILT;
+
+      box.style.transform =
+        `perspective(${PERSPECTIVE}px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) scale(1.04)`;
+
+      box.style.setProperty('--mx', ((px * 0.5 + 0.5) * 100).toFixed(1) + '%');
+      box.style.setProperty('--my', ((py * 0.5 + 0.5) * 100).toFixed(1) + '%');
+    }
+
+    function onEnter(){
+      box.style.transition = 'transform .12s linear';
+      box.classList.add('is-hover');
+    }
+
+    function onLeave(){
+      box.style.transition = 'transform .5s cubic-bezier(.22,.61,.36,1), box-shadow .5s ease';
+      box.style.transform = '';
+      box.classList.remove('is-hover');
+    }
+
+    box.addEventListener('pointerenter', onEnter);
+    box.addEventListener('pointermove', onMove);
+    box.addEventListener('pointerleave', onLeave);
+  });
+})();
+</script>
+
+<script>
+/* =========================================
+   TERCEIRA DOBRA · DOR — item ativo acompanha o scroll
+
+   O bloco (título + lista) fica pinado no centro da tela via
+   position: sticky. A seção por trás é mais alta que a tela: essa
+   sobra de altura é a "régua" de scroll. A cada frame de scroll,
+   calculamos o quanto já foi percorrido dela (0 a 1) e usamos isso
+   pra decidir qual item está selecionado — sem travar o scroll do
+   usuário, é só leitura de posição.
+========================================= */
+(function(){
+  const section = document.querySelector('.dor-section');
+  const items = document.querySelectorAll('.dor-item');
+  if(!section || !items.length) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if(reduceMotion){
+    section.classList.add('no-scrub');
+    items[0].classList.add('is-active');
+    return;
+  }
+
+  /* vh de "corda" de scroll por item: define o quão devagar troca a seleção */
+  const VH_POR_ITEM = 80;
+  section.style.height = (100 + items.length * VH_POR_ITEM) + 'vh';
+
+  let ticking = false;
+
+  function update(){
+    ticking = false;
+    const rect = section.getBoundingClientRect();
+    const percurso = rect.height - window.innerHeight;
+    if(percurso <= 0) return;
+
+    const progresso = Math.min(1, Math.max(0, -rect.top / percurso));
+    let idx = Math.floor(progresso * items.length);
+    if(idx >= items.length) idx = items.length - 1;
+
+    items.forEach((it, i) => it.classList.toggle('is-active', i === idx));
+  }
+
+  function onScroll(){
+    if(!ticking){
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();
+</script>
+
+<script>
+/* =========================================
+   OITAVA DOBRA · MÉTODO — cartões empilhando por scroll
+
+   Mesma "régua" de scroll da dobra "Dor" (seção mais alta que a tela,
+   sobra vira progresso 0→1). A diferença é o que o progresso controla:
+   aqui não é destaque de texto, é a posição vertical de cada cartão.
+
+   Os 4 cartões ocupam o mesmo retângulo (position: absolute, CSS).
+   O cartão 1 já nasce no lugar. Cada cartão seguinte reserva uma fatia
+   igual do progresso total pra subir do pé do slot até translateY(0),
+   cobrindo o anterior. O deslocamento é medido em px a partir da altura
+   do slot (não 100% do cartão) porque o slot é de propósito mais alto
+   que um cartão: essa folga é a pista onde o cartão aparece chegando.
+   Terminada a fatia do último cartão, a seção acaba e o sticky solta
+   sozinho — sem nenhum scroll-jacking, é só leitura de posição.
+========================================= */
+(function(){
+  const section = document.querySelector('.pedido-section');
+  const slot = section ? section.querySelector('.pedido-etapas') : null;
+  const etapas = section ? [...section.querySelectorAll('.etapa')] : [];
+  if(!section || !slot || etapas.length < 2) return;
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if(reduceMotion){
+    section.classList.add('no-scrub');
+    return;
+  }
+
+  /* vh de "corda" de scroll por transição (3 transições pra 4 cartões) */
+  const VH_POR_ETAPA = 80;
+  const passos = etapas.length - 1;
+  section.style.height = (100 + passos * VH_POR_ETAPA) + 'vh';
+
+  let ticking = false;
+
+  function update(){
+    ticking = false;
+    const rect = section.getBoundingClientRect();
+    const percurso = rect.height - window.innerHeight;
+    if(percurso <= 0) return;
+
+    const progresso = Math.min(1, Math.max(0, -rect.top / percurso));
+    const posGlobal = progresso * passos; /* 0 → passos, contínuo */
+
+    /* o cartão em espera fica logo abaixo da borda de baixo da tela, então
+       a distância que ele percorre é do topo do slot até o fim do viewport
+       (+ uma folga pra borda não espiar). Medido a cada frame porque muda
+       com o tamanho da janela. Enquanto a dobra está presa, o topo do slot
+       não se mexe — o cartão sobe inteiro, sem nada recortando. */
+    const ateBordaDaTela = window.innerHeight - slot.getBoundingClientRect().top + 40;
+    /* o Math.max protege o frame em que a dobra ainda não está presa: ali o
+       slot pode estar muito abaixo da tela e a conta viraria negativa,
+       jogando os cartões pra CIMA em vez de pra baixo */
+    const percursoCartao = Math.max(slot.offsetHeight + 40, ateBordaDaTela);
+
+    etapas.forEach((el, i) => {
+      if(i === 0) return; /* primeiro cartão fica sempre parado no lugar */
+      const local = Math.min(1, Math.max(0, posGlobal - (i - 1)));
+      el.style.transform = `translateY(${(1 - local) * percursoCartao}px)`;
+    });
+  }
+
+  function onScroll(){
+    if(!ticking){
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
+})();
+</script>
+
+<script>
+/* =========================================
+   NAVBAR · contraste automático + navegação por âncora
+
+   A nav é sticky (sempre visível), mas o site alterna entre dobras
+   escuras e claras (Método e Perguntas são claras). O texto branco da
+   nav some contra um fundo quase branco, então aqui a gente detecta
+   qual dobra está "atrás" da nav a cada scroll — pega a que ocupa a
+   faixa de y bem abaixo da nav — e liga a classe `.header-wrap--claro`
+   quando essa dobra tem `data-nav="claro"`. Toda a troca visual (cores,
+   transição) é CSS; isso só decide QUANDO trocar.
+
+   Os links (Trabalho/Frentes/Método/Sobre) já são âncoras normais
+   (`href="#id"`) — a rolagem suave é `scroll-behavior: smooth` no CSS,
+   sem JS nenhum pra isso.
+========================================= */
+(function(){
+  const headerWrap = document.querySelector('.header-wrap');
+  const secoes = [...document.querySelectorAll('body > section')];
+  if(!headerWrap || !secoes.length) return;
+
+  /* tem que ser MAIOR que o `scroll-margin-top` do CSS (115px), não
+     igual — o navegador não pousa o salto do link num pixel exato (varia
+     uns px conforme o tamanho de tela), então igualar os dois valores
+     ainda deixava, por alguns pixels, a dobra antiga sendo lida como
+     "atual" logo depois do salto, e a nav travava na cor errada até
+     o usuário rolar um pouco mais. Essa folga extra resolve. */
+  const OFFSET_ANCORA = 135;
+
+  let ticking = false;
+
+  function atualizar(){
+    ticking = false;
+    const y = OFFSET_ANCORA;
+    const atual = secoes.find(sec => {
+      const r = sec.getBoundingClientRect();
+      return r.top <= y && r.bottom > y;
+    });
+    headerWrap.classList.toggle('header-wrap--claro', !!atual && atual.dataset.nav === 'claro');
+  }
+
+  function onScroll(){
+    if(!ticking){
+      ticking = true;
+      requestAnimationFrame(atualizar);
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  atualizar();
+})();
+</script>
+
+<script>
+/* =========================================
+   FUNDO DA HERO · ONDAS EM LINHAS (LARANJA)
+
+   Linhas horizontais igualmente espaçadas que só aparecem da metade
+   da dobra pra baixo, ondulando por duas senoides sobrepostas.
+   Blend aditivo ('lighter'): onde as linhas se cruzam, o laranja soma
+   e acende — é isso que dá o brilho e a leitura 3D.
+   O mouse levanta um morro gaussiano e ilumina as linhas por perto.
+
+   Canvas 2D + requestAnimationFrame puro (0 KB de dependência).
+   Pausa sozinho quando a dobra sai da tela.
+========================================= */
+(function(){
+  const canvas = document.querySelector('.hero-bg');
+  if(!canvas) return;
+
+  const hero = canvas.parentElement;
+  const ctx = canvas.getContext('2d');
+
+  const LINE_GAP = 24;   /* distância vertical entre as linhas */
+  const STEP     = 16;   /* amostragem horizontal, em px */
+
+  const SIGMA = 190;              /* alcance da influência do mouse */
+  const SIG2  = 2 * SIGMA * SIGMA;
+  const LIFT  = 92;               /* altura do morro sob o cursor */
+
+  /* laranja da IDV (--laranja-400 #ff7a33): tom claro que soma bem no blend aditivo */
+  const RGB = '255, 122, 51';
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let W = 0, H = 0, cols = 0;
+  let lines = [];
+  let rafId = null;
+  let visible = true;
+  let t = 0;
+
+  const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999, active: false };
+
+  function build(){
+    lines = [];
+    const n = Math.ceil(H / LINE_GAP) + 2;
+
+    for(let i = 0; i < n; i++){
+      const baseY = i * LINE_GAP;
+      const vpos  = H ? baseY / H : 0;
+
+      /* as ondas entram só a partir da metade inferior, deixando o headline limpo */
+      const fade = Math.min(1, Math.max(0, (vpos - 0.5) / 0.36));
+      if(fade <= 0.001) continue;
+
+      lines.push({
+        baseY,
+        phase: i * 0.5,
+        amp:   6 + vpos * 30,
+        alpha: fade * 0.34
+      });
+    }
+  }
+
+  function resize(){
+    const rect = hero.getBoundingClientRect();
+    W = rect.width;
+    H = rect.height;
+    if(!W || !H) return;
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width  = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    cols = Math.ceil(W / STEP) + 1;
+    build();
+  }
+
+  function draw(){
+    t += 0.006;
+
+    mouse.x += (mouse.tx - mouse.x) * 0.08;
+    mouse.y += (mouse.ty - mouse.y) * 0.08;
+
+    ctx.clearRect(0, 0, W, H);
+
+    /* blend aditivo: cruzamentos somam e acendem */
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.lineWidth = 1.15;
+
+    for(let li = 0; li < lines.length; li++){
+      const L = lines[li];
+
+      ctx.beginPath();
+      let prevX = 0, prevY = 0;
+
+      for(let c = 0; c <= cols; c++){
+        const x = c * STEP;
+
+        /* primeira onda */
+        let y = L.baseY + L.amp * Math.sin(x * 0.006 + t * 1.2 + L.phase);
+
+        /* segunda onda, mais curta e em sentido contrário: tira o ar artificial */
+        y += (L.amp * 0.5) * Math.sin(x * 0.013 - t * 0.8 + L.phase * 1.7);
+
+        /* morro gaussiano sob o cursor.
+           usa baseY (não o y ondulado) pra linha inteira subir de forma coerente */
+        if(mouse.active){
+          const dx = x - mouse.x;
+          const dy = L.baseY - mouse.y;
+          y -= LIFT * Math.exp(-(dx * dx + dy * dy) / SIG2);
+        }
+
+        if(c === 0){
+          ctx.moveTo(x, y);
+        } else {
+          ctx.quadraticCurveTo(prevX, prevY, (prevX + x) / 2, (prevY + y) / 2);
+        }
+
+        prevX = x;
+        prevY = y;
+      }
+
+      let alpha = L.alpha;
+
+      /* linhas perto do cursor brilham mais */
+      if(mouse.active){
+        const dyc = L.baseY - mouse.y;
+        alpha += 0.22 * Math.exp(-(dyc * dyc) / SIG2);
+      }
+
+      ctx.strokeStyle = `rgba(${RGB}, ${alpha.toFixed(3)})`;
+      ctx.stroke();
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  function frame(){
+    draw();
+    rafId = requestAnimationFrame(frame);
+  }
+
+  function start(){
+    if(rafId === null && visible && !reduceMotion){
+      rafId = requestAnimationFrame(frame);
+    }
+  }
+
+  function stop(){
+    if(rafId !== null){
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+  }
+
+  window.addEventListener('mousemove', (event) => {
+    const rect = hero.getBoundingClientRect();
+    mouse.tx = event.clientX - rect.left;
+    mouse.ty = event.clientY - rect.top;
+    mouse.active = event.clientY >= rect.top && event.clientY <= rect.bottom;
+  }, { passive: true });
+
+  window.addEventListener('mouseleave', () => {
+    mouse.active = false;
+    mouse.tx = -9999;
+    mouse.ty = -9999;
+  });
+
+  /* só anima enquanto a dobra está na tela */
+  if('IntersectionObserver' in window){
+    new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      visible ? start() : stop();
+    }, { threshold: 0 }).observe(hero);
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    document.hidden ? stop() : start();
+  });
+
+  /* ResizeObserver em vez de window.resize: pega também quando a dobra
+     muda de altura sozinha (ex.: a foto da hero terminando de carregar) */
+  if('ResizeObserver' in window){
+    let resizeTimer = null;
+    new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        resize();
+        if(reduceMotion) draw();
+      }, 150);
+    }).observe(hero);
+  } else {
+    window.addEventListener('resize', resize);
+  }
+
+  resize();
+  if(reduceMotion){
+    draw();           /* respeita quem pediu menos movimento: desenha estático */
+  } else {
+    start();
+  }
+})();
+</script>
+
+<script>
+/* =========================================
+   NONA DOBRA · PERGUNTAS — acordeão
+
+   Só uma pergunta fica aberta por vez, igual ao destaque do Figma (o
+   cartão "ativo" é o único com fundo escuro). Clicar num cartão fechado
+   abre ele e fecha o que estava aberto; clicar no que já está aberto só
+   fecha. A troca visual (fundo, cor do texto, resposta aparecendo) é
+   toda CSS — aqui só liga/desliga a classe e troca o ícone pra versão
+   acesa/apagada.
+========================================= */
+(function(){
+  const cartoes = [...document.querySelectorAll('.pergunta')];
+  if(!cartoes.length) return;
+
+  const ICONE_ATIVO = 'teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus-ativo.svg';
+  const ICONE_PADRAO = 'teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg';
+
+  function fechar(cartao){
+    cartao.classList.remove('pergunta--ativa');
+    cartao.querySelector('.pergunta-toggle').setAttribute('aria-expanded', 'false');
+    cartao.querySelector('.pergunta-icone img').src = ICONE_PADRAO;
+  }
+
+  function abrir(cartao){
+    cartao.classList.add('pergunta--ativa');
+    cartao.querySelector('.pergunta-toggle').setAttribute('aria-expanded', 'true');
+    cartao.querySelector('.pergunta-icone img').src = ICONE_ATIVO;
+  }
+
+  cartoes.forEach(cartao => {
+    cartao.querySelector('.pergunta-toggle').addEventListener('click', () => {
+      const jaEstavaAberto = cartao.classList.contains('pergunta--ativa');
+      cartoes.forEach(fechar);
+      if(!jaEstavaAberto) abrir(cartao);
+    });
+  });
+})();
+</script>
+
+<script>
+(function(){
+  const PARTICLE_GAP = 1.6;
+  const PARTICLE_SIZE = 0.9;
+  const MOUSE_RADIUS = 55;
+  const PUSH_FORCE = 1.6;
+  const RETURN_FORCE = 0.035;
+  const FRICTION = 0.88;
+
+  /* pontos de parada equivalentes ao gradiente original (89deg, branco -> cinza -> preto) */
+  const GRADIENT_STOPS = [
+    { pos: 0,    color: [245, 245, 245] },
+    { pos: 0.31, color: [245, 245, 245] },
+    { pos: 0.58, color: [147, 147, 147] },
+    { pos: 0.72, color: [41, 41, 41] },
+    { pos: 0.89, color: [26, 26, 26] },
+    { pos: 1,    color: [26, 26, 26] }
+  ];
+
+  function colorAt(frac){
+    frac = Math.min(1, Math.max(0, frac));
+    for(let i = 0; i < GRADIENT_STOPS.length - 1; i++){
+      const a = GRADIENT_STOPS[i], b = GRADIENT_STOPS[i + 1];
+      if(frac >= a.pos && frac <= b.pos){
+        const t = b.pos === a.pos ? 0 : (frac - a.pos) / (b.pos - a.pos);
+        return [
+          Math.round(a.color[0] + (b.color[0] - a.color[0]) * t),
+          Math.round(a.color[1] + (b.color[1] - a.color[1]) * t),
+          Math.round(a.color[2] + (b.color[2] - a.color[2]) * t)
+        ];
+      }
+    }
+    return GRADIENT_STOPS[GRADIENT_STOPS.length - 1].color;
+  }
+
+  function buildParticleText(canvas){
+    const text = canvas.dataset.text;
+    const isSmall = window.matchMedia('(max-width: 1100px)').matches;
+    const fontSize = isSmall ? 64 : parseInt(canvas.dataset.fontSize || '120', 10);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const font = `700 ${fontSize}px Inter, sans-serif`;
+
+    const measure = document.createElement('canvas').getContext('2d');
+    measure.font = font;
+    const textWidth = measure.measureText(text).width;
+
+    const width = Math.ceil(textWidth) + 16;
+    const height = Math.ceil(fontSize * 1.25);
+
+    const offscreen = document.createElement('canvas');
+    offscreen.width = width;
+    offscreen.height = height;
+    const octx = offscreen.getContext('2d');
+    octx.font = font;
+    octx.fillStyle = '#fff';
+    octx.textBaseline = 'alphabetic';
+    octx.fillText(text, 8, height * 0.78);
+
+    const imgData = octx.getImageData(0, 0, width, height).data;
+
+    const particles = [];
+    for(let y = 0; y < height; y += PARTICLE_GAP){
+      for(let x = 0; x < width; x += PARTICLE_GAP){
+        const xi = Math.floor(x);
+        const yi = Math.floor(y);
+        const alpha = imgData[(yi * width + xi) * 4 + 3];
+        if(alpha > 128){
+          const [r, g, b] = colorAt(x / width);
+          particles.push({
+            x, y,
+            originalX: x, originalY: y,
+            vx: 0, vy: 0,
+            color: `rgb(${r},${g},${b})`
+          });
+        }
+      }
+    }
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const mouse = { x: -1000, y: -1000, targetX: -1000, targetY: -1000 };
+
+    canvas.addEventListener('mousemove', (event) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.targetX = (event.clientX - rect.left) * (width / rect.width);
+      mouse.targetY = (event.clientY - rect.top) * (height / rect.height);
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      mouse.targetX = -1000;
+      mouse.targetY = -1000;
+    });
+
+    function update(){
+      mouse.x += (mouse.targetX - mouse.x) * 0.15;
+      mouse.y += (mouse.targetY - mouse.y) * 0.15;
+
+      for(const p of particles){
+        const dx = p.x - mouse.x;
+        const dy = p.y - mouse.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if(distance < MOUSE_RADIUS){
+          const strength = 1 - distance / MOUSE_RADIUS;
+          const smoothStrength = strength * strength * (3 - 2 * strength);
+          const angle = Math.atan2(dy, dx);
+          const force = smoothStrength * PUSH_FORCE;
+          p.vx += Math.cos(angle) * force;
+          p.vy += Math.sin(angle) * force;
+        }
+
+        p.vx += (p.originalX - p.x) * RETURN_FORCE;
+        p.vy += (p.originalY - p.y) * RETURN_FORCE;
+
+        p.vx *= FRICTION;
+        p.vy *= FRICTION;
+
+        p.x += p.vx;
+        p.y += p.vy;
+      }
+    }
+
+    function draw(){
+      ctx.clearRect(0, 0, width, height);
+      for(const p of particles){
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, PARTICLE_SIZE, PARTICLE_SIZE);
+      }
+    }
+
+    function animate(){
+      update();
+      draw();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  }
+
+  function init(){
+    document.querySelectorAll('.stat-num-canvas').forEach(buildParticleText);
+  }
+
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(init);
+  } else {
+    window.addEventListener('load', init);
+  }
+})();
+</script>
+
+<script>
+/* =========================================
+   SCROLL SUAVE (mouse/trackpad)
+
+   Em vez de deixar a roda do mouse pular direto pro destino, a gente
+   intercepta o evento, guarda um "alvo" e persegue ele aos poucos a
+   cada frame (lerp) — dá aquele peso/inércia de scroll suave sem
+   precisar de nenhuma biblioteca.
+
+   De propósito só mexe no `window.scrollY` de verdade (nunca um
+   transform fake): todo o resto do site — o pin da dobra "Dor", os
+   cartões da "Método", a troca de cor da navbar — já lê a posição real
+   de scroll, então continuam funcionando sem precisar saber que isso
+   existe.
+
+   Só liga em quem tem mouse/trackpad de verdade (`hover:hover` +
+   `pointer:fine`): touch já rola com inércia nativa, mexer nisso só
+   atrapalharia. E respeita quem pediu menos movimento.
+========================================= */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  const EASE = 0.12;
+  let atual = window.scrollY;
+  let alvo = window.scrollY;
+  let animando = false;
+
+  function limiteMax(){
+    return document.documentElement.scrollHeight - window.innerHeight;
+  }
+
+  function passo(){
+    const diferenca = alvo - atual;
+    if(Math.abs(diferenca) < 0.5){
+      atual = alvo;
+      window.scrollTo({ top: atual, behavior: 'instant' });
+      animando = false;
+      return;
+    }
+    atual += diferenca * EASE;
+    window.scrollTo({ top: atual, behavior: 'instant' });
+    requestAnimationFrame(passo);
+  }
+
+  window.addEventListener('wheel', function(e){
+    if(e.ctrlKey) return; /* pinch-zoom do trackpad — não interceptar */
+    e.preventDefault();
+    alvo = Math.min(limiteMax(), Math.max(0, alvo + e.deltaY));
+    if(!animando){
+      animando = true;
+      requestAnimationFrame(passo);
+    }
+  }, { passive: false });
+
+  /* scroll por outro meio (barra de rolagem, teclado, clique em âncora)
+     precisa ressincronizar o alvo, senão a roda do mouse "puxava" a
+     página de volta pro último alvo antigo na próxima rolada */
+  window.addEventListener('scroll', function(){
+    if(!animando){
+      atual = window.scrollY;
+      alvo = window.scrollY;
+    }
+  }, { passive: true });
+
+  window.addEventListener('resize', function(){
+    alvo = Math.min(limiteMax(), alvo);
+  });
+})();
+</script>
+
+<script>
+/* =========================================
+   CURSOR FOLLOWER · rastro de luz
+
+   Corrente de pontos: o primeiro persegue o cursor e cada um dos
+   outros persegue o ANTERIOR da fila. Como cada elo já está atrasado
+   em relação ao anterior, o atraso vai se somando e a corrente inteira
+   desenha uma cauda atrás do ponteiro — sem precisar guardar histórico
+   de posições nem redesenhar nada em canvas.
+
+   O ponteiro do sistema fica como está: isso aqui só acompanha ele,
+   não substitui.
+
+   Só liga em mouse/trackpad de verdade (`hover:hover` + `pointer:fine`):
+   em touch não existe ponteiro pra seguir. E respeita quem pediu menos
+   movimento, igual todas as outras animações do site.
+========================================= */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  const QUANTIDADE = 34;
+  const TAMANHO_CABECA = 22;   /* px — o ponto da frente */
+  const TAMANHO_PONTA = 6;     /* px — o último fiapo da cauda */
+  /* EASE alto de propósito. O atraso de cada elo se MULTIPLICA pelo
+     tamanho da corrente, então ease baixo esticaria a cauda por quase
+     a tela inteira. E como o comprimento total é `QUANTIDADE × atraso
+     de cada elo`, os dois andam juntos: muitos pontos com ease alto dão
+     o MESMO tamanho de cauda que poucos pontos com ease baixo, só que
+     com os pontos bem mais juntos — que é o que faz o rastro ler como
+     luz contínua em vez de um colar de bolinhas. */
+  const EASE = 0.72;
+
+  const trilha = document.createElement('div');
+  trilha.className = 'cursor-trail';
+  trilha.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(trilha);
+
+  const pontos = [];
+
+  for(let i = 0; i < QUANTIDADE; i++){
+    /* 0 = cabeça, 1 = fim da cauda */
+    const t = i / (QUANTIDADE - 1);
+    const tamanho = TAMANHO_CABECA - (TAMANHO_CABECA - TAMANHO_PONTA) * t;
+
+    const ponto = document.createElement('i');
+    ponto.style.width = tamanho + 'px';
+    ponto.style.height = tamanho + 'px';
+    /* centraliza cada ponto no seu próprio eixo */
+    ponto.style.marginLeft = (-tamanho / 2) + 'px';
+    ponto.style.marginTop = (-tamanho / 2) + 'px';
+    ponto.style.opacity = (1 - t) * 0.85 + 0.06;
+    trilha.appendChild(ponto);
+
+    pontos.push({ el: ponto, x: 0, y: 0 });
+  }
+
+  let alvoX = 0, alvoY = 0;
+  let iniciado = false;
+
+  window.addEventListener('pointermove', function(e){
+    if(e.pointerType !== 'mouse') return;
+
+    alvoX = e.clientX;
+    alvoY = e.clientY;
+
+    /* no primeiro movimento a corrente inteira nasce embaixo do cursor;
+       sem isso ela viria chicoteando do canto (0,0) na primeira mexida */
+    if(!iniciado){
+      iniciado = true;
+      for(const p of pontos){ p.x = alvoX; p.y = alvoY; }
+      trilha.classList.add('is-visivel');
+    }
+  }, { passive: true });
+
+  /* apagar quando o mouse sai da janela, senão o rastro fica aceso
+     parado num canto como se tivesse travado */
+  document.addEventListener('mouseleave', function(){
+    trilha.classList.remove('is-visivel');
+  });
+
+  document.addEventListener('mouseenter', function(){
+    if(iniciado) trilha.classList.add('is-visivel');
+  });
+
+  function passo(){
+    /* cada elo mira em quem vem antes; o primeiro mira no cursor */
+    let miraX = alvoX, miraY = alvoY;
+
+    for(const p of pontos){
+      p.x += (miraX - p.x) * EASE;
+      p.y += (miraY - p.y) * EASE;
+      p.el.style.transform = 'translate3d(' + p.x + 'px, ' + p.y + 'px, 0)';
+      miraX = p.x;
+      miraY = p.y;
+    }
+
+    requestAnimationFrame(passo);
+  }
+
+  requestAnimationFrame(passo);
+})();
+</script>
+
+</body>
+</html>

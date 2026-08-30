@@ -1,0 +1,792 @@
+/* =========================================
+   ESTILO COMPARTILHADO · PÁGINAS DE CASE (subpáginas de projeto)
+
+   Usado por case-ai-comet.html, case-solar-ruby.html, case-hard-flow.html.
+   Mesma "pegada" da home: fundo preto, laranja de destaque, cantos de
+   26px/24px, blocos narrativos título+texto em duas colunas.
+========================================= */
+:root{
+  --preto: #000000;
+  --branco: #ffffff;
+  --neutro-100: #f5f5f5;
+  --neutro-200: #e5e5e5;
+  --neutro-400: #a3a3a3;
+  --neutro-600: #525252;
+  --neutro-800: #1a1a1a;
+  --laranja-500: #ff5900;
+  --laranja-400: #ff7a33;
+  --borda: #c7c7c7;
+  --linha: rgba(255,255,255,0.12);
+}
+
+*{ box-sizing: border-box; margin: 0; padding: 0; }
+
+body{
+  background: var(--preto);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+img{ display: block; max-width: 100%; }
+
+/* ---------- NAVBAR (mesma da home, fixa em todas as sub-páginas) ---------- */
+.header-wrap{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 32px 120px 0;
+}
+
+.nav{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  border-radius: 100px;
+  padding: 13px 40px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.015) 100%);
+  border: 1px solid rgba(255,255,255,0.14);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 8px 24px rgba(0,0,0,0.35);
+  overflow: hidden;
+}
+
+.nav::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(160px 100px at 15% 0%, rgba(255,255,255,0.12), transparent 70%);
+  pointer-events: none;
+}
+
+.nav > *{ position: relative; }
+
+.nav-left{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-back{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #1e1e1e;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--neutro-100);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color .3s ease, color .3s ease;
+}
+
+.nav-back:hover{
+  background-color: rgba(255,255,255,.1);
+  color: var(--laranja-400);
+}
+
+.nav-back .arrow{
+  display: inline-block;
+  font-size: 16px;
+  line-height: 1;
+  transition: transform .3s cubic-bezier(.22,.61,.36,1);
+}
+
+.nav-back:hover .arrow{ transform: translateX(-2px); }
+
+.badge{
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 9px;
+  background: #1e1e1e;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 85px;
+  padding: 5px 16px 5px 5px;
+  text-decoration: none;
+}
+
+.badge img{ width: 24px; height: 24px; border-radius: 50%; }
+
+.badge span{
+  font-family: 'Archivo', sans-serif;
+  font-weight: 500;
+  font-size: 9.4px;
+  letter-spacing: 0.05em;
+  color: #f4f2ed;
+  white-space: nowrap;
+}
+
+.nav-links{
+  display: flex;
+  gap: 28px;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--neutro-100);
+  white-space: nowrap;
+}
+
+.nav-links a{ color: inherit; text-decoration: none; }
+.nav-links a:hover{ color: var(--laranja-400); }
+
+.btn-secondary{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--borda);
+  border-radius: 100px;
+  padding: 12px 21px;
+  font-weight: 600;
+  font-size: 10.5px;
+  color: var(--neutro-100);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform .35s cubic-bezier(.22,.61,.36,1), border-color .35s, background-color .35s;
+}
+
+.btn-secondary:hover{
+  transform: translateY(-2px);
+  border-color: #fff;
+  background-color: rgba(255,255,255,.06);
+}
+
+/* ---------- BLOCOS COMUNS ---------- */
+.eyebrow{
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.35;
+  letter-spacing: 0.78px;
+  text-transform: uppercase;
+  color: var(--laranja-400);
+  white-space: nowrap;
+}
+
+/* ---------- HERO ---------- */
+.case-hero{
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.case-hero-head{
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.case-hero h1{
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1.1;
+  color: var(--branco);
+}
+
+.case-hero .lead{
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.35;
+  color: var(--neutro-400);
+  max-width: 760px;
+}
+
+.case-hero-img{
+  height: 916px;
+  border-radius: 24px;
+  border: 1px solid var(--linha);
+  overflow: hidden;
+}
+
+.case-hero-img img,
+.case-hero-img video{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* cases de social media: o entregável é a própria grade de peças,
+   então o herói mostra a colagem inteira em vez de recortá-la num
+   palco de altura fixa */
+.case-hero-img--grid,
+.case-hero-img--grid img{ height: auto; }
+
+/* ---------- FICHA TÉCNICA ---------- */
+.case-overview{
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 40px 120px 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.case-rule{
+  height: 1px;
+  background: var(--linha);
+}
+
+.ficha{
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.ficha-col{
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ficha-col dt{
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.35;
+  letter-spacing: 0.78px;
+  text-transform: uppercase;
+  color: var(--neutro-600);
+}
+
+.ficha-col dd{
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--neutro-100);
+}
+
+/* ---------- SEÇÕES NARRATIVAS ---------- */
+.case-block{
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 120px;
+  display: flex;
+  gap: 80px;
+  align-items: flex-start;
+}
+
+.case-block-title{
+  width: 400px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.case-block-title h2{
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1.1;
+  color: var(--neutro-100);
+}
+
+.case-block-body{
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.case-block-body p{
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.case-block-body p:first-child{
+  font-size: 18px;
+  color: var(--neutro-200);
+}
+
+.case-block-body p + p{
+  font-size: 16px;
+  color: var(--neutro-400);
+}
+
+/* execução: título+texto em cima, imagem larga embaixo */
+.case-block--stacked{
+  flex-direction: column;
+  gap: 56px;
+}
+
+.case-block--stacked .case-block-inner{
+  display: flex;
+  gap: 80px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.case-showcase{
+  width: 100%;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid var(--linha);
+}
+
+.case-showcase img{ width: 100%; height: auto; }
+
+/* ---------- GALERIA ---------- */
+.case-gallery{
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.case-gallery img{
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* vitrine de peças soltas (posts 4:5) — três por linha, no tamanho em
+   que dá pra ler a peça, em vez de esticadas na largura toda */
+.case-pecas{
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.case-pecas img{
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+/* ---------- AMPLIAR IMAGEM (lightbox) ----------
+   O fundo continua visível por trás: a camada é semitransparente e o
+   backdrop-filter desfoca o que está atrás dela, em vez de tapar. */
+.zoomavel{ cursor: zoom-in; }
+
+.lightbox{
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease, visibility .3s ease;
+}
+
+.lightbox.aberto{ opacity: 1; visibility: visible; }
+
+.lightbox img{
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.6);
+  transform: scale(.96);
+  transition: transform .3s cubic-bezier(.22,.61,.36,1);
+}
+
+.lightbox.aberto img{ transform: scale(1); }
+
+.lightbox-fechar{
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 50%;
+  background: rgba(0,0,0,.45);
+  color: var(--neutro-100);
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color .3s ease, border-color .3s ease;
+}
+
+.lightbox-fechar:hover{
+  background: rgba(255,255,255,.15);
+  border-color: #fff;
+}
+
+/* setas pra navegar entre as outras peças sem fechar a imagem —
+   somem sozinhas quando a página só tem uma imagem no grupo */
+.lightbox-nav{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 50%;
+  background: rgba(0,0,0,.45);
+  color: var(--neutro-100);
+  cursor: pointer;
+  transition: background-color .3s ease, border-color .3s ease;
+}
+
+.lightbox-nav:hover{
+  background: rgba(255,255,255,.15);
+  border-color: #fff;
+}
+
+.lightbox-nav[hidden]{ display: none; }
+
+.lightbox-prev{ left: 24px; }
+.lightbox-next{ right: 24px; }
+
+.lightbox-nav svg{ display: block; }
+
+/* ---------- SITE NO AR (quando o entregável é um site vivo) ---------- */
+.case-live{
+  width: calc(100% - 240px);
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 48px;
+  border-radius: 26px;
+  border: 1px solid var(--linha);
+  background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.012) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.case-live-txt{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.case-live-txt h2{
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.2;
+  color: var(--neutro-100);
+}
+
+.case-live-txt p{
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  color: var(--neutro-400);
+}
+
+.btn-light{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 100px;
+  padding: 18px 32px;
+  background: var(--neutro-100);
+  color: var(--preto);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.35;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease;
+}
+
+.btn-light:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(255,255,255,.16);
+}
+
+.btn-light .arrow{
+  display: inline-block;
+  transition: transform .35s cubic-bezier(.22,.61,.36,1);
+}
+
+.btn-light:hover .arrow{ transform: translateX(5px); }
+
+.btn-light .behance-icon{
+  display: inline-block;
+  flex-shrink: 0;
+  transition: transform .35s cubic-bezier(.22,.61,.36,1);
+}
+
+.btn-light:hover .behance-icon{ transform: scale(1.12); }
+
+/* ---------- OUTROS PROJETOS ---------- */
+.related{
+  background: var(--neutro-800);
+  padding: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.related-head{
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.related-head h2{
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1.1;
+  color: var(--neutro-100);
+}
+
+.related-head p{
+  font-family: 'Archivo', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 1.3;
+  letter-spacing: 0.66px;
+  color: var(--neutro-400);
+}
+
+.related-grid{
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.related-card{
+  width: 433px;
+  height: 320px;
+  border-radius: 26px;
+  border: 1px solid var(--linha);
+  overflow: hidden;
+  display: block;
+  position: relative;
+}
+
+.related-card img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s cubic-bezier(.22,.61,.36,1);
+}
+
+.related-card:hover img{ transform: scale(1.05); }
+
+/* descrição do projeto, revelada ao passar o mouse por cima da capa */
+.related-overlay{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 28px;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.88) 100%);
+  opacity: 0;
+  transition: opacity .35s ease;
+  pointer-events: none;
+}
+
+.related-card:hover .related-overlay{ opacity: 1; }
+
+.related-overlay-title{
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--branco);
+}
+
+.related-overlay-desc{
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.35;
+  color: var(--neutro-200);
+}
+
+/* ---------- VER NO BEHANCE (fecha a página, antes do rodapé) ---------- */
+.case-behance{
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 120px 120px;
+  display: flex;
+  justify-content: flex-start;   /* alinhado à esquerda, como o resto da página */
+}
+
+/* Ao passar o mouse o botão vira azul Behance e ganha um anel de luz
+   girando na borda. O truque: o ::before é um degradê cônico que sobra
+   2px pra fora e gira; o ::after cobre o miolo, então só a "casquinha"
+   do degradê aparece — é isso que lê como borda luminosa em movimento. */
+@property --giro-luz{
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes giroLuz{
+  to{ --giro-luz: 360deg; }
+}
+
+.case-behance .btn-light{
+  position: relative;
+  z-index: 0;                    /* cria o contexto pros pseudos ficarem atrás */
+  background: none;              /* quem pinta o fundo agora é o ::after */
+  transition: transform .35s cubic-bezier(.22,.61,.36,1),
+              color .35s ease,
+              box-shadow .35s ease;
+}
+
+.case-behance .btn-light::before{
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: -2;
+  border-radius: inherit;
+  background: conic-gradient(from var(--giro-luz),
+              transparent 0deg,
+              #1769ff 35deg,
+              #a8c8ff 90deg,
+              #4d8dff 145deg,
+              transparent 210deg,
+              transparent 360deg);
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+
+.case-behance .btn-light::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: var(--neutro-100);
+  transition: background-color .35s ease;
+}
+
+.case-behance .btn-light:hover{
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(23,105,255,.45);
+}
+
+.case-behance .btn-light:hover::before{
+  opacity: 1;
+  animation: giroLuz 2.5s linear infinite;
+}
+
+.case-behance .btn-light:hover::after{ background-color: #1769ff; }
+
+/* ---------- RODAPÉ ---------- */
+.rodape{
+  background: var(--preto);
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rodape-cols{
+  display: flex;
+  gap: 64px;
+  flex-wrap: wrap;
+}
+
+.rodape-col{
+  flex: 1;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rodape-col h3{
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--branco);
+}
+
+.rodape-col ul{ list-style: none; }
+
+.rodape-col li,
+.rodape-col a{
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--neutro-100);
+  text-decoration: none;
+}
+
+.rodape-col a:hover{ color: var(--laranja-400); }
+
+@media (prefers-reduced-motion: reduce){
+  .related-card img, .related-overlay, .btn-secondary, .btn-light, .btn-light .arrow, .btn-light .behance-icon, .nav-back, .nav-back .arrow, .lightbox-nav{ transition: none; }
+  .lightbox, .lightbox img{ transition: none; }
+  .lightbox img{ transform: none; }
+  /* a cor ainda muda no hover, mas a luz para de girar */
+  .case-behance .btn-light::before,
+  .case-behance .btn-light::after{ transition: none; }
+  .case-behance .btn-light:hover::before{ animation: none; }
+}
+
+@media (max-width: 1100px){
+  .header-wrap{ padding: 20px 24px 0; }
+  .nav{ padding: 12px 20px; }
+  .nav-links{ display: none; }
+
+  .case-hero,
+  .case-block,
+  .related,
+  .rodape{ padding: 60px 24px; }
+  .case-overview{ padding: 32px 24px 60px; }
+  .case-gallery{ padding: 60px 24px 80px; }
+  .case-pecas{ grid-template-columns: 1fr; gap: 20px; }
+  .lightbox{ padding: 16px; }
+  .lightbox-fechar{ top: 12px; right: 12px; width: 40px; height: 40px; }
+  .lightbox-nav{ width: 40px; height: 40px; }
+  .lightbox-prev{ left: 8px; }
+  .lightbox-next{ right: 8px; }
+
+  .case-hero h1,
+  .case-block-title h2,
+  .related-head h2{ font-size: 32px; }
+
+  .case-hero-img{ height: 420px; }
+  .case-hero-img--grid{ height: auto; }
+
+  .case-block,
+  .case-block--stacked .case-block-inner{ flex-direction: column; gap: 32px; }
+  .case-block-title{ width: 100%; }
+
+  .ficha-col{ width: 45%; min-width: 160px; }
+  .related-card{ width: 100%; height: 240px; }
+
+  .case-live{ margin: 0 24px; padding: 32px; gap: 24px; }
+  .case-live-txt h2{ font-size: 22px; }
+  .btn-light{ padding: 16px 26px; font-size: 15px; }
+  .case-behance{ padding: 0 24px 60px; }
+}
