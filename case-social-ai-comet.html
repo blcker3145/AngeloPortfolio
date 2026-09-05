@@ -22,13 +22,17 @@
           <span>Angelo Felipe</span>
         </a>
       </div>
-      <div class="nav-links">
+      <div class="nav-links" id="nav-links">
         <a href="index.html">Trabalho</a>
         <a href="index.html">Frentes</a>
         <a href="index.html">Método</a>
         <a href="index.html">Sobre</a>
       </div>
       <a href="#" class="btn-secondary">Entrar em contato</a>
+      <!-- só aparece no mobile; abre/fecha a .nav-links -->
+      <button class="nav-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
     </nav>
   </div>
 
@@ -164,6 +168,19 @@
       <img src="teste.site/assets/img/Imagens-Angelo.site/Badge/avatar.png.png" alt="Angelo Felipe">
       <span>Angelo Felipe</span>
     </a>
+
+    <!-- bloco exclusivo do mobile, igual ao da home: logo, começo do
+         formulário e os CTAs -->
+    <div class="rodape-mobile">
+      <img class="rodape-logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
+      <div class="rodape-form">
+        <input class="rodape-campo" type="text" name="nome" placeholder="Seu nome" aria-label="Seu nome">
+        <a href="#" class="rodape-enviar">
+          Solicitar Projeto
+          <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
+        </a>
+      </div>
+    </div>
     <div class="rodape-cols">
       <div class="rodape-col">
         <h3>Angelo Felipe</h3>
@@ -198,6 +215,19 @@
           <li>Estruturação de perfil</li>
         </ul>
       </div>
+    </div>
+
+    <!-- fecha o rodapé no mobile; no desktop fica escondido -->
+    <div class="rodape-social">
+      <a href="https://behance.net/FanzeDesign" aria-label="Behance">
+        <img src="teste.site/assets/Icons/Icons-Angelo.site/Social/behance.svg" alt="">
+      </a>
+      <a href="https://instagram.com/angelo.odesigner" aria-label="Instagram">
+        <img src="teste.site/assets/Icons/Icons-Angelo.site/Social/instagram.svg" alt="">
+      </a>
+      <a href="#" aria-label="YouTube">
+        <img src="teste.site/assets/Icons/Icons-Angelo.site/Social/youtube.svg" alt="">
+      </a>
     </div>
   </footer>
 

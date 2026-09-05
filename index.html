@@ -156,6 +156,23 @@
     color: var(--laranja-400);
   }
 
+  /* elementos que só existem no layout mobile — ficam fora de cena aqui
+     e são ligados no bloco de 640px lá no fim da folha */
+  .nav-menu,
+  .hero-band-img,
+  .hero-band-logo,
+  .frente-icone-mobile,
+  .rodape-social,
+  .rodape-mobile{ display: none; }
+
+  /* o sublinhado de "alinhado" no título do hero (vem do Figma) */
+  .hero-text h1 .sublinhado{
+    text-decoration: underline;
+    text-decoration-color: #ff9b66;
+    text-decoration-thickness: .075em;
+    text-underline-offset: .08em;
+  }
+
   .btn-secondary{
     display: inline-flex;
     align-items: center;
@@ -1801,6 +1818,957 @@
   @media (max-width: 1100px){
     .rodape{ padding: 60px 24px; }
   }
+
+  /* =====================================================================
+     MOBILE (390) · layout do Figma "Home · Mobile (390)"
+
+     Fica no FIM da folha de propósito: as dobras já tinham regras soltas
+     de `max-width: 1100px` cada uma, e como a especificidade é a mesma,
+     quem vem por último ganha. Assim dá pra ler o mobile inteiro num
+     lugar só, em vez de caçar oito blocos espalhados.
+
+     Medidas do Figma que se repetem em quase tudo:
+       . tela 390, conteúdo 342  → padding lateral de 24
+       . respiro entre dobras    → 64 em cima e embaixo
+       . distância entre blocos  → 32
+       . cantos                  → 20 nos cards, 100 (pílula) nos botões
+       . botões                  → 56 de altura, largura cheia, empilhados
+
+     A escala tipográfica também é fixa: 34 no título do hero, 28 nos
+     títulos de dobra, 20 nos títulos de card, 15 no corpo, 12–13 nos
+     rótulos.
+  ===================================================================== */
+  @media (max-width: 640px){
+
+    /* ---------- HEADER · barra chapada, sem a pílula de vidro ---------- */
+    .header-wrap{ padding: 0; }
+
+    .nav{
+      max-width: none;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+      padding: 14px 24px;
+      background: var(--preto);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+      overflow: visible;   /* o menu aberto precisa escapar da barra */
+    }
+
+    .nav::before{ display: none; }
+
+    .header-wrap--claro .nav{ background: var(--preto); }
+
+    .badge{ padding: 5px 15px 5px 5px; }
+    .badge span{ font-size: 11px; letter-spacing: .06em; }
+
+    /* o "Entrar em contato" sai — no Figma o topo só tem badge + menu */
+    .header-wrap .btn-secondary{ display: none; }
+
+    .nav-menu{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3.6px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 1px solid var(--neutro-400);
+      border-radius: 100px;
+      background: none;
+      cursor: pointer;
+    }
+
+    .nav-menu span{
+      width: 13px;
+      height: 1px;
+      border-radius: 1.5px;
+      background: var(--branco);
+      transition: transform .25s ease, opacity .25s ease;
+    }
+
+    /* hamburger vira "x" quando aberto */
+    .nav-menu[aria-expanded="true"] span:nth-child(1){ transform: translateY(4.6px) rotate(45deg); }
+    .nav-menu[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
+    .nav-menu[aria-expanded="true"] span:nth-child(3){ transform: translateY(-4.6px) rotate(-45deg); }
+
+    /* os links viram painel: escondidos até o menu abrir */
+    .nav-links{
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      padding: 8px 24px 20px;
+      background: var(--preto);
+      font-size: 15px;
+    }
+
+    .nav-links.is-aberto{ display: flex; }
+    .nav-links a{ padding: 12px 0; }
+
+    /* ---------- DOBRA 01 · hero ---------- */
+    .hero{
+      min-height: 0;
+      padding: 32px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      align-items: stretch;
+    }
+
+    .hero-content{
+      flex-direction: column;
+      gap: 32px;
+      max-width: none;
+    }
+
+    /* a foto vira uma faixa baixa e vai pro topo, com o logo por cima */
+    .hero-photo{
+      order: -1;
+      width: 100%;
+      height: 78px;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* a foto do desktop sai de cena: no mobile a faixa usa a marca em
+       vidro que veio do Figma */
+    .hero-photo > img:first-child{ display: none; }
+
+    /* os seletores levam `.hero-photo img` junto porque a regra genérica
+       da foto tem especificidade maior que uma classe sozinha */
+    .hero-photo img.hero-band-img{
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 42%;
+      /* o Figma escurece a imagem em 68% pro logo ler por cima */
+      filter: brightness(.55);
+    }
+
+    .hero-photo img.hero-band-logo{
+      display: block;
+      position: absolute;
+      left: 18px;          /* no Figma o logo fica à ESQUERDA */
+      bottom: 18px;
+      width: 106px;
+      height: auto;
+      object-fit: contain;
+      filter: none;
+    }
+
+    .hero-text{
+      max-width: none;
+      gap: 32px;
+      align-items: stretch;
+      text-align: left;    /* o bloco de 1100px centraliza; o Figma não */
+    }
+
+    /* o logo daqui some: no mobile ele mora na faixa da foto */
+    .hero-text .logo{ display: none; }
+
+    .hero-text h1{
+      font-size: 34px;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: -16px;   /* compensa o gap de 32 → 16 até o lead */
+    }
+
+    /* no mobile o título é um parágrafo corrido, não três linhas
+       animadas com máscara — deixar as .line como bloco quebraria a
+       quebra natural do texto */
+    .hero-text h1 .line,
+    .hero-text h1 .line > span{
+      display: inline;
+      overflow: visible;
+      transform: none;
+      animation: none;
+    }
+
+    /* no HTML as três .line são coladas uma na outra (sem espaço, porque
+       no desktop cada uma é um bloco). Viradas em inline, "precisa" e
+       "estar" grudariam — este espaço recompõe a separação */
+    .hero-text h1 .line::after{ content: " "; }
+
+    .hero-text p.lead{ font-size: 15px; line-height: 1.5; }
+
+    .ctas{ flex-direction: column; gap: 12px; align-items: stretch; }
+
+    /* ---------- botões: pílula, largura cheia, 56 de altura ---------- */
+    .hero .btn-primary,
+    .hero .btn-secondary,
+    .proj-cta .btn-primary,
+    .proj-cta .btn-secondary,
+    .sobre-texto .btn-primary,
+    .cta-final .btn-primary,
+    .cta-final .btn-secondary{
+      width: 100%;
+      height: 56px;
+      padding: 0 16px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 600;
+      white-space: normal;
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .hero .btn-primary img,
+    .sobre-texto .btn-primary img{ width: 20px; height: 20px; }
+
+    .hero .btn-secondary .arrow{ display: none; }
+
+    /* ---------- os cards "Desde 2022 / 40 a 60" ---------- */
+    .numeros{
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      max-width: none;
+    }
+
+    .numero{
+      display: flex;
+      /* o padrão é `column`: sem trocar aqui, o flex-basis do <strong>
+         viraria ALTURA em vez de largura e esticaria o card */
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: left;
+      gap: 16px;
+      height: auto;
+      min-height: 76px;
+      padding: 16px 20px;
+      border: 0;
+      border-radius: 20px;
+      /* o Figma pede um cinza chapado, não o vidro do desktop */
+      background: var(--neutro-800);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+      font-size: 13px;
+    }
+
+    .numero::before{ display: none; }   /* o brilho do card de vidro */
+
+    .numero strong{
+      flex: 0 0 130px;
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--branco);
+    }
+
+    .numero p{
+      flex: 1;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--neutro-400);
+    }
+
+    /* o Figma só traz dois; o terceiro é exclusivo do desktop */
+    .numeros .numero:nth-child(3){ display: none; }
+
+    /* ---------- DOBRA 02 · prova ---------- */
+    .stats-section{ padding: 64px 24px; }
+
+    .stats{
+      display: flex;
+      /* o bloco de 1100px empilha; no Figma os dois ficam lado a lado */
+      flex-direction: row;
+      /* a .stats é item flex da seção, então sem isso ela fica do tamanho
+         do conteúdo e não respeita os 342 que sobram do padding de 24 */
+      width: 100%;
+      gap: 48px;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .stat{ flex: 1; min-width: 0; text-align: center; }
+
+    /* o número em canvas (partículas) é firula de desktop: no mobile
+       vira texto normal, que é o que o Figma pede e ainda escala melhor */
+    .stat-num-canvas{ display: none; }
+
+    .stat::before{
+      content: attr(data-num);
+      display: block;
+      font-size: 36px;
+      font-weight: 700;
+      line-height: .95;
+      letter-spacing: -0.03em;
+      color: var(--branco);
+      margin-bottom: 8px;
+    }
+
+    .stat p{ font-size: 15px; line-height: 1.5; color: var(--neutro-400); }
+
+    /* ---------- DOBRA 03 · dor ----------
+       O pin fica ligado, igual ao desktop: a altura da seção quem define
+       é a JS, então o padding vai no .dor-pin e não na seção.
+
+       No Figma o primeiro item já aparece grande e branco e os outros
+       apagados — que é justamente o par ativo/inativo desta animação.
+       Então em vez de fixar o destaque no primeiro, deixo a rolagem
+       mover esse destaque item a item. */
+    .dor-section{ padding: 0; }
+
+    .dor-pin{ padding: 64px 24px; }
+
+    .dor-inner{
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      max-width: none;
+      padding: 0;
+    }
+
+    .dor-title{ font-size: 28px; line-height: 1.1; letter-spacing: -0.015em; }
+
+    .dor-list{ display: flex; flex-direction: column; gap: 24px; }
+
+    /* --foco (0→1) é escrito pelo JS a cada frame de scroll.
+       Todas as propriedades visuais derivam dele de forma contínua:
+       opacidade, tamanho de fonte, cor e brilho da barra.
+       Nada acontece em degrau — o polegar tem controle direto sobre
+       cada pixel de transição, em tempo real. */
+    .dor-item{
+      --foco: 0;
+      display: flex;
+      align-items: stretch;
+      gap: 16px;
+      /* opacidade vai de 0.35 (longe) a 1.0 (em foco) */
+      opacity: calc(.35 + .65 * var(--foco));
+      /* GPU composite — sem custo de layout a cada frame */
+      will-change: opacity;
+      /* toque direto: sem atraso de identificação de gesto */
+      touch-action: pan-y;
+    }
+
+    .dor-bar{
+      position: relative;
+      width: 3px;
+      flex: 0 0 3px;
+      height: auto;
+      border-radius: 100px;
+      background: var(--neutro-600);
+      /* transition zero: o ::after já cuida do efeito visual */
+      transition: none;
+    }
+
+    /* a cor laranja sobe junto com o foco — zero degrau */
+    .dor-bar::after{
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: var(--laranja-500);
+      /* box-shadow também proporcional ao foco */
+      box-shadow: 0 0 calc(16px * var(--foco)) rgba(255,89,0, calc(.5 * var(--foco)));
+      opacity: var(--foco);
+      will-change: opacity;
+    }
+
+    .dor-text{
+      /* font-size interpolado continuamente: 15px (longe) → 20px (foco pleno)
+         O dedo controla o tamanho letra a letra, sem nenhum salto. */
+      font-size: calc(15px + 5px * var(--foco));
+      /* line-height também acompanha: 1.5 (longe) → 1.25 (foco) */
+      line-height: calc(1.5 - .25 * var(--foco));
+      /* cor: neutro-400 → branco, proporcional */
+      color: color-mix(in srgb, var(--branco) calc(var(--foco) * 100%), var(--neutro-400));
+      /* letter-spacing sutil: 0 → -0.005em ao aproximar */
+      letter-spacing: calc(-0.005em * var(--foco));
+      /* font-weight não interpola no CSS — controlado pelo JS via --foco-w */
+      font-weight: var(--foco-w, 400);
+      will-change: font-size, opacity;
+    }
+
+    /* durante a medição das alturas o JS congela tudo */
+    .dor-list.medindo .dor-text{ transition: none; }
+
+    /* quando is-active, a barra cinza some de trás (o laranja do ::after
+       já cobre; manter cinza causava halo fantasma na borda) */
+    .dor-item.is-active .dor-bar{ background: transparent; }
+    .dor-item.is-active .dor-text{ color: var(--branco); }
+
+    /* ---------- DOBRA 04 · frentes (fundo branco no mobile) ---------- */
+    .frentes-section{
+      min-height: 0;
+      padding: 64px 24px;
+      background: var(--branco);
+    }
+
+    .frentes-inner{ display: flex; flex-direction: column; gap: 32px; max-width: none; }
+
+    .frentes-header{ display: flex; flex-direction: column; gap: 8px; }
+
+    .frentes-kicker{
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.3;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      color: #b33e00;
+    }
+
+    .frentes-header h2{
+      font-size: 28px;
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      color: var(--preto);
+    }
+
+    .frentes-list{ display: flex; flex-direction: column; gap: 0; }
+
+    .frente{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 24px 16px;
+      border: 0;
+      border-top: 1px solid var(--neutro-200);
+      background: none;
+    }
+
+    .frentes-list .frente:first-child{ border-top: 0; }
+
+    .frente::before,
+    .frente::after{ display: none; }   /* tira o brilho que segue o mouse */
+
+    .frente-index{
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.3;
+      letter-spacing: .02em;
+      color: var(--neutro-600);
+    }
+
+    .frente-texto{ display: contents; }
+
+    .frente-texto h3{
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.005em;
+      color: var(--preto);
+    }
+
+    .frente-texto p{
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--neutro-600);
+    }
+
+    .frente-icone{
+      order: 9;            /* o ícone vai pro fim do card */
+      width: 18px;
+      height: 18px;
+      background: none;
+      border: 0;
+      border-radius: 0;
+      /* no desktop isso aqui é um cartão laranja com sombra e efeito 3D;
+         no mobile é só o traço do ícone, então tudo o que era do cartão
+         (sombra, brilho e a inclinação que a JS aplica) sai */
+      box-shadow: none;
+      transform: none !important;
+      transition: none;
+    }
+
+    .frente-icone::after{ display: none; }   /* o brilho que segue o mouse */
+
+    /* troca pelo ícone do Figma: o do desktop sai, o mobile entra. Já
+       vêm com traço laranja, então nada de inverter cor aqui */
+    .frente-icone img{ display: none; }
+
+    .frente-icone img.frente-icone-mobile{
+      display: block;
+      width: 18px;
+      height: 18px;
+      filter: none;
+      /* o translateZ do efeito 3D do desktop também não vale aqui */
+      transform: none;
+      transition: none;
+    }
+
+    /* ---------- DOBRAS 05 e 06 · projetos (empilhados, sem carrossel) ---------- */
+    .proj-section{
+      min-height: 0;
+      padding: 64px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .proj-header{ display: flex; flex-direction: column; gap: 8px; }
+
+    .proj-header h2{ font-size: 28px; line-height: 1.1; letter-spacing: -0.015em; }
+
+    .proj-header p{ font-size: 13px; font-weight: 500; line-height: 1.45; color: var(--neutro-400); }
+
+    /* o arrastar-pra-rolar sai: no mobile os cards empilham */
+    .proj-scroll{
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      overflow: visible;
+      cursor: auto;
+      padding: 0;
+    }
+
+    .proj-track{ display: none; }
+
+    .proj-card,
+    .proj-card--active{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transform: none;
+      scale: 1;
+    }
+
+    .proj-thumb{
+      width: 100%;
+      height: 200px;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .proj-thumb img{ width: 100%; height: 100%; object-fit: cover; transform: none; }
+
+    /* No desktop o rodapé do card são duas colunas lado a lado. No Figma
+       mobile vira: nome, subtítulo e — numa linha separada com filete em
+       cima — as tags à esquerda e o link à direita.
+
+       `display: contents` nas .proj-col dissolve as duas colunas e joga
+       os 6 filhos direto no grid do .proj-meta, aí cada um é posicionado
+       na mão. Sem isso os itens ficariam presos dentro da coluna e não
+       daria pra intercalar nome/subtítulo/tags/link nessa ordem. */
+    /* o seletor duplo é pra alcançar `.proj-card--active .proj-meta`, que
+       a JS do carrossel liga no card em destaque e tem especificidade
+       maior — sem isso o gap de 42px do desktop continuaria valendo */
+    .proj-card .proj-meta,
+    .proj-card--active .proj-meta{
+      display: grid;
+      grid-template-columns: 1fr auto;
+      column-gap: 0;
+      row-gap: 4px;
+      align-items: baseline;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .proj-card .proj-col,
+    .proj-card--active .proj-col{ display: contents; flex: none; }
+
+    .proj-rule{ display: none; }
+
+    .proj-name{
+      grid-column: 1 / -1;
+      grid-row: 1;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.005em;
+      color: var(--neutro-100);
+    }
+
+    .proj-sub{
+      grid-column: 1 / -1;
+      grid-row: 2;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.3;
+      letter-spacing: .02em;
+      color: var(--neutro-400);
+    }
+
+    /* o filete é um item próprio do grid ocupando a linha inteira, em
+       vez de uma borda em cada um dos dois textos — assim ele não
+       quebra no ponto em que as duas colunas se encontram */
+    .proj-card .proj-meta::before{
+      content: "";
+      grid-column: 1 / -1;
+      grid-row: 3;
+      align-self: start;
+      height: 1px;
+      margin-top: 12px;
+      background: var(--neutro-800);
+    }
+
+    .proj-tags,
+    .proj-link{
+      grid-row: 3;
+      margin-top: 12px;
+      padding-top: 12px;
+    }
+
+    .proj-tags{
+      grid-column: 1;
+      padding-right: 12px;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: 0;
+      color: var(--neutro-400);
+    }
+
+    .proj-link{
+      grid-column: 2;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--branco);
+      white-space: nowrap;
+    }
+
+    .proj-cta{ display: flex; flex-direction: column; gap: 12px; }
+
+    /* ---------- DOBRA 07 · sobre ---------- */
+    .sobre-section{ padding: 64px 24px; }
+
+    .sobre-inner{ display: flex; flex-direction: column; gap: 32px; max-width: none; }
+
+    /* a esteira infinita vira uma linha só, distribuída */
+    .sobre-marquee{ width: 100%; overflow: visible; }
+
+    .sobre-marquee--reverso{ display: none; }   /* o Figma só traz uma */
+
+    .sobre-marquee-track{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 0;
+      animation: none;
+    }
+
+    /* o track é duplicado pro loop (5 nomes + 5 pontos, duas vezes). Aqui
+       corta no 9º: sobram os 5 nomes com 4 pontos ENTRE eles, sem o ponto
+       solto no fim que a versão em looping precisa ter */
+    .sobre-marquee-track > *:nth-child(n+10){ display: none; }
+
+    .sobre-marquee span{ font-size: 12px; font-weight: 300; line-height: 1.3; color: var(--neutro-400); }
+
+    .sobre-content{ flex-direction: column; gap: 32px; }
+
+    .sobre-photo{
+      width: 100%;
+      max-width: none;
+      height: 420px;
+      border-radius: 20px;
+      border: 1px solid var(--neutro-100);
+    }
+
+    .sobre-photo::before{ display: none; }   /* o degradê fino do desktop */
+
+    /* escurece o pé da foto pro texto da ocupação ler */
+    .sobre-photo::after{
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.04) 67%, rgba(0,0,0,.9) 92%);
+      pointer-events: none;
+    }
+
+    .sobre-tools,
+    .sobre-cursor{ display: none; }   /* enfeites que o mobile não traz */
+
+    .sobre-ocupacao{
+      left: 19px;
+      right: auto;
+      bottom: 21px;
+      z-index: 2;
+      gap: 11px;
+      padding: 0;
+      background: none;
+      border: 0;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .sobre-ocupacao .label{ font-size: 12px; line-height: 1.3; color: var(--neutro-400); }
+    .sobre-ocupacao .valor{ font-size: 20px; font-weight: 500; line-height: 1.25; letter-spacing: -0.005em; }
+
+    .sobre-texto{ gap: 16px; }
+
+    .sobre-eyebrow{
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.3;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      color: var(--laranja-500);
+    }
+
+    .sobre-texto h2{ font-size: 28px; line-height: 1.1; letter-spacing: -0.015em; }
+
+    .sobre-paragrafos{ gap: 16px; }
+    .sobre-paragrafos p{ font-size: 15px; line-height: 1.5; color: var(--neutro-400); }
+    .sobre-paragrafos p:first-child{ color: #ff9b66; }
+    .sobre-paragrafos .destaque{ color: inherit; font-weight: 400; }
+
+    /* ---------- DOBRA 08 · método ----------
+       Aqui o pin e o empilhamento dos cartões continuam ligados, iguais
+       ao desktop: a altura da seção quem define é a JS, e o padding mora
+       no .pedido-pin (não na seção), senão ele entraria de novo a cada
+       volta da "corda" de rolagem. */
+    .pedido-section{
+      padding: 0;
+      background: var(--branco);
+    }
+
+    .pedido-pin{
+      padding: 64px 24px;
+      /* o degradê laranja mora aqui (não na seção) desde o ajuste do
+         brilho fixo; no mobile o Figma pede branco chapado */
+      background: none;
+    }
+
+    .pedido-inner{
+      flex-direction: column;
+      align-items: stretch;
+      gap: 32px;
+      width: 100%;
+      max-width: none;
+    }
+
+    .pedido-titulo{ width: 100%; flex-shrink: 0; }
+
+    .pedido-titulo h2{
+      font-size: 28px;
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+    }
+
+    /* o slot precisa de altura fixa porque os 4 cartões ficam sobrepostos
+       nele — e todos passam a ter essa altura. A medida vem do cartão
+       mais alto (etapa 03, ~195px de conteúdo) mais uma folga */
+    .pedido-etapas{
+      flex: none;
+      position: relative;
+      width: 100%;
+      max-width: none;
+      height: 212px;
+    }
+
+    .etapa{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 24px;
+      border: 1px solid var(--neutro-200);
+      border-radius: 20px;
+      background: var(--neutro-100);
+      /* a sombra dá a leitura de um cartão passando por cima do outro */
+      box-shadow: 0 -8px 24px rgba(0,0,0,.10);
+    }
+
+    .etapa-numero{
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.3;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+      color: #b33e00;
+    }
+
+    .etapa h3{
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.005em;
+      color: var(--preto);
+    }
+
+    .etapa-texto{ font-size: 15px; line-height: 1.5; color: var(--neutro-600); }
+
+    /* ---------- DOBRA 09 · perguntas (cards escuros) ---------- */
+    .perguntas-section{ padding: 64px 24px; background: var(--preto); }
+
+    .perguntas-inner{ gap: 32px; max-width: none; }
+
+    .perguntas-inner > h2{
+      font-size: 28px;
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      color: var(--branco);
+    }
+
+    .pergunta,
+    .pergunta--ativa{ border-radius: 20px; background: var(--neutro-800); }
+
+    /* no mobile todos os cards já são escuros, então o hover não muda cor */
+    .pergunta:not(.pergunta--ativa):hover{ background: var(--neutro-800); }
+
+    .pergunta-toggle{ align-items: flex-start; gap: 16px; padding: 20px; }
+
+    .pergunta-info h3{
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: -0.005em;
+      color: var(--branco);
+    }
+
+    .pergunta-info p{
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--neutro-400);
+      padding-top: 12px;
+    }
+
+    .pergunta:not(.pergunta--ativa):hover .pergunta-info h3{ color: var(--branco); }
+    .pergunta:not(.pergunta--ativa):hover .pergunta-info p{ color: var(--neutro-400); }
+
+    /* o "+" vira um círculo vazado, sem o ícone em imagem */
+    .pergunta-icone{
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--neutro-600);
+      border-radius: 100px;
+    }
+
+    .pergunta-icone img{ display: none; }
+
+    .pergunta-icone::before{
+      content: "+";
+      font-size: 16px;
+      line-height: 1;
+      color: var(--branco);
+    }
+
+    .pergunta--ativa .pergunta-icone::before{ content: "–"; }
+
+    /* ---------- DOBRA 10 · cta final (preto, sem botões) ---------- */
+    .cta-final{
+      min-height: 0;
+      padding: 80px 24px;
+      background: var(--preto);
+    }
+
+    .cta-final-inner{ gap: 24px; max-width: none; }
+
+    .cta-final-texto{ gap: 24px; }
+
+    .cta-final-texto h2{
+      font-size: 30px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .cta-final-quebra{ display: none; }
+
+    .cta-final-texto p{ font-size: 15px; line-height: 1.5; color: var(--branco); }
+
+    /* os CTAs desta dobra migram pro rodapé no layout mobile */
+    .cta-final-ctas,
+    .cta-final-nota{ display: none; }
+
+    .cta-final-glow--esq{ width: 420px; height: 420px; top: -250px; left: -296px; }
+    .cta-final-glow--dir{ width: 360px; height: 360px; top: 256px; left: 217px; right: auto; bottom: auto; }
+
+    /* ---------- DOBRA 11 · rodapé ---------- */
+    .rodape{
+      padding: 60px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      max-width: none;
+      border-radius: 0;
+      text-align: center;
+    }
+
+    .rodape .badge{ display: none; }   /* no mobile quem abre é o logo */
+
+    .rodape-mobile{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      width: 100%;
+    }
+
+    .rodape-logo{ width: 138px; height: auto; }
+
+    .rodape-form{ display: flex; flex-direction: column; gap: 12px; width: 100%; }
+
+    .rodape-campo{
+      width: 100%;
+      height: 56px;
+      padding: 0 28px;
+      border: 1px solid var(--neutro-400);
+      border-radius: 100px;
+      background: none;
+      color: var(--neutro-100);
+      font-family: inherit;
+      font-size: 15px;
+    }
+
+    .rodape-campo::placeholder{ color: var(--neutro-400); }
+    .rodape-campo:focus{ outline: none; border-color: var(--laranja-500); }
+
+    .rodape-enviar{
+      width: 100%;
+      height: 48px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .rodape-enviar img{ width: 18px; height: 18px; }
+
+    .rodape-cols{
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .rodape-col{ gap: 8px; }
+
+    .rodape-col h3{ font-size: 16px; font-weight: 600; line-height: 1.3; color: var(--branco); }
+
+    .rodape-col li,
+    .rodape-col a{ font-size: 12px; line-height: 1.8; color: var(--neutro-400); }
+
+    /* Behance, Instagram e YouTube fecham o rodapé (96px de largura
+       total no Figma: 24 + 20 + 20 com os vãos) */
+    .rodape-social{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      height: 36px;
+    }
+
+    .rodape-social img{ display: block; height: 20px; width: auto; }
+
+    /* ---------- o rastro do cursor não faz sentido em touch ---------- */
+    .cursor-trail{ display: none; }
+  }
 </style>
 </head>
 <body>
@@ -1811,13 +2779,18 @@
         <img src="teste.site/assets/img/Imagens-Angelo.site/Badge/avatar.png.png" alt="Angelo Felipe">
         <span>Angelo Felipe</span>
       </div>
-      <div class="nav-links">
+      <div class="nav-links" id="nav-links">
         <a href="#trabalho">Trabalho</a>
         <a href="#frentes">Frentes</a>
         <a href="#metodo">Método</a>
         <a href="#sobre">Sobre</a>
       </div>
       <a href="#" class="btn-secondary">Entrar em contato</a>
+      <!-- só aparece no mobile; abre/fecha a .nav-links, que no desktop
+           já está sempre visível -->
+      <button class="nav-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
+        <span></span><span></span><span></span>
+      </button>
     </nav>
   </div>
 
@@ -1828,19 +2801,23 @@
     <div class="hero-content">
       <div class="hero-text">
         <img class="logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
-        <h1><span class="line"><span>Seu projeto precisa</span></span><span class="line"><span>estar alinhado <span class="hl">com</span></span></span><span class="line"><span class="hl">seu propósito</span></span></h1>
+        <h1><span class="line"><span>Seu projeto precisa</span></span><span class="line"><span>estar <span class="sublinhado">alinhado</span> <span class="hl">com</span></span></span><span class="line"><span class="hl">seu propósito</span></span></h1>
         <p class="lead">Transforme a forma como sua marca é percebida, comunique o valor do que você oferece e atraia clientes que reconhecem o que sua empresa realmente vale.</p>
         <div class="ctas">
           <a href="#" class="btn-primary">
             Solicitar orçamento
             <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
           </a>
-          <a href="#" class="btn-secondary">Ver o trabalho <span class="arrow">→</span></a>
+          <a href="#trabalho" class="btn-secondary">Ver Projetos <span class="arrow">→</span></a>
         </div>
       </div>
 
       <div class="hero-photo">
         <img src="teste.site/assets/img/Imagens-Angelo.site/Frame%2011.png" alt="Angelo Felipe">
+        <!-- no mobile a foto dá lugar a uma faixa com a marca em vidro e o
+             logo por cima; as duas só aparecem abaixo de 640px -->
+        <img class="hero-band-img" src="teste.site/assets/img/mobile/hero-band.jpg" alt="">
+        <img class="hero-band-logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="">
       </div>
     </div>
 
@@ -1863,11 +2840,13 @@
 
   <section class="stats-section">
     <div class="stats">
-      <div class="stat">
+      <!-- o data-num alimenta a versão em texto do número, que substitui
+           o canvas de partículas no mobile -->
+      <div class="stat" data-num="+2.500">
         <canvas class="stat-num-canvas" data-text="+2.500" data-font-size="120"></canvas>
-        <p>peças entregues desde 2022</p>
+        <p>peças entregues</p>
       </div>
-      <div class="stat">
+      <div class="stat" data-num="+27.172">
         <canvas class="stat-num-canvas" data-text="27.172" data-font-size="120"></canvas>
         <p>views no Behance</p>
       </div>
@@ -1915,6 +2894,8 @@
           </div>
           <div class="frente-icone">
             <img src="teste.site/assets/Icons/Icons-Angelo.site/Navigation/Navigation.svg" alt="">
+            <!-- o Figma usa outro ícone no mobile; o do desktop continua -->
+            <img class="frente-icone-mobile" src="teste.site/assets/Icons/Icons-Angelo.site/Frentes/frente-01.svg" alt="">
           </div>
         </div>
         <div class="frente">
@@ -1925,6 +2906,7 @@
           </div>
           <div class="frente-icone">
             <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Conversation.svg" alt="">
+            <img class="frente-icone-mobile" src="teste.site/assets/Icons/Icons-Angelo.site/Frentes/frente-02.svg" alt="">
           </div>
         </div>
         <div class="frente">
@@ -1935,6 +2917,7 @@
           </div>
           <div class="frente-icone">
             <img src="teste.site/assets/Icons/Icons-Angelo.site/Grid_Dots.svg" alt="">
+            <img class="frente-icone-mobile" src="teste.site/assets/Icons/Icons-Angelo.site/Frentes/frente-03.svg" alt="">
           </div>
         </div>
       </div>
@@ -2335,6 +3318,20 @@
       <img src="teste.site/assets/img/Imagens-Angelo.site/Badge/avatar.png.png" alt="Angelo Felipe">
       <span>Angelo Felipe</span>
     </a>
+
+    <!-- bloco exclusivo do mobile: no Figma os CTAs saem da dobra final
+         e vêm pro rodapé, junto do logo e do começo do formulário -->
+    <div class="rodape-mobile">
+      <img class="rodape-logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
+      <div class="rodape-form">
+        <input class="rodape-campo" type="text" name="nome" placeholder="Seu nome" aria-label="Seu nome">
+        <a href="#" class="btn-primary rodape-enviar">
+          Solicitar Projeto
+          <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
+        </a>
+      </div>
+    </div>
+
     <div class="rodape-cols">
       <div class="rodape-col">
         <h3>Angelo Felipe</h3>
@@ -2369,6 +3366,19 @@
           <li>Estruturação de perfil</li>
         </ul>
       </div>
+    </div>
+
+    <!-- fecha o rodapé no mobile; no desktop fica escondido -->
+    <div class="rodape-social">
+      <a href="https://behance.net/FanzeDesign" aria-label="Behance">
+        <img src="teste.site/assets/Icons/Icons-Angelo.site/Social/behance.svg" alt="">
+      </a>
+      <a href="https://instagram.com/angelo.odesigner" aria-label="Instagram">
+        <img src="teste.site/assets/Icons/Icons-Angelo.site/Social/instagram.svg" alt="">
+      </a>
+      <a href="#" aria-label="YouTube">
+        <img src="teste.site/assets/Icons/Icons-Angelo.site/Social/youtube.svg" alt="">
+      </a>
     </div>
   </footer>
 
@@ -2629,9 +3639,53 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
     return;
   }
 
-  /* vh de "corda" de scroll por item: define o quão devagar troca a seleção */
-  const VH_POR_ITEM = 80;
-  section.style.height = (100 + items.length * VH_POR_ITEM) + 'vh';
+  const lista = section.querySelector('.dor-list');
+  const ehCelular = () => window.matchMedia('(max-width: 640px)').matches;
+
+  /* vh de "corda" de scroll por item.
+     Desktop: 80vh — há espaço e o mouse não cansa.
+     Mobile: 32vh — o polegar percorre pouco e cada item já responde
+     com sensação de snap natural. Muito mais que isso e o usuário
+     sente que está rolando no vazio; menos e fica difícil de mirar. */
+  function medirAltura(){
+    const vhPorItem = ehCelular() ? 32 : 80;
+    section.style.height = (100 + items.length * vhPorItem) + 'vh';
+  }
+
+  /* O item em foco cresce de 15px (--foco:0) a 20px (--foco:1) de forma
+     contínua via calc(). Para reservar espaço correto, precisamos forçar
+     --foco:1 durante a medição — além de is-active — senão a altura
+     medida seria a menor (15px) e o layout ainda puxaria ao trocar. */
+  function reservarAlturas(){
+    if(!lista) return;
+
+    items.forEach(it => { it.style.minHeight = ''; });
+
+    if(!ehCelular()) return;
+
+    lista.classList.add('medindo');
+
+    const alturas = [...items].map(it => {
+      const jaAtivo = it.classList.contains('is-active');
+      const focoAnterior = it.style.getPropertyValue('--foco');
+      /* força o tamanho em foco pleno antes de medir */
+      it.classList.add('is-active');
+      it.style.setProperty('--foco', '1');
+      it.style.setProperty('--foco-w', '600');
+      const h = it.getBoundingClientRect().height;
+      if(!jaAtivo) it.classList.remove('is-active');
+      it.style.setProperty('--foco', focoAnterior || '0');
+      it.style.setProperty('--foco-w', focoAnterior >= 0.5 ? 600 : 400);
+      return Math.ceil(h);
+    });
+
+    items.forEach((it, i) => { it.style.minHeight = alturas[i] + 'px'; });
+
+    lista.classList.remove('medindo');
+  }
+
+  medirAltura();
+  reservarAlturas();
 
   let ticking = false;
 
@@ -2642,10 +3696,32 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
     if(percurso <= 0) return;
 
     const progresso = Math.min(1, Math.max(0, -rect.top / percurso));
-    let idx = Math.floor(progresso * items.length);
-    if(idx >= items.length) idx = items.length - 1;
 
-    items.forEach((it, i) => it.classList.toggle('is-active', i === idx));
+    /* posição contínua na lista: 0 = primeiro item, N-1 = último */
+    const pos = progresso * (items.length - 1);
+    const idx = Math.round(pos);
+
+    items.forEach((it, i) => {
+      it.classList.toggle('is-active', i === idx);
+
+      /* foco linear: 1 no item exato, 0 a ≥1 item de distância */
+      const focoLinear = Math.max(0, 1 - Math.abs(i - pos));
+
+      /* easing suave (ease-in-out cúbico) sobre o foco linear:
+         dá sensação de snap suave — o item cresce devagar no
+         início e no fim, acelerando no meio. O polegar sente o
+         "clique" sem nenhum degrau brusco. */
+      const t = focoLinear;
+      const foco = t < 0.5
+        ? 4 * t * t * t
+        : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+      it.style.setProperty('--foco', foco.toFixed(4));
+
+      /* font-weight: 400 (longe) → 600 (em foco). CSS não interpola
+         font-weight via custom property, então alternamos em 0.5 */
+      it.style.setProperty('--foco-w', foco >= 0.5 ? 600 : 400);
+    });
   }
 
   function onScroll(){
@@ -2655,8 +3731,21 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
     }
   }
 
+  function onResize(){
+    medirAltura();
+    reservarAlturas();
+    update();
+  }
+
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
+  window.addEventListener('resize', onResize);
+
+  /* as fontes mudam a altura do texto: medir antes delas carregarem
+     reservaria espaço errado */
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(reservarAlturas);
+  }
+
   update();
 })();
 </script>
@@ -2691,10 +3780,20 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
     return;
   }
 
-  /* vh de "corda" de scroll por transição (3 transições pra 4 cartões) */
-  const VH_POR_ETAPA = 80;
   const passos = etapas.length - 1;
-  section.style.height = (100 + passos * VH_POR_ETAPA) + 'vh';
+
+  /* vh de "corda" de scroll por transição (3 transições pra 4 cartões).
+     No celular o passo é mais curto: a tela é alta e estreita, então 80vh
+     por cartão viraria um trecho longo demais de rolagem pra pouca coisa
+     acontecendo — 55vh mantém a troca no mesmo ritmo que o polegar. */
+  const ehCelular = window.matchMedia('(max-width: 640px)').matches;
+  const VH_POR_ETAPA = ehCelular ? 55 : 80;
+
+  function medirAltura(){
+    section.style.height = (100 + passos * VH_POR_ETAPA) + 'vh';
+  }
+
+  medirAltura();
 
   let ticking = false;
 
@@ -2789,6 +3888,45 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   atualizar();
+})();
+</script>
+
+<script>
+/* =========================================
+   MENU MOBILE
+
+   No desktop os links da nav ficam sempre visíveis e este botão está
+   escondido por CSS — então aqui só o que o mobile precisa: abrir e
+   fechar o painel de links.
+
+   O estado mora no `aria-expanded` do botão (o CSS lê ele pra virar o
+   hamburger em "x"), e a classe no painel é só o liga/desliga.
+========================================= */
+(function(){
+  const botao = document.querySelector('.nav-menu');
+  const links = document.querySelector('.nav-links');
+  if(!botao || !links) return;
+
+  function fechar(){
+    botao.setAttribute('aria-expanded', 'false');
+    links.classList.remove('is-aberto');
+  }
+
+  botao.addEventListener('click', function(){
+    const aberto = botao.getAttribute('aria-expanded') === 'true';
+    botao.setAttribute('aria-expanded', String(!aberto));
+    links.classList.toggle('is-aberto', !aberto);
+  });
+
+  /* clicar num link leva pra dobra: o painel não pode ficar aberto por cima */
+  links.addEventListener('click', function(e){
+    if(e.target.closest('a')) fechar();
+  });
+
+  /* voltar pro desktop com o menu aberto deixaria o `is-aberto` preso */
+  window.matchMedia('(min-width: 641px)').addEventListener('change', function(e){
+    if(e.matches) fechar();
+  });
 })();
 </script>
 

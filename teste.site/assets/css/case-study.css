@@ -136,6 +136,11 @@ img{ display: block; max-width: 100%; }
 .nav-links a{ color: inherit; text-decoration: none; }
 .nav-links a:hover{ color: var(--laranja-400); }
 
+/* só existem no layout mobile — ligados no bloco de 640px no fim do arquivo */
+.nav-menu,
+.rodape-mobile,
+.rodape-social{ display: none; }
+
 .btn-secondary{
   display: inline-flex;
   align-items: center;
@@ -789,4 +794,316 @@ img{ display: block; max-width: 100%; }
   .case-live-txt h2{ font-size: 22px; }
   .btn-light{ padding: 16px 26px; font-size: 15px; }
   .case-behance{ padding: 0 24px 60px; }
+}
+
+/* =====================================================================
+   MOBILE (390) · mesma régua do layout mobile da home
+
+   Vem depois do bloco de 1100px de propósito: a especificidade é igual,
+   então quem fica por último ganha.
+
+   Medidas que se repetem, iguais às da home:
+     . tela 390, conteúdo 342  → padding lateral de 24
+     . respiro entre seções    → 64 em cima e embaixo
+     . cantos                  → 20 em imagem e card
+     . botões                  → 56 de altura, largura cheia, pílula
+
+   Escala tipográfica: 34 no h1 do case, 28 nos títulos de seção, 20 nos
+   títulos de card, 15 no corpo, 12–13 nos rótulos.
+===================================================================== */
+@media (max-width: 640px){
+
+  /* ---------- HEADER · barra chapada, igual à home ---------- */
+  .header-wrap{ padding: 0; }
+
+  .nav{
+    max-width: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    padding: 14px 24px;
+    background: var(--preto);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    overflow: visible;   /* o menu aberto precisa escapar da barra */
+  }
+
+  .nav::before{ display: none; }
+
+  .nav-left{ gap: 10px; }
+
+  .nav-back{ width: 32px; height: 32px; flex-shrink: 0; }
+
+  .badge{ padding: 5px 15px 5px 5px; }
+  .badge span{ font-size: 11px; letter-spacing: .06em; }
+
+  /* no mobile o topo é só voltar + badge + menu */
+  .nav > .btn-secondary{ display: none; }
+
+  .nav-menu{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3.6px;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--neutro-400);
+    border-radius: 100px;
+    background: none;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .nav-menu span{
+    width: 13px;
+    height: 1px;
+    border-radius: 1.5px;
+    background: var(--branco);
+    transition: transform .25s ease, opacity .25s ease;
+  }
+
+  .nav-menu[aria-expanded="true"] span:nth-child(1){ transform: translateY(4.6px) rotate(45deg); }
+  .nav-menu[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
+  .nav-menu[aria-expanded="true"] span:nth-child(3){ transform: translateY(-4.6px) rotate(-45deg); }
+
+  .nav-links{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 24px 20px;
+    background: var(--preto);
+    font-size: 15px;
+  }
+
+  .nav-links.is-aberto{ display: flex; }
+  .nav-links a{ padding: 12px 0; }
+
+  /* ---------- rótulos ---------- */
+  .eyebrow{
+    font-size: 12px;
+    letter-spacing: .02em;
+    /* no desktop é nowrap; aqui a frase é longa demais pra caber
+       numa linha só de 342px */
+    white-space: normal;
+  }
+
+  /* ---------- HERO ---------- */
+  .case-hero{
+    padding: 32px 24px 64px;
+    gap: 32px;
+  }
+
+  .case-hero-head{ gap: 16px; }
+
+  .case-hero h1{ font-size: 34px; line-height: 1.08; letter-spacing: -0.02em; }
+
+  .case-hero .lead{ font-size: 15px; line-height: 1.5; max-width: none; }
+
+  .case-hero-img{ height: 240px; border-radius: 20px; }
+
+  /* nos cases de social media o herói é a grade inteira de peças,
+     que não pode ser recortada numa altura fixa */
+  .case-hero-img--grid{ height: auto; }
+
+  /* ---------- FICHA TÉCNICA ---------- */
+  .case-overview{ padding: 0 24px 64px; gap: 24px; }
+
+  /* duas colunas: com uma só, os quatro campos viram uma tira comprida */
+  .ficha{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 20px;
+  }
+
+  .ficha-col{ width: auto; min-width: 0; gap: 6px; }
+
+  .ficha-col dt{ font-size: 12px; letter-spacing: .02em; }
+
+  .ficha-col dd{ font-size: 15px; font-weight: 600; line-height: 1.3; }
+
+  /* ---------- SEÇÕES NARRATIVAS ---------- */
+  .case-block,
+  .case-block--stacked{ padding: 64px 24px; gap: 32px; flex-direction: column; }
+
+  .case-block--stacked .case-block-inner{ flex-direction: column; gap: 24px; }
+
+  .case-block-title{ width: 100%; gap: 8px; }
+
+  .case-block-title h2{ font-size: 28px; line-height: 1.1; letter-spacing: -0.015em; }
+
+  .case-block-body{ gap: 16px; }
+
+  .case-block-body p:first-child,
+  .case-block-body p + p{ font-size: 15px; line-height: 1.5; }
+
+  .case-showcase{ border-radius: 20px; }
+
+  /* ---------- GALERIA ---------- */
+  .case-gallery{ padding: 64px 24px; gap: 16px; }
+
+  .case-gallery img{ border-radius: 20px; }
+
+  /* as peças 4:5 numa coluna só: em três por linha elas ficariam
+     pequenas demais pra leitura no celular */
+  .case-pecas{ grid-template-columns: 1fr; gap: 16px; }
+
+  .case-pecas img{ border-radius: 20px; }
+
+  /* ---------- VER NO AR ---------- */
+  .case-live{
+    width: auto;
+    margin: 0 24px;
+    padding: 24px;
+    border-radius: 20px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .case-live-txt{ gap: 8px; }
+  .case-live-txt h2{ font-size: 20px; line-height: 1.25; letter-spacing: -0.005em; }
+  .case-live-txt p{ font-size: 15px; line-height: 1.5; }
+
+  /* botão em pílula de largura cheia, igual aos CTAs da home */
+  .btn-light{
+    width: 100%;
+    height: 56px;
+    padding: 0 16px;
+    justify-content: center;
+    font-size: 15px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .case-behance{ padding: 0 24px 64px; }
+
+  /* ---------- OUTROS PROJETOS ---------- */
+  .related{ padding: 64px 24px; gap: 32px; }
+
+  .related-head{ flex-direction: column; align-items: flex-start; gap: 8px; }
+
+  .related-head h2{ font-size: 28px; line-height: 1.1; letter-spacing: -0.015em; }
+
+  .related-head p{ font-size: 12px; }
+
+  .related-grid{ flex-direction: column; gap: 16px; }
+
+  .related-card{ width: 100%; height: 200px; border-radius: 20px; }
+
+  /* em touch não existe hover: a descrição fica sempre à mostra. Como
+     ela deixa de ser um estado passageiro, o véu escurece mais cedo —
+     no card de 200px o degradê do desktop só escurecia lá embaixo e o
+     texto brigava com o que já estava impresso na capa */
+  .related-overlay{
+    opacity: 1;
+    transform: none;
+    padding: 20px;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 8%, rgba(0,0,0,.55) 45%, rgba(0,0,0,.92) 100%);
+  }
+
+  .related-overlay-title{ font-size: 18px; }
+  .related-overlay-desc{ font-size: 13px; }
+
+  /* ---------- RODAPÉ · o mesmo da home ---------- */
+  .rodape{
+    padding: 60px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    max-width: none;
+    border-radius: 0;
+    text-align: center;
+  }
+
+  .rodape > .badge{ display: none; }   /* no mobile quem abre é o logo */
+
+  .rodape-mobile{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+  }
+
+  .rodape-logo{ width: 138px; height: auto; }
+
+  .rodape-form{ display: flex; flex-direction: column; gap: 12px; width: 100%; }
+
+  .rodape-campo{
+    width: 100%;
+    height: 56px;
+    padding: 0 28px;
+    border: 1px solid var(--neutro-400);
+    border-radius: 100px;
+    background: none;
+    color: var(--neutro-100);
+    font-family: inherit;
+    font-size: 15px;
+  }
+
+  .rodape-campo::placeholder{ color: var(--neutro-400); }
+  .rodape-campo:focus{ outline: none; border-color: var(--laranja-500); }
+
+  /* o botão primário não existe nesta folha (é só da home), então o
+     degradê da marca vem declarado aqui */
+  .rodape-enviar{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 48px;
+    border-radius: 100px;
+    border: 1px solid var(--laranja-500);
+    background: linear-gradient(10deg, rgb(14,0,0) 24.5%, rgb(18,1,0) 36.8%, rgb(34,7,0) 49.3%, rgb(93,9,0) 59.8%, rgb(193,11,0) 68.9%, var(--laranja-500) 80.5%, rgb(225,154,102) 97.2%);
+    color: var(--branco);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .rodape-enviar img{ width: 18px; height: 18px; }
+
+  /* Behance, Instagram e YouTube fecham o rodapé */
+  .rodape-social{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    height: 36px;
+  }
+
+  .rodape-social img{ display: block; height: 20px; width: auto; }
+
+  .rodape-cols{
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .rodape-col{ gap: 8px; }
+
+  .rodape-col h3{ font-size: 16px; font-weight: 600; line-height: 1.3; }
+
+  .rodape-col li,
+  .rodape-col a{ font-size: 12px; line-height: 1.8; }
+
+  /* ---------- LIGHTBOX ---------- */
+  .lightbox{ padding: 12px; }
+  .lightbox-fechar{ top: 10px; right: 10px; width: 40px; height: 40px; }
+  .lightbox-nav{ width: 40px; height: 40px; }
+  .lightbox-prev{ left: 6px; }
+  .lightbox-next{ right: 6px; }
 }

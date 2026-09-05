@@ -106,3 +106,40 @@
     if(e.key === 'ArrowRight') mostrar(indiceAtual + 1);
   });
 })();
+
+/* =========================================
+   MENU MOBILE · páginas de case
+
+   Mesmo comportamento do menu da home: no desktop os links da nav ficam
+   sempre visíveis e este botão está escondido por CSS, então aqui só o
+   que o mobile precisa — abrir e fechar o painel de links.
+
+   O estado mora no `aria-expanded` do botão (o CSS lê ele pra virar o
+   hamburger em "x"); a classe no painel é só o liga/desliga.
+========================================= */
+(function(){
+  const botao = document.querySelector('.nav-menu');
+  const links = document.querySelector('.nav-links');
+  if(!botao || !links) return;
+
+  function fechar(){
+    botao.setAttribute('aria-expanded', 'false');
+    links.classList.remove('is-aberto');
+  }
+
+  botao.addEventListener('click', function(){
+    const aberto = botao.getAttribute('aria-expanded') === 'true';
+    botao.setAttribute('aria-expanded', String(!aberto));
+    links.classList.toggle('is-aberto', !aberto);
+  });
+
+  /* clicar num link sai da página: o painel não pode ficar aberto por cima */
+  links.addEventListener('click', function(e){
+    if(e.target.closest('a')) fechar();
+  });
+
+  /* voltar pro desktop com o menu aberto deixaria o `is-aberto` preso */
+  window.matchMedia('(min-width: 641px)').addEventListener('change', function(e){
+    if(e.matches) fechar();
+  });
+})();
