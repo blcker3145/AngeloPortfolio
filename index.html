@@ -21,6 +21,32 @@
     --borda: #c7c7c7;
   }
 
+  /* ---------- SELEÇÃO DE TEXTO ----------
+     Sem isso o navegador pinta o trecho selecionado com o azul do sistema,
+     que não existe em lugar nenhum da identidade e salta na tela escura.
+     O texto continua selecionável — dá pra copiar o @ e o link do Behance,
+     que é justamente pra isso que eles estão ali. */
+  ::selection{ background: var(--laranja-500); color: var(--branco); }
+  ::-moz-selection{ background: var(--laranja-500); color: var(--branco); }
+
+  /* já os elementos de interface não são texto pra ler: selecionar o rótulo
+     de um botão ou arrastar o carrossel e sair pintando tudo de laranja é
+     só ruído. O tap-highlight tira o flash azul do toque no celular. */
+  .badge,
+  .nav-menu,
+  .btn-primary,
+  .btn-secondary,
+  .btn-light,
+  .proj-scroll,
+  .pergunta-toggle,
+  .metodo-trilha,
+  .etapa-cena{
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  a, button, .proj-scroll{ -webkit-tap-highlight-color: transparent; }
+
+
   *{ box-sizing: border-box; margin: 0; padding: 0; }
 
   html{ scroll-behavior: smooth; }
