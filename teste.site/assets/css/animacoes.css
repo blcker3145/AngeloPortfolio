@@ -490,8 +490,14 @@
 }
 .entrega-trilho{
   position: relative;
-  width: 100%;
+  /* largura fixa e centrada: com a distancia conhecida em px, o pacote
+     anda por transform (composto pela GPU) em vez de left, que forcava
+     recalculo de layout a cada quadro */
+  --percurso: 158px;
+  width: 236px;
+  max-width: 100%;
   height: 44px;
+  margin: 0 auto;
 }
 .rota{
   position: absolute;
@@ -509,6 +515,7 @@
   background: var(--fogo);
   box-shadow: 0 5px 12px rgba(255,89,0,.3);
   animation: entregaAnda 4.6s cubic-bezier(.5,0,.2,1) infinite;
+  will-change: transform;
 }
 /* a fita do pacote, pra ler como caixa e não como retângulo */
 .pacote::before{
@@ -522,9 +529,9 @@
 /* anima left em vez de translateX: a largura do cartão muda entre desktop,
    tablet e celular, e a porcentagem acompanha sozinha */
 @keyframes entregaAnda{
-  0%,  6%  { left: 4px;  opacity: 1; transform: scale(1); }
-  58%      { left: 68%;  opacity: 1; transform: scale(1); }
-  70%,100% { left: 68%;  opacity: 0; transform: scale(.55); }
+  0%,  6%  { opacity: 1; transform: translateX(0)     scale(1); }
+  58%      { opacity: 1; transform: translateX(var(--percurso)) scale(1); }
+  70%,100% { opacity: 0; transform: translateX(var(--percurso)) scale(.55); }
 }
 
 .destino{
@@ -566,7 +573,7 @@
   .alinha-pilha{ gap: 10px; padding-left: 12px; }
   .bloco{ height: 13px; }
   .guia{ top: 16px; bottom: 16px; left: 28px; }
-  .entrega-trilho{ height: 36px; }
+  .entrega-trilho{ --percurso: 136px; width: 212px; height: 36px; }
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -637,7 +644,7 @@
   .bloco{ height: 12px; border-radius: 5px; }
   .guia{ top: 14px; bottom: 14px; left: 24px; }
 
-  .entrega-trilho{ height: 32px; }
+  .entrega-trilho{ --percurso: 124px; width: 188px; height: 32px; }
   .pacote{ width: 22px; height: 18px; margin-top: -9px; }
   .destino{ width: 32px; height: 25px; margin-top: -13px; right: 2px; }
   .rota{ right: 44px; }

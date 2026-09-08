@@ -353,7 +353,10 @@
     box-shadow: 0 4px 4px rgba(0,0,0,0.25);
     background: linear-gradient(18deg, rgb(14,0,0) 24.5%, rgb(18,1,0) 36.8%, rgb(34,7,0) 49.3%, rgb(93,9,0) 59.8%, rgb(193,11,0) 68.9%, var(--laranja-500) 80.5%, rgb(225,154,102) 97.2%);
     background-size: 220% 220%;
-    animation: btnGradient 6s ease-in-out infinite;
+    /* o degrade era animado por background-position, que repinta fora da
+       GPU e aparecia no Lighthouse como animacao nao composta em todo botao
+       primario. Fixo na posicao do meio, o visual quase nao muda. */
+    background-position: 50% 50%;
     transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease;
     color: var(--neutro-200);
     font-weight: 700;
@@ -477,12 +480,6 @@
   }
 
   /* degradê do botão laranja em movimento contínuo */
-  @keyframes btnGradient{
-    0%  { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100%{ background-position: 0% 50%; }
-  }
-
   .header-wrap .nav,
   .hero-text .logo,
   .hero-text p.lead,
@@ -1416,26 +1413,30 @@
      Os quatro dividem o mesmo ciclo de 3.2s, cada um entrando 0.8s depois
      do anterior — é essa defasagem que faz a luz "caminhar" pra baixo. */
   @keyframes ferramentaAcende{
-    0%, 18%{
-      border-color: var(--laranja-500);
-      color: var(--laranja-500);
-      box-shadow: 0 0 14px rgba(255,89,0,.55);
-    }
-    30%, 100%{
-      border-color: var(--neutro-100);
-      color: var(--neutro-100);
-      box-shadow: none;
-    }
+    0%, 18%  { opacity: 1; }
+    30%, 100%{ opacity: 0; }
   }
 
-  .sobre-tools > .sobre-tool{
+  /* o realce virou uma camada por cima que so aparece e some. Antes ele
+     repintava borda, cor e sombra a cada quadro — as quatro ferramentas
+     entravam na conta de animacoes nao compostas do Lighthouse. */
+  .sobre-tools > .sobre-tool{ position: relative; }
+  .sobre-tools > .sobre-tool::after{
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 8px;
+    border: 1px solid var(--laranja-500);
+    box-shadow: 0 0 14px rgba(255,89,0,.55);
+    opacity: 0;
     animation: ferramentaAcende 3.2s linear infinite;
+    pointer-events: none;
   }
 
-  .sobre-tools > .sobre-tool:nth-child(1){ animation-delay: 0s; }
-  .sobre-tools > .sobre-tool:nth-child(2){ animation-delay: .8s; }
-  .sobre-tools > .sobre-tool:nth-child(3){ animation-delay: 1.6s; }
-  .sobre-tools > .sobre-tool:nth-child(4){ animation-delay: 2.4s; }
+  .sobre-tools > .sobre-tool:nth-child(1)::after{ animation-delay: 0s; }
+  .sobre-tools > .sobre-tool:nth-child(2)::after{ animation-delay: .8s; }
+  .sobre-tools > .sobre-tool:nth-child(3)::after{ animation-delay: 1.6s; }
+  .sobre-tools > .sobre-tool:nth-child(4)::after{ animation-delay: 2.4s; }
 
   .sobre-ocupacao{
     position: absolute;
@@ -1455,6 +1456,18 @@
     border-radius: 50%;
     background: #72e587;
     border: 1px solid #2c933f;
+    position: relative;
+  }
+
+  /* o anel vive num ::after proprio, em transform/opacity: mesma leitura de
+     "online", so que composta pela GPU */
+  .sobre-dot-verde::after{
+    content: "";
+    position: absolute;
+    inset: -4px;
+    z-index: -1;
+    border-radius: 50%;
+    background: rgba(114,229,135,.5);
     animation: dotOnline 1.8s ease-in-out infinite;
   }
 
@@ -1462,12 +1475,12 @@
      leitura clássica de "status online" */
   @keyframes dotOnline{
     0%, 100%{
-      background: #72e587;
-      box-shadow: 0 0 0 0 rgba(114,229,135,.55);
+      transform: scale(.55);
+      opacity: .8;
     }
     50%{
-      background: #a8f5b8;
-      box-shadow: 0 0 0 5px rgba(114,229,135,0);
+      transform: scale(1.2);
+      opacity: 0;
     }
   }
 
@@ -3351,7 +3364,7 @@
   <div class="header-wrap">
     <nav class="nav">
       <div class="badge">
-        <img src="teste.site/assets/img/Imagens-Angelo.site/Badge/avatar.png.png" alt="Angelo Felipe">
+        <img loading="lazy" decoding="async" width="24" height="24" src="teste.site/assets/img/Imagens-Angelo.site/Badge/avatar.png.png" alt="Angelo Felipe">
         <span>Angelo Felipe</span>
       </div>
       <div class="nav-links" id="nav-links">
@@ -3375,24 +3388,24 @@
 
     <div class="hero-content">
       <div class="hero-text">
-        <img class="logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
+        <img decoding="async" width="139" height="42" class="logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
         <h1><span class="line"><span>Seu projeto precisa</span></span><span class="line"><span>estar <span class="sublinhado">alinhado</span> <span class="hl">com</span></span></span><span class="line"><span class="hl">seu propósito</span></span></h1>
         <p class="lead">Transforme a forma como sua marca é percebida, comunique o valor do que você oferece e atraia clientes que reconhecem o que sua empresa realmente vale.</p>
         <div class="ctas">
           <a href="#" class="btn-primary" data-qualifica>
             Solicitar orçamento
-            <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
+            <img loading="lazy" decoding="async" width="24" height="24" src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
           </a>
           <a href="#trabalho" class="btn-secondary">Ver Projetos <span class="arrow">→</span></a>
         </div>
       </div>
 
       <div class="hero-photo">
-        <img src="teste.site/assets/img/Imagens-Angelo.site/Frame%2011.png" alt="Angelo Felipe">
+        <img loading="lazy" decoding="async" width="460" height="704" src="teste.site/assets/img/Imagens-Angelo.site/Frame%2011.webp" alt="Angelo Felipe">
         <!-- no mobile a foto dá lugar a uma faixa com a marca em vidro e o
              logo por cima; as duas só aparecem abaixo de 640px -->
-        <img class="hero-band-img" src="teste.site/assets/img/mobile/hero-band.jpg" alt="">
-        <img class="hero-band-logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="">
+        <img loading="lazy" decoding="async" width="300" height="224" class="hero-band-img" src="teste.site/assets/img/mobile/hero-band.webp" alt="">
+        <img decoding="async" width="139" height="42" class="hero-band-logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="">
       </div>
     </div>
 
@@ -3468,9 +3481,9 @@
             <p>Símbolo, tipografia, paleta e as regras de uso. O documento que faz toda peça futura sair parecida com a sua marca, mesmo quando não sou eu fazendo.</p>
           </div>
           <div class="frente-icone">
-            <img src="teste.site/assets/Icons/Icons-Angelo.site/Navigation/Navigation.svg" alt="">
+            <img loading="lazy" decoding="async" width="43" height="43" src="teste.site/assets/Icons/Icons-Angelo.site/Navigation/Navigation.svg" alt="">
             <!-- o Figma usa outro ícone no mobile; o do desktop continua -->
-            <img class="frente-icone-mobile" src="teste.site/assets/Icons/Icons-Angelo.site/Frentes/frente-01.svg" alt="">
+            <img loading="lazy" decoding="async" width="20" height="20" class="frente-icone-mobile" src="teste.site/assets/Icons/Icons-Angelo.site/Frentes/frente-01.svg" alt="">
           </div>
         </div>
         <div class="frente">
@@ -3480,8 +3493,8 @@
             <p>Landing page, site institucional, portfólio, e-commerce ou sistema web. Cada tipo com o escopo certo pro que seu negócio precisa hoje.</p>
           </div>
           <div class="frente-icone">
-            <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Conversation.svg" alt="">
-            <img class="frente-icone-mobile" src="teste.site/assets/Icons/Icons-Angelo.site/Frentes/frente-02.svg" alt="">
+            <img loading="lazy" decoding="async" width="58" height="59" src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Conversation.svg" alt="">
+            <img loading="lazy" decoding="async" width="20" height="20" class="frente-icone-mobile" src="teste.site/assets/Icons/Icons-Angelo.site/Frentes/frente-02.svg" alt="">
           </div>
         </div>
         <div class="frente">
@@ -3491,8 +3504,8 @@
             <p>Carrossel, estático, PDF, banner, impresso. Avulso quando é pontual, em pacote quando a demanda é toda semana.</p>
           </div>
           <div class="frente-icone">
-            <img src="teste.site/assets/Icons/Icons-Angelo.site/Grid_Dots.svg" alt="">
-            <img class="frente-icone-mobile" src="teste.site/assets/Icons/Icons-Angelo.site/Frentes/frente-03.svg" alt="">
+            <img loading="lazy" decoding="async" width="48" height="48" src="teste.site/assets/Icons/Icons-Angelo.site/Grid_Dots.svg" alt="">
+            <img loading="lazy" decoding="async" width="20" height="18" class="frente-icone-mobile" src="teste.site/assets/Icons/Icons-Angelo.site/Frentes/frente-03.svg" alt="">
           </div>
         </div>
       </div>
@@ -3514,7 +3527,7 @@
 
         <div class="proj-card">
           <a class="proj-thumb" href="case-ai-comet.html">
-            <img src="teste.site/assets/img/Imagens-Angelo.site/%5Bimg%5D%20thumb%20do%20projeto-3.png" alt="AI Comet — landing page e identidade">
+            <img loading="lazy" decoding="async" width="756" height="240" src="teste.site/assets/img/Imagens-Angelo.site/%5Bimg%5D%20thumb%20do%20projeto-3.webp" alt="AI Comet — landing page e identidade">
           </a>
           <div class="proj-meta">
             <div class="proj-col">
@@ -3532,7 +3545,7 @@
 
         <div class="proj-card">
           <a class="proj-thumb" href="case-solar-ruby.html">
-            <img src="teste.site/assets/img/Imagens-Angelo.site/%5Bimg%5D%20thumb%20do%20projeto-5.png" alt="Solar Ruby — landing page">
+            <img loading="lazy" decoding="async" width="398" height="240" src="teste.site/assets/img/Imagens-Angelo.site/%5Bimg%5D%20thumb%20do%20projeto-5.webp" alt="Solar Ruby — landing page">
           </a>
           <div class="proj-meta">
             <div class="proj-col">
@@ -3550,7 +3563,7 @@
 
         <div class="proj-card">
           <a class="proj-thumb" href="case-hard-flow.html">
-            <img src="teste.site/assets/img/case-hard-flow/showcase.png" alt="Hard Flow — identidade, site e social media">
+            <img loading="lazy" decoding="async" width="1440" height="900" src="teste.site/assets/img/case-hard-flow/showcase.webp" alt="Hard Flow — identidade, site e social media">
           </a>
           <div class="proj-meta">
             <div class="proj-col">
@@ -3592,7 +3605,7 @@
 
         <div class="proj-card">
           <a class="proj-thumb" href="case-social-ai-comet.html">
-            <img src="teste.site/assets/img/social-media/thumb-ai-comet.png" alt="AI Comet — criativo para CRM">
+            <img loading="lazy" decoding="async" width="1600" height="1214" src="teste.site/assets/img/social-media/thumb-ai-comet.webp" alt="AI Comet — criativo para CRM">
           </a>
           <div class="proj-meta">
             <div class="proj-col">
@@ -3610,7 +3623,7 @@
 
         <div class="proj-card">
           <a class="proj-thumb" href="case-social-ativasolar.html">
-            <img src="teste.site/assets/img/social-media/thumb-ativasolar.png" alt="AtivaSolar — sistema de peças para redes sociais">
+            <img loading="lazy" decoding="async" width="1200" height="908" src="teste.site/assets/img/social-media/thumb-ativasolar.webp" alt="AtivaSolar — sistema de peças para redes sociais">
           </a>
           <div class="proj-meta">
             <div class="proj-col">
@@ -3628,7 +3641,7 @@
 
         <div class="proj-card">
           <a class="proj-thumb" href="case-social-hive.html">
-            <img src="teste.site/assets/img/social-media/thumb-hive.png" alt="Hive — estudo de identidade">
+            <img loading="lazy" decoding="async" width="1200" height="908" src="teste.site/assets/img/social-media/thumb-hive.webp" alt="Hive — estudo de identidade">
           </a>
           <div class="proj-meta">
             <div class="proj-col">
@@ -3679,7 +3692,7 @@
       <div class="sobre-content">
 
         <div class="sobre-photo">
-          <img class="sobre-foto" src="teste.site/assets/img/sobre/foto-estudio.jpg" alt="Angelo Felipe em estúdio de fotografia">
+          <img loading="lazy" decoding="async" width="700" height="922" class="sobre-foto" src="teste.site/assets/img/sobre/foto-estudio.webp" alt="Angelo Felipe em estúdio de fotografia">
 
           <div class="sobre-tools">
             <span class="sobre-tool sobre-tool--figma" aria-hidden="true">
@@ -3698,7 +3711,7 @@
             </svg>
           </div>
 
-          <img class="sobre-cursor" src="teste.site/assets/Icons/Icons-Angelo.site/Sobre/cursor-angelo.svg" alt="">
+          <img loading="lazy" decoding="async" width="112" height="59" class="sobre-cursor" src="teste.site/assets/Icons/Icons-Angelo.site/Sobre/cursor-angelo.svg" alt="">
 
           <div class="sobre-ocupacao">
             <span class="sobre-dot-verde"></span>
@@ -3719,7 +3732,7 @@
           </div>
           <a href="#" class="btn-primary" data-qualifica>
             Solicitar orçamento
-            <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
+            <img loading="lazy" decoding="async" width="24" height="24" src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
           </a>
         </div>
 
@@ -3838,7 +3851,7 @@
             </div>
           </div>
           <span class="pergunta-icone" aria-hidden="true">
-            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus-ativo.svg" alt="">
+            <img loading="lazy" decoding="async" width="66" height="66" src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus-ativo.svg" alt="">
           </span>
         </button>
       </div>
@@ -3852,7 +3865,7 @@
             </div>
           </div>
           <span class="pergunta-icone" aria-hidden="true">
-            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
+            <img loading="lazy" decoding="async" width="58" height="58" src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
           </span>
         </button>
       </div>
@@ -3866,7 +3879,7 @@
             </div>
           </div>
           <span class="pergunta-icone" aria-hidden="true">
-            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
+            <img loading="lazy" decoding="async" width="58" height="58" src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
           </span>
         </button>
       </div>
@@ -3880,7 +3893,7 @@
             </div>
           </div>
           <span class="pergunta-icone" aria-hidden="true">
-            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
+            <img loading="lazy" decoding="async" width="58" height="58" src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
           </span>
         </button>
       </div>
@@ -3894,7 +3907,7 @@
             </div>
           </div>
           <span class="pergunta-icone" aria-hidden="true">
-            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
+            <img loading="lazy" decoding="async" width="58" height="58" src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
           </span>
         </button>
       </div>
@@ -3908,7 +3921,7 @@
             </div>
           </div>
           <span class="pergunta-icone" aria-hidden="true">
-            <img src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
+            <img loading="lazy" decoding="async" width="58" height="58" src="teste.site/assets/Icons/Icons-Angelo.site/Perguntas/plus.svg" alt="">
           </span>
         </button>
       </div>
@@ -3928,7 +3941,7 @@
       <div class="cta-final-ctas">
         <a href="#" class="btn-primary" data-qualifica>
           Começar meu projeto
-          <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
+          <img loading="lazy" decoding="async" width="24" height="24" src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
         </a>
         <a href="https://wa.me/5521992268562" class="btn-secondary" target="_blank" rel="noopener noreferrer">Prefere conversar antes? Chama no WhatsApp</a>
       </div>
@@ -3941,23 +3954,23 @@
          rodapé em duas colunas (o Figma desse breakpoint não usa nem o
          badge nem o formulário do mobile) -->
     <div class="rodape-tablet-brand">
-      <img class="rodape-tablet-logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
+      <img decoding="async" width="139" height="42" class="rodape-tablet-logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
       <p>Designer gráfico focado em marcas que desejam atrair clientes de alto valor.</p>
     </div>
     <a class="badge" href="#">
-      <img src="teste.site/assets/img/Imagens-Angelo.site/Badge/avatar.png.png" alt="Angelo Felipe">
+      <img loading="lazy" decoding="async" width="24" height="24" src="teste.site/assets/img/Imagens-Angelo.site/Badge/avatar.png.png" alt="Angelo Felipe">
       <span>Angelo Felipe</span>
     </a>
 
     <!-- bloco exclusivo do mobile: no Figma os CTAs saem da dobra final
          e vêm pro rodapé, junto do logo e do começo do formulário -->
     <div class="rodape-mobile">
-      <img class="rodape-logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
+      <img decoding="async" width="139" height="42" class="rodape-logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
       <div class="rodape-form">
         <input class="rodape-campo" type="text" name="nome" placeholder="Seu nome" aria-label="Seu nome">
         <a href="#" class="btn-primary rodape-enviar" data-qualifica>
           Solicitar Projeto
-          <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
+          <img loading="lazy" decoding="async" width="24" height="24" src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
         </a>
       </div>
     </div>
@@ -4005,13 +4018,13 @@
     <!-- fecha o rodapé no mobile e no tablet; no desktop fica escondido -->
     <div class="rodape-social">
       <a href="https://www.behance.net/FanzeDesign" aria-label="Behance" target="_blank" rel="noopener noreferrer">
-        <img src="teste.site/assets/Icons/Icons-Angelo.site/Social/behance.svg" alt="">
+        <img loading="lazy" decoding="async" width="24" height="15" src="teste.site/assets/Icons/Icons-Angelo.site/Social/behance.svg" alt="">
       </a>
       <a href="https://instagram.com/angelo.odesigner" aria-label="Instagram">
-        <img src="teste.site/assets/Icons/Icons-Angelo.site/Social/instagram.svg" alt="">
+        <img loading="lazy" decoding="async" width="20" height="20" src="teste.site/assets/Icons/Icons-Angelo.site/Social/instagram.svg" alt="">
       </a>
       <a href="#" aria-label="YouTube">
-        <img src="teste.site/assets/Icons/Icons-Angelo.site/Social/youtube.svg" alt="">
+        <img loading="lazy" decoding="async" width="20" height="20" src="teste.site/assets/Icons/Icons-Angelo.site/Social/youtube.svg" alt="">
       </a>
     </div>
   </footer>
@@ -4960,13 +4973,35 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
       }
     }
 
+    let visivel = false;
+    let rodando = false;
+
     function animate(){
+      if(!visivel){ rodando = false; return; }
       update();
       draw();
       requestAnimationFrame(animate);
     }
 
-    animate();
+    function ligar(){
+      if(rodando) return;
+      rodando = true;
+      requestAnimationFrame(animate);
+    }
+
+    /* O loop só roda enquanto o número está na tela. Antes eram duas telas
+       de partículas atualizando e redesenhando a 60fps o tempo todo, mesmo
+       com a dobra fora de vista — de longe a maior fatia do trabalho de
+       main thread da página, e a origem das tarefas longas. */
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(entradas){
+        visivel = entradas[0].isIntersecting;
+        if(visivel) ligar();
+      }, { rootMargin: '150px' }).observe(canvas);
+    } else {
+      visivel = true;
+      ligar();
+    }
   }
 
   function init(){
