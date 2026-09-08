@@ -156,14 +156,18 @@
     color: var(--laranja-400);
   }
 
-  /* elementos que só existem no layout mobile — ficam fora de cena aqui
-     e são ligados no bloco de 640px lá no fim da folha */
+  /* elementos que só existem nos layouts mobile e/ou tablet — ficam
+     fora de cena aqui e são ligados nos blocos de @media lá no fim
+     da folha, cada um na sua faixa de largura */
   .nav-menu,
   .hero-band-img,
   .hero-band-logo,
   .frente-icone-mobile,
   .rodape-social,
-  .rodape-mobile{ display: none; }
+  .rodape-mobile,
+  .rodape-tablet-brand,
+  .rodape-tablet-copy,
+  .proj-tag-tablet{ display: none; }
 
   /* o sublinhado de "alinhado" no título do hero (vem do Figma) */
   .hero-text h1 .sublinhado{
@@ -2769,7 +2773,552 @@
     /* ---------- o rastro do cursor não faz sentido em touch ---------- */
     .cursor-trail{ display: none; }
   }
+
+  /* =====================================================================
+     TABLET (641–1100) · frame "home-tablet-768" do Figma
+
+     Ao contrário do mobile — que é a régua do desktop reencaixada —,
+     esse breakpoint tem frame PRÓPRIO no Figma, com diagramação
+     específica pra cada dobra. Os valores abaixo vêm direto de lá,
+     seção por seção, não são só "hero e frentes menores".
+
+     Duas mudanças estruturais valem pra folha inteira:
+       . a navegação usa SEMPRE o hamburger nesta faixa — o Figma não
+         desenha nenhum estado de tablet com os links da nav visíveis;
+       . as dobras "Dor" e "Método", que no desktop/mobile contam uma
+         história por scroll (um item/cartão em foco por vez), viram
+         grades estáticas 2×2 aqui — o JS de cada uma já detecta essa
+         largura e força o modo sem scroll (ver os dois scripts).
+  ===================================================================== */
+  @media (min-width: 641px) and (max-width: 1100px){
+
+    /* ---------- HEADER · sempre hamburger, nunca os links ----------
+       Diferente do mobile (sem borda nenhuma), o Figma deste header
+       tem um filete embaixo separando a nav do conteúdo. */
+    .header-wrap{ padding: 0; }
+
+    .nav{
+      max-width: none;
+      margin: 0;
+      border: 0;
+      border-bottom: 1px solid var(--neutro-800);
+      border-radius: 0;
+      padding: 16px 40px;
+      background: var(--preto);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+      overflow: visible;
+    }
+
+    .nav::before{ display: none; }
+
+    /* a barra é SEMPRE preta nesta faixa — o tema "claro" da navbar
+       (pro vidro do desktop) não pode pintar nada aqui, senão os links
+       ficam cinza-escuro em cima do painel preto ao passar pelas
+       dobras claras (Método, Perguntas) */
+    .header-wrap--claro .nav{ background: var(--preto); border-color: var(--neutro-800); }
+    .header-wrap--claro .nav-links{ color: var(--neutro-100); }
+    .header-wrap--claro .badge{ background: #1e1e1e; border-color: rgba(255,255,255,0.1); }
+    .header-wrap--claro .badge span{ color: #f4f2ed; }
+    .header-wrap--claro .nav-menu{ border-color: var(--neutro-400); }
+    .header-wrap--claro .nav-menu span{ background: var(--branco); }
+
+    .badge{ padding: 6px 18px 6px 6px; gap: 10px; }
+    .badge img{ width: 28px; height: 24px; }
+    .badge span{ font-size: 12px; letter-spacing: .06em; }
+
+    .nav > .btn-secondary{ display: none; }
+
+    .nav-menu{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 1px solid var(--neutro-400);
+      border-radius: 100px;
+      background: none;
+      cursor: pointer;
+    }
+
+    .nav-menu span{
+      width: 15px;
+      height: 1.5px;
+      border-radius: 2px;
+      background: var(--branco);
+      transition: transform .25s ease, opacity .25s ease;
+    }
+
+    .nav-menu[aria-expanded="true"] span:nth-child(1){ transform: translateY(5.5px) rotate(45deg); }
+    .nav-menu[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
+    .nav-menu[aria-expanded="true"] span:nth-child(3){ transform: translateY(-5.5px) rotate(-45deg); }
+
+    .nav-links{
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      padding: 8px 40px 24px;
+      background: var(--preto);
+      font-size: 16px;
+    }
+
+    .nav-links.is-aberto{ display: flex; }
+    .nav-links a{ padding: 14px 0; }
+
+    /* ---------- espaçamento geral das dobras ---------- */
+    .stats-section,
+    .frentes-section,
+    .proj-section,
+    .sobre-section,
+    .perguntas-section{ padding: 80px 40px; }
+
+    .dor-pin,
+    .pedido-pin{ padding: 80px 40px; }
+
+    /* ---------- DOBRA 01 · hero ----------
+       Mesma ESTRUTURA do mobile (empilhado, faixa com a marca em
+       vidro no topo, números lado a lado) na escala do tablet: título
+       44 em vez de 34, faixa de 160 em vez de 78. */
+    .hero{ min-height: 0; padding: 56px 40px 64px; gap: 40px; }
+    .hero-content{ flex-direction: column; gap: 40px; }
+
+    .hero-text{
+      max-width: none;
+      align-items: flex-start;
+      text-align: left;
+      gap: 20px;
+    }
+
+    .hero-text h1{ font-size: 44px; line-height: 1.1; letter-spacing: -0.02em; }
+    .hero-text p.lead{ font-size: 15px; line-height: 1.45; max-width: none; }
+
+    /* no desktop isso é uma foto de retrato; aqui vira a mesma faixa
+       baixa com a marca em vidro que o mobile já usa — mesmos assets */
+    .hero-photo{
+      order: -1;
+      width: 100%;
+      max-width: none;
+      height: 160px;
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-photo > img:first-child{ display: none; }
+
+    .hero-photo img.hero-band-img{
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 42%;
+      filter: brightness(.55);
+    }
+
+    .hero-photo img.hero-band-logo{
+      display: block;
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      width: 150px;
+      height: auto;
+      filter: none;
+    }
+
+    /* o logo já está na faixa; sem isso ele se repete de novo aqui em
+       cima do título */
+    .hero-text .logo{ display: none; }
+
+    /* o título vira texto corrido — as três `.line` do desktop foram
+       desenhadas pra largura DELE; no tablet o texto quebra diferente */
+    .hero-text h1 .line,
+    .hero-text h1 .line > span{
+      display: inline;
+      overflow: visible;
+      transform: none;
+      animation: none;
+    }
+
+    .hero-text h1 .line::after{ content: " "; }
+
+    .ctas{ flex-direction: row; flex-wrap: nowrap; gap: 16px; align-items: stretch; }
+
+    .hero .btn-primary,
+    .hero .btn-secondary{
+      flex: 1;
+      width: auto;
+      height: 56px;
+      padding: 0 16px;
+      font-size: 16px;
+      white-space: nowrap;
+    }
+
+    .hero .btn-secondary .arrow{ display: none; }
+
+    .numeros{ flex-direction: row; gap: 20px; width: 100%; height: auto; }
+
+    .numero{
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      gap: 8px;
+      height: auto;
+      min-height: 0;
+      padding: 24px;
+      border: 0;
+      border-radius: 20px;
+      background: var(--neutro-800);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+    }
+
+    .numero::before{ display: none; }
+
+    .numero strong{
+      font-family: 'Archivo', sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--branco);
+    }
+
+    .numero p{ font-size: 15px; line-height: 1.45; color: var(--neutro-400); }
+
+    /* o Figma só traz dois cards; o terceiro é exclusivo do desktop */
+    .numeros .numero:nth-child(3){ display: none; }
+
+    /* ---------- DOBRA 02 · prova ----------
+       O Figma acrescenta um filete vertical entre as duas estatísticas
+       que não existe em nenhum outro breakpoint. Em vez de markup
+       novo, é um ::before plantado na metade do gap do segundo item. */
+    .stats-section{
+      padding: 48px 40px;
+      border-top: 1px solid var(--neutro-800);
+      border-bottom: 1px solid var(--neutro-800);
+    }
+
+    .stats{ flex-direction: row; gap: 48px; width: 100%; justify-content: center; }
+    .stat{ position: relative; flex: 1; min-width: 0; text-align: center; }
+    .stat p{ font-size: 15px; }
+
+    .stat:nth-child(2)::before{
+      content: "";
+      position: absolute;
+      left: -24px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1px;
+      height: 60px;
+      background: var(--neutro-800);
+    }
+
+    /* ---------- DOBRA 03 · dor ----------
+       Grade 2×2 estática (o JS já entrega o item 1 fixo em foco nesta
+       largura). Os quatro indicadores ficam laranja: sem a leitura
+       sequencial do scroll, apagar três deles não faz sentido. */
+    .dor-section{ padding: 0; }
+    .dor-inner{ gap: 48px; max-width: none; }
+    .dor-title{ font-size: 36px; line-height: 1.2; }
+
+    .dor-section.no-scrub .dor-list{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .dor-bar{ background: var(--laranja-500); }
+    .dor-text{ font-size: 15px; line-height: 1.45; }
+    .dor-item.is-active .dor-text{ font-size: 18px; line-height: 1.3; }
+
+    /* ---------- DOBRA 04 · frentes ----------
+       Sem ícone nenhum: cada frente é só índice + título + descrição
+       empilhados, largura cheia, separados por um filete. */
+    .frentes-inner{ gap: 40px; }
+    .frentes-header{ gap: 8px; }
+    .frentes-kicker{ font-size: 11px; letter-spacing: .06em; }
+    .frentes-header h2{ font-size: 36px; line-height: 1.2; }
+
+    .frentes-list{ gap: 0; }
+
+    .frente{
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      flex-wrap: nowrap;
+      gap: 12px;
+      padding: 24px 0;
+    }
+
+    .frente-index{ font-size: 11px; letter-spacing: .06em; }
+    .frente-texto{ flex: none; width: 100%; }
+    .frente-texto h3{ font-size: 22px; line-height: 1.22; }
+    .frente-texto p{ font-size: 15px; line-height: 1.45; }
+    .frente-icone{ display: none; }
+
+    /* ---------- DOBRAS 05 e 06 · projetos ---------- */
+    .proj-section{ gap: 48px; }
+    .proj-header h2{ font-size: 36px; line-height: 1.1; }
+    .proj-header p{ font-size: 15px; }
+
+    /* só a dobra "Trabalho selecionado" tem esse rótulo; o :has() evita
+       precisar de uma classe extra só pra diferenciar as duas dobras */
+    .proj-header:has(.proj-tag-tablet){
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-areas: "title tag" "sub tag";
+      align-items: end;
+      column-gap: 24px;
+    }
+    .proj-header:has(.proj-tag-tablet) h2{ grid-area: title; }
+    .proj-header:has(.proj-tag-tablet) p{ grid-area: sub; }
+
+    .proj-tag-tablet{
+      display: block;
+      grid-area: tag;
+      align-self: end;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--laranja-500);
+      white-space: nowrap;
+    }
+
+    /* dois por linha: com a largura do tablet, o carrossel de arrastar
+       do desktop mostraria card pela metade o tempo todo */
+    .proj-scroll{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      overflow: visible;
+      cursor: auto;
+      padding: 0;
+    }
+
+    .proj-track{ display: none; }
+
+    .proj-card,
+    .proj-card--active{
+      width: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transform: none;
+      scale: 1;
+    }
+
+    .proj-thumb{ width: 100%; height: 220px; border-radius: 16px; }
+    .proj-thumb img{ width: 100%; height: 100%; object-fit: cover; transform: none; }
+
+    /* sem filete, sem o link "Ver projeto": nome, subtítulo e detalhes
+       empilhados — é só o que o cartão do tablet mostra no Figma */
+    .proj-card .proj-meta,
+    .proj-card--active .proj-meta{
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .proj-card .proj-col,
+    .proj-card--active .proj-col{ display: contents; flex: none; }
+
+    .proj-card .proj-meta::before{ display: none; }
+    .proj-rule,
+    .proj-link{ display: none; }
+
+    .proj-name{ order: 1; font-size: 22px; }
+    .proj-sub{ order: 2; font-size: 11px; letter-spacing: .06em; }
+    .proj-tags{ order: 3; margin-top: 0; padding-top: 0; font-size: 15px; }
+
+    .proj-cta{ flex-direction: row; gap: 16px; }
+    .proj-cta .btn-primary,
+    .proj-cta .btn-secondary{ flex: 1; width: auto; height: 56px; white-space: nowrap; }
+
+    /* o Figma não desenha CTA nenhum na dobra de social media aqui */
+    .proj-section--social .proj-cta{ display: none; }
+
+    /* ---------- DOBRA 07 · sobre ---------- */
+    .sobre-inner{ gap: 48px; }
+    .sobre-marquee--reverso{ display: none; }
+    .sobre-marquee-track{ animation: none; justify-content: space-between; }
+    .sobre-marquee-track > *:nth-child(n+10){ display: none; }
+    .sobre-marquee span{ font-size: 15px; }
+
+    .sobre-content{ flex-direction: row; gap: 40px; align-items: stretch; }
+    .sobre-photo{ flex: 1; width: auto; max-width: none; height: 440px; }
+    .sobre-tools,
+    .sobre-cursor{ display: none; }
+
+    .sobre-texto{ flex: 1; max-width: none; gap: 20px; }
+    .sobre-eyebrow{ font-size: 11px; letter-spacing: .06em; }
+    .sobre-texto h2{ font-size: 32px; line-height: 1.2; }
+    .sobre-paragrafos{ gap: 20px; }
+    .sobre-paragrafos p{ font-size: 15px; line-height: 1.45; }
+
+    /* o Figma deste breakpoint só traz os dois primeiros parágrafos */
+    .sobre-paragrafos p:nth-child(3){ display: none; }
+
+    .sobre-texto .btn-primary{ width: 100%; height: 56px; }
+
+    /* ---------- DOBRA 08 · método ----------
+       Mesma lógica da Dor: grade 2×2 estática, sem os cartões
+       empilhando por scroll (o JS já força esse modo nesta largura). */
+    .pedido-section{ padding: 0; }
+    .pedido-pin{ background: none; }
+    .pedido-inner{ flex-direction: column; align-items: stretch; gap: 48px; width: 100%; max-width: none; }
+    .pedido-titulo{ width: 100%; }
+    .pedido-titulo h2{ font-size: 32px; line-height: 1.2; }
+
+    .pedido-section.no-scrub .pedido-etapas{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      width: 100%;
+      max-width: none;
+    }
+
+    .pedido-section.no-scrub .etapa{ padding: 24px; border-radius: 20px; gap: 12px; }
+
+    .etapa-numero{ font-size: 11px; letter-spacing: .06em; }
+    .etapa h3{ font-size: 22px; line-height: 1.22; }
+    .etapa-texto{ font-size: 15px; line-height: 1.45; }
+
+    /* ---------- DOBRA 09 · perguntas ----------
+       O Figma troca o fundo preto por cinza-claro e alterna cor de
+       cartão por pergunta — a primeira (ativa) continua escura, as
+       outras ficam brancas, não numa escala de cinza como no desktop.
+       Só mostra as 3 primeiras perguntas, não as 6. */
+    .perguntas-section{ background: var(--neutro-200); }
+    .perguntas-inner{ gap: 32px; }
+    .perguntas-inner > h2{ font-size: 32px; line-height: 1.2; color: var(--preto); }
+
+    /* nth-of-type (não nth-child): o <h2> do título é irmão dos
+       cartões, e nth-child contaria ele também, cortando um cartão
+       cedo demais */
+    .pergunta:nth-of-type(n+4){ display: none; }
+
+    .pergunta:not(.pergunta--ativa){ background: var(--branco); }
+    .pergunta:not(.pergunta--ativa):hover{ background: var(--branco); }
+    .pergunta:not(.pergunta--ativa) .pergunta-info h3,
+    .pergunta:not(.pergunta--ativa):hover .pergunta-info h3{ color: #1a1a1a; }
+    .pergunta:not(.pergunta--ativa) .pergunta-info p,
+    .pergunta:not(.pergunta--ativa):hover .pergunta-info p{ color: #666666; }
+
+    .pergunta-toggle{ padding: 20px; gap: 12px; }
+    .pergunta-info h3{ font-size: 16px; }
+    .pergunta-info p{ font-size: 15px; line-height: 1.45; padding-top: 0; }
+
+    /* o selo em SVG de 58px do desktop dá lugar a um círculo vazado
+       com "+"/"–" — igual à solução já usada no mobile */
+    .pergunta-icone{
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--neutro-600);
+      border-radius: 100px;
+    }
+    .pergunta-icone img{ display: none; }
+    .pergunta-icone::before{ content: "+"; font-size: 16px; line-height: 1; color: var(--branco); }
+    .pergunta--ativa .pergunta-icone::before{ content: "–"; }
+    .pergunta:not(.pergunta--ativa) .pergunta-icone{ border-color: #d1d1d1; }
+    .pergunta:not(.pergunta--ativa) .pergunta-icone::before{ color: #1a1a1a; }
+
+    /* ---------- DOBRA 10 · cta final ---------- */
+    .cta-final{ min-height: 0; padding: 96px 40px; gap: 32px; }
+    .cta-final-inner{ gap: 32px; max-width: none; }
+    .cta-final-texto{ gap: 16px; }
+    .cta-final-texto h2{ font-size: 36px; line-height: 1.2; }
+    .cta-final-quebra{ display: none; }
+    .cta-final-texto p{ font-size: 15px; line-height: 1.45; }
+
+    /* o Figma deste breakpoint não desenha nenhum botão aqui */
+    .cta-final-ctas,
+    .cta-final-nota{ display: none; }
+
+    .cta-final-glow--esq{ width: 450px; height: 420px; top: -100px; left: -200px; }
+    .cta-final-glow--dir{ width: 420px; height: 420px; top: 200px; left: 400px; }
+
+    /* ---------- DOBRA 11 · rodapé ----------
+       Rodapé próprio do tablet: marca+bio de um lado, Navegar e
+       Frentes do outro (sem "Onde me achar" nem os dados pessoais), e
+       uma barra final com direitos + ícones sociais. Nem o badge nem
+       o formulário do mobile aparecem nesta largura. */
+    .rodape{
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      grid-template-areas: "brand links" "copy social";
+      column-gap: 40px;
+      row-gap: 24px;
+      align-items: start;
+      max-width: none;
+      padding: 56px 40px;
+      text-align: left;
+    }
+
+    .rodape > .badge{ display: none; }
+
+    .rodape-tablet-brand{ display: flex; flex-direction: column; gap: 24px; grid-area: brand; }
+    .rodape-tablet-logo{ width: 160px; height: auto; }
+    .rodape-tablet-brand p{ font-size: 15px; line-height: 1.45; color: var(--neutro-400); }
+
+    .rodape-cols{ grid-area: links; display: flex; gap: 48px; width: auto; }
+
+    /* só Navegar e Frentes sobrevivem nesta largura */
+    .rodape-col:nth-child(1),
+    .rodape-col:nth-child(3){ display: none; }
+
+    .rodape-col{ flex: none; min-width: 0; align-items: flex-start; text-align: left; }
+    .rodape-col h3{ font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+    .rodape-col li,
+    .rodape-col a{ font-size: 15px; }
+
+    .rodape-tablet-copy{
+      display: block;
+      grid-area: copy;
+      align-self: start;
+      margin: 0;
+      padding-top: 24px;
+      border-top: 1px solid var(--neutro-800);
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: .06em;
+      color: var(--neutro-400);
+    }
+
+    .rodape-social{
+      display: flex;
+      grid-area: social;
+      justify-self: end;
+      align-self: start;
+      gap: 16px;
+      padding-top: 24px;
+      border-top: 1px solid var(--neutro-800);
+      height: auto;
+    }
+  }
 </style>
+<link href="teste.site/assets/css/qualifica.css" rel="stylesheet">
+<script src="teste.site/assets/js/qualifica.js" defer></script>
+<link href="teste.site/assets/css/animacoes.css" rel="stylesheet">
+<script src="teste.site/assets/js/animacoes.js" defer></script>
 </head>
 <body>
 
@@ -2785,7 +3334,7 @@
         <a href="#metodo">Método</a>
         <a href="#sobre">Sobre</a>
       </div>
-      <a href="#" class="btn-secondary">Entrar em contato</a>
+      <a href="#" class="btn-secondary" data-qualifica>Entrar em contato</a>
       <!-- só aparece no mobile; abre/fecha a .nav-links, que no desktop
            já está sempre visível -->
       <button class="nav-menu" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">
@@ -2804,7 +3353,7 @@
         <h1><span class="line"><span>Seu projeto precisa</span></span><span class="line"><span>estar <span class="sublinhado">alinhado</span> <span class="hl">com</span></span></span><span class="line"><span class="hl">seu propósito</span></span></h1>
         <p class="lead">Transforme a forma como sua marca é percebida, comunique o valor do que você oferece e atraia clientes que reconhecem o que sua empresa realmente vale.</p>
         <div class="ctas">
-          <a href="#" class="btn-primary">
+          <a href="#" class="btn-primary" data-qualifica>
             Solicitar orçamento
             <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
           </a>
@@ -2856,7 +3405,7 @@
   <section class="dor-section">
     <div class="dor-pin">
       <div class="dor-inner">
-        <h2 class="dor-title">Seu negócio é bom. Seu material ainda não diz isso.</h2>
+        <h2 class="dor-title" data-anima>Seu negócio é bom. Seu material ainda não diz isso.</h2>
         <div class="dor-list">
           <div class="dor-item">
             <span class="dor-bar"></span>
@@ -2882,7 +3431,7 @@
   <section class="frentes-section" id="frentes">
     <div class="frentes-inner">
       <div class="frentes-header">
-        <p class="frentes-kicker">Quatro frentes.</p>
+        <p class="frentes-kicker" data-anima>Quatro frentes.</p>
         <h2>Um padrão só.</h2>
       </div>
       <div class="frentes-list">
@@ -2930,6 +3479,9 @@
       <div class="proj-header">
         <h2>Trabalho selecionado</h2>
         <p>Identidade · Landing page · Site institucional · Social media</p>
+        <!-- só existe no tablet, onde o cabeçalho vira uma linha com
+             esse rótulo alinhado à direita -->
+        <span class="proj-tag-tablet">Projetos em destaque</span>
       </div>
 
       <div class="proj-scroll">
@@ -2991,8 +3543,8 @@
       </div>
 
       <div class="proj-cta">
-        <a href="#" class="btn-light">Quero algo assim pro meu negócio →</a>
-        <a href="#" class="btn-secondary">Portfólio completo no Behance →</a>
+        <a href="#" class="btn-light" data-qualifica>Quero algo assim pro meu negócio →</a>
+        <a href="https://www.behance.net/FanzeDesign" class="btn-secondary" target="_blank" rel="noopener noreferrer">Portfólio completo no Behance →</a>
         <div class="proj-track" role="slider" tabindex="0" aria-label="Progresso do carrossel de projetos" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
           <span class="proj-track-thumb"></span>
         </div>
@@ -3069,8 +3621,8 @@
       </div>
 
       <div class="proj-cta">
-        <a href="#" class="btn-light">Quero algo assim pro meu negócio →</a>
-        <a href="#" class="btn-secondary">Portfólio completo no Behance →</a>
+        <a href="#" class="btn-light" data-qualifica>Quero algo assim pro meu negócio →</a>
+        <a href="https://www.behance.net/FanzeDesign" class="btn-secondary" target="_blank" rel="noopener noreferrer">Portfólio completo no Behance →</a>
         <div class="proj-track" role="slider" tabindex="0" aria-label="Progresso do carrossel de projetos para social media" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
           <span class="proj-track-thumb"></span>
         </div>
@@ -3132,14 +3684,14 @@
         </div>
 
         <div class="sobre-texto">
-          <p class="sobre-eyebrow">Sobre</p>
+          <p class="sobre-eyebrow" data-anima>Sobre</p>
           <h2>Rodei agência. Hoje faço isso <span class="hl">pelo seu negócio.</span></h2>
           <div class="sobre-paragrafos">
             <p><span class="destaque">Comecei no design em 2022 e passei por 7 operações:</span> Thunder, XBrandBrasil, Performx, Maximus, Criarte, Studio W e Lumus.</p>
             <p>Em algumas, produzia 40–60 peças por dia. Esse volume me ensinou o que nenhum curso ensina: como fazer uma marca parecer profissional em poucos segundos e transmitir confiança antes mesmo da primeira palavra.</p>
             <p>Hoje, aplico isso em marcas onde cada detalhe do visual pode fazer a diferença.</p>
           </div>
-          <a href="#" class="btn-primary">
+          <a href="#" class="btn-primary" data-qualifica>
             Solicitar orçamento
             <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
           </a>
@@ -3179,21 +3731,66 @@
             <p class="etapa-numero">Etapa 01</p>
             <h3>Você me conta o que precisa</h3>
             <p class="etapa-texto">Preenche o formulário aqui embaixo com o que seu negócio precisa agora. Leva menos de um minuto.</p>
+            <!-- cena: a conversa chegando, e a resposta dela saindo em laranja -->
+            <div class="etapa-cena etapa-cena--conversa" aria-hidden="true">
+              <span class="balao balao--curto"></span>
+              <span class="balao balao--medio"></span>
+              <span class="balao balao--voce"></span>
+              <span class="digitando"><i></i><i></i><i></i></span>
+            </div>
           </div>
           <div class="etapa">
             <p class="etapa-numero">Etapa 02</p>
             <h3>Eu te respondo no WhatsApp</h3>
             <p class="etapa-texto">Com a mensagem já detalhada, eu retorno com prazo e valor certos pro seu caso. Sem tabela genérica.</p>
+            <!-- cena: o aviso do WhatsApp acendendo no laranja da marca -->
+            <div class="etapa-cena etapa-cena--zap" aria-hidden="true">
+              <span class="zap-linha">
+                <span class="zap">
+                <span class="zap-halo"></span>
+                <span class="zap-halo zap-halo--dois"></span>
+                <svg class="zap-glifo" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="fogoZap" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#ff7a33"/>
+                      <stop offset="55%" stop-color="#ff2d00"/>
+                      <stop offset="100%" stop-color="#c10b00"/>
+                    </linearGradient>
+                  </defs>
+                  <path fill="url(#fogoZap)" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0 0 20.464 3.488"/>
+                </svg>
+                </span>
+                <span class="zap-texto"><i class="zap-l zap-l--1"></i><i class="zap-l zap-l--2"></i></span>
+                <span class="zap-badge">1</span>
+              </span>
+            </div>
           </div>
           <div class="etapa">
             <p class="etapa-numero">Etapa 03</p>
             <h3>Alinhamos o projeto</h3>
             <p class="etapa-texto">Referência, prazo e o que sua marca precisa comunicar. Aqui a gente decide junto antes de eu desenhar qualquer coisa.</p>
+            <!-- cena: as peças tortas assentando, com as guias piscando no encaixe -->
+            <div class="etapa-cena etapa-cena--alinha" aria-hidden="true">
+              <span class="guia guia--v"></span>
+              <span class="guia guia--h"></span>
+              <span class="bloco bloco--1"></span>
+              <span class="bloco bloco--2"></span>
+              <span class="bloco bloco--3"></span>
+            </div>
           </div>
           <div class="etapa">
             <p class="etapa-numero">Etapa 04</p>
             <h3>Você recebe pronto</h3>
             <p class="etapa-texto">Arquivos nos formatos certos, prontos pra publicar ou pra subir no ar. Editáveis inclusos.</p>
+            <!-- cena: o pacote percorrendo a rota até a entrega -->
+            <div class="etapa-cena etapa-cena--entrega" aria-hidden="true">
+              <span class="entrega-trilho">
+                <span class="rota"></span>
+                <span class="destino"></span>
+                <span class="pacote"></span>
+                <span class="entregue">✓</span>
+              </span>
+            </div>
           </div>
         </div>
 
@@ -3303,17 +3900,24 @@
         <p>Você marca as opções, eu recebo tudo já organizado no WhatsApp e volto com prazo e valor certos pro seu caso.</p>
       </div>
       <div class="cta-final-ctas">
-        <a href="#" class="btn-primary">
+        <a href="#" class="btn-primary" data-qualifica>
           Começar meu projeto
           <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
         </a>
-        <a href="#" class="btn-secondary">Prefere conversar antes? Chama no WhatsApp</a>
+        <a href="https://wa.me/5521992268562" class="btn-secondary" target="_blank" rel="noopener noreferrer">Prefere conversar antes? Chama no WhatsApp</a>
       </div>
       <p class="cta-final-nota">Sem cadastro e sem compromisso. Seus dados de contato só entram no último passo.</p>
     </div>
   </section>
 
   <footer class="rodape">
+    <!-- bloco exclusivo do tablet: logo + bio curta, à esquerda do
+         rodapé em duas colunas (o Figma desse breakpoint não usa nem o
+         badge nem o formulário do mobile) -->
+    <div class="rodape-tablet-brand">
+      <img class="rodape-tablet-logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
+      <p>Designer gráfico focado em marcas que desejam atrair clientes de alto valor.</p>
+    </div>
     <a class="badge" href="#">
       <img src="teste.site/assets/img/Imagens-Angelo.site/Badge/avatar.png.png" alt="Angelo Felipe">
       <span>Angelo Felipe</span>
@@ -3325,7 +3929,7 @@
       <img class="rodape-logo" src="teste.site/assets/Icons/Icons-Angelo.site/Vector-4.svg" alt="Angelo">
       <div class="rodape-form">
         <input class="rodape-campo" type="text" name="nome" placeholder="Seu nome" aria-label="Seu nome">
-        <a href="#" class="btn-primary rodape-enviar">
+        <a href="#" class="btn-primary rodape-enviar" data-qualifica>
           Solicitar Projeto
           <img src="teste.site/assets/Icons/Icons-Angelo.site/Communication/Chat_Circle.svg" alt="">
         </a>
@@ -3368,9 +3972,13 @@
       </div>
     </div>
 
-    <!-- fecha o rodapé no mobile; no desktop fica escondido -->
+    <!-- exclusivo do tablet: barra final com direitos + ícones sociais,
+         separada por um filete das colunas de link acima -->
+    <p class="rodape-tablet-copy">© 2026 Angelo Felipe. Todos os direitos reservados.</p>
+
+    <!-- fecha o rodapé no mobile e no tablet; no desktop fica escondido -->
     <div class="rodape-social">
-      <a href="https://behance.net/FanzeDesign" aria-label="Behance">
+      <a href="https://www.behance.net/FanzeDesign" aria-label="Behance" target="_blank" rel="noopener noreferrer">
         <img src="teste.site/assets/Icons/Icons-Angelo.site/Social/behance.svg" alt="">
       </a>
       <a href="https://instagram.com/angelo.odesigner" aria-label="Instagram">
@@ -3632,8 +4240,15 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
   if(!section || !items.length) return;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* no tablet o Figma apresenta isso como uma grade 2×2 estática, sem
+     nenhuma rolagem controlando destaque — os quatro itens já estão
+     todos visíveis ao mesmo tempo, então "revelar um por vez" via
+     scroll-jacking não faz sentido aqui como faz numa lista de uma
+     coluna só. Reaproveita o mesmo fallback .no-scrub do
+     prefers-reduced-motion, só que disparado pela largura da tela. */
+  const ehTablet = window.matchMedia('(min-width: 641px) and (max-width: 1100px)').matches;
 
-  if(reduceMotion){
+  if(reduceMotion || ehTablet){
     section.classList.add('no-scrub');
     items[0].classList.add('is-active');
     return;
@@ -3774,9 +4389,15 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
   if(!section || !slot || etapas.length < 2) return;
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* mesmo raciocínio da dobra "Dor": no tablet o Figma mostra os 4
+     cartões como uma grade 2×2 estática, todos visíveis ao mesmo
+     tempo — não faz sentido empilhar um por cima do outro por scroll
+     quando os quatro já cabem juntos na tela. */
+  const ehTablet = window.matchMedia('(min-width: 641px) and (max-width: 1100px)').matches;
 
-  if(reduceMotion){
+  if(reduceMotion || ehTablet){
     section.classList.add('no-scrub');
+    section.style.setProperty('--progresso', 1);
     return;
   }
 
@@ -3805,6 +4426,10 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
 
     const progresso = Math.min(1, Math.max(0, -rect.top / percurso));
     const posGlobal = progresso * passos; /* 0 → passos, contínuo */
+
+    /* a trilha do Método (animacoes.js) lê isso pra encher junto com os
+       cartões, sem precisar recalcular a rolagem por conta própria */
+    section.style.setProperty('--progresso', progresso);
 
     /* o cartão em espera fica logo abaixo da borda de baixo da tela, então
        a distância que ele percorre é do topo do slot até o fim do viewport

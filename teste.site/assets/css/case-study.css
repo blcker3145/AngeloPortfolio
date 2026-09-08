@@ -1107,3 +1107,200 @@ img{ display: block; max-width: 100%; }
   .lightbox-prev{ left: 6px; }
   .lightbox-next{ right: 6px; }
 }
+
+/* =====================================================================
+   TABLET (641–1100) · o degrau entre o mobile de 390 e o desktop
+
+   Mesma régua do breakpoint de tablet da home:
+     . padding lateral   24 (mobile) → 40 → 120 (desktop)
+     . respiro vertical  64 (mobile) → 80 → 120 (desktop)
+     . escala de texto   34/28/20/15 → 40/34/22/16 → 44/44/22/18
+
+   Aqui sobra largura, então o que empilhou no celular (ficha, peças,
+   projetos relacionados, rodapé) volta a conviver lado a lado.
+
+   Fica no fim do arquivo pra vencer o bloco de `max-width:1100px`, e o
+   `min-width: 641px` garante que nunca esbarre no bloco mobile.
+===================================================================== */
+@media (min-width: 641px) and (max-width: 1100px){
+
+  /* ---------- espaçamento geral ---------- */
+  .case-hero,
+  .case-block,
+  .case-block--stacked,
+  .case-gallery,
+  .related,
+  .rodape{ padding: 80px 40px; }
+
+  .case-overview{ padding: 0 40px 80px; }
+  .case-behance{ padding: 0 40px 80px; }
+
+  /* ---------- HERO ---------- */
+  .case-hero{ gap: 40px; }
+  .case-hero-head{ gap: 20px; }
+  .case-hero h1{ font-size: 40px; line-height: 1.08; }
+  .case-hero .lead{ font-size: 16px; line-height: 1.5; max-width: 640px; }
+  .case-hero-img{ height: 420px; border-radius: 24px; }
+  .case-hero-img--grid{ height: auto; }
+
+  .eyebrow{ font-size: 12px; white-space: normal; }
+
+  /* ---------- FICHA TÉCNICA ---------- */
+  /* quatro colunas caberiam apertadas; duas dão respiro ao valor */
+  .ficha{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 32px;
+  }
+
+  .ficha-col{ width: auto; min-width: 0; gap: 8px; }
+  .ficha-col dt{ font-size: 12px; }
+  .ficha-col dd{ font-size: 18px; }
+
+  /* ---------- SEÇÕES NARRATIVAS ---------- */
+  /* título em cima e texto embaixo: lado a lado, a coluna de 400px do
+     desktop deixaria o corpo do texto espremido nesta largura */
+  .case-block,
+  .case-block--stacked{ flex-direction: column; gap: 32px; }
+
+  .case-block--stacked .case-block-inner{ flex-direction: column; gap: 32px; }
+
+  .case-block-title{ width: 100%; gap: 12px; }
+  .case-block-title h2{ font-size: 34px; line-height: 1.1; }
+  /* trava de medida: solto, o parágrafo passava de 80 caracteres por
+     linha, acima da faixa confortável de leitura (45–75) */
+  .case-block-body{ gap: 20px; max-width: 680px; }
+  .case-block-body p:first-child{ font-size: 17px; line-height: 1.5; }
+  .case-block-body p + p{ font-size: 16px; line-height: 1.5; }
+
+  .case-showcase{ border-radius: 24px; }
+
+  /* ---------- GALERIA ---------- */
+  .case-gallery{ gap: 24px; }
+  .case-gallery img{ border-radius: 20px; }
+
+  /* as peças 4:5 em duas por linha: em três ficariam pequenas demais */
+  .case-pecas{ grid-template-columns: 1fr 1fr; gap: 24px; }
+  .case-pecas img{ border-radius: 20px; }
+
+  /* ---------- VER NO AR ---------- */
+  .case-live{
+    width: auto;
+    margin: 0 40px;
+    padding: 36px;
+    border-radius: 24px;
+    gap: 28px;
+  }
+
+  .case-live-txt h2{ font-size: 24px; }
+  .case-live-txt p{ font-size: 16px; }
+
+  .btn-light{ height: 56px; padding: 0 28px; font-size: 15px; white-space: nowrap; }
+
+  /* ---------- OUTROS PROJETOS ---------- */
+  .related{ gap: 40px; }
+  .related-head{ gap: 20px; }
+  .related-head h2{ font-size: 34px; }
+
+  .related-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .related-card{ width: auto; height: 240px; border-radius: 20px; }
+
+  /* em touch não existe hover: a descrição fica sempre à mostra */
+  .related-overlay{
+    opacity: 1;
+    transform: none;
+    padding: 24px;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 8%, rgba(0,0,0,.55) 45%, rgba(0,0,0,.92) 100%);
+  }
+
+  /* ---------- RODAPÉ ---------- */
+  /* 2×2: quatro colunas nesta largura quebrariam os links no meio */
+  .rodape-cols{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .rodape-col{ width: auto; }
+}
+
+/* ---- tablet pequeno: a nav com os links não cabe, então vale o mesmo
+        topo do celular, com o hamburger ---- */
+@media (min-width: 641px) and (max-width: 767px){
+  .header-wrap{ padding: 0; }
+
+  .nav{
+    max-width: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    padding: 16px 40px;
+    background: var(--preto);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .nav::before{ display: none; }
+  .nav-left{ gap: 12px; }
+  .nav-back{ width: 34px; height: 34px; flex-shrink: 0; }
+  .nav > .btn-secondary{ display: none; }
+
+  .nav-menu{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3.6px;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--neutro-400);
+    border-radius: 100px;
+    background: none;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .nav-menu span{
+    width: 14px;
+    height: 1px;
+    border-radius: 1.5px;
+    background: var(--branco);
+    transition: transform .25s ease, opacity .25s ease;
+  }
+
+  .nav-menu[aria-expanded="true"] span:nth-child(1){ transform: translateY(4.6px) rotate(45deg); }
+  .nav-menu[aria-expanded="true"] span:nth-child(2){ opacity: 0; }
+  .nav-menu[aria-expanded="true"] span:nth-child(3){ transform: translateY(-4.6px) rotate(-45deg); }
+
+  .nav-links{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    padding: 8px 40px 24px;
+    background: var(--preto);
+    font-size: 16px;
+  }
+
+  .nav-links.is-aberto{ display: flex; }
+  .nav-links a{ padding: 14px 0; }
+}
+
+/* ---- tablet grande: cabe a nav inteira, então os links voltam ---- */
+@media (min-width: 768px) and (max-width: 1100px){
+  .header-wrap{ padding: 32px 40px 0; }
+  .nav{ padding: 13px 28px; }
+  .nav-links{ display: flex; gap: 24px; font-size: 13px; }
+  .nav-menu{ display: none; }
+}
