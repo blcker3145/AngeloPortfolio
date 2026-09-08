@@ -650,3 +650,56 @@
   .rota{ right: 44px; }
   .entregue{ font-size: 14px; margin-top: -27px; right: 12px; }
 }
+
+/* ==========================================================================
+   9. CONTRASTE E ÁREA DE TOQUE
+
+   Correções apontadas pelo Lighthouse. Ficam aqui, no fim da folha, pra
+   não se perderem no meio do CSS de cada dobra.
+   ========================================================================== */
+
+/* ---------- contraste ----------
+   O #737373 dava 4,43:1 sobre o preto e 4,35:1 sobre o cinza claro dos
+   cartões — os dois abaixo do mínimo de 4,5:1 pra texto pequeno. São
+   ajustes de poucos tons: o cinza continua discreto, só deixa de sumir. */
+.numero p,
+.proj-header p,
+.proj-tags{ color: #7d7d7d; }          /* sobre fundo escuro: 5,0:1 */
+
+.etapa-numero{ color: #6a6a6a; }        /* sobre o cartão claro: 5,2:1 */
+
+/* o marquee era o pior caso da página: 2,69:1 */
+.sobre-marquee span{ color: #7d7d7d; }
+
+/* ---------- área de toque ----------
+   Os links tinham 15 a 19px de altura clicável. O mínimo recomendado é
+   24px. O padding cresce só a área sensível ao toque — a posição do texto
+   na tela não muda, porque em todos esses casos o container é flex e
+   centraliza o conteúdo. */
+.nav-links a{ padding-block: 5px; }
+
+.rodape-col a,
+.rodape-col li a{ display: inline-block; padding-block: 3px; }
+
+.proj-link{ padding-block: 3px; }
+
+/* ---------- foco visível ----------
+   Navegação por teclado precisa de um indicador. O padrão do Chrome é um
+   anel azul que não existe na identidade; este é o mesmo laranja da marca
+   e aparece só pra quem está de fato navegando pelo teclado. */
+:focus-visible{
+  outline: 2px solid var(--laranja-500);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* os ícones sociais do rodapé são desenhos de 20px: a área clicável
+   acompanhava o desenho e ficava abaixo dos 24px mínimos. O flex cresce
+   só a área sensível, o ícone continua do mesmo tamanho no centro. */
+.rodape-social a{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 32px;
+}

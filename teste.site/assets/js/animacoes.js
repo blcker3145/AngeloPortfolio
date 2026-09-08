@@ -119,10 +119,33 @@
     pintar();
   }
 
+  /* ---------- 4. medida do marquee ----------
+     A faixa rola metade da própria largura (o conteúdo é duplicado). Em
+     porcentagem isso depende do tamanho da caixa, e o Chrome não consegue
+     compor a animação — ela volta pra main thread a cada quadro. Medindo
+     em px e entregando pela variável, a mesma animação roda na GPU. */
+  function medirMarquee(){
+    var faixas = document.querySelectorAll('.sobre-marquee-track');
+    if(!faixas.length) return;
+
+    function medir(){
+      faixas.forEach(function(f){
+        f.style.setProperty('--marquee', '-' + Math.round(f.scrollWidth / 2) + 'px');
+      });
+    }
+
+    medir();
+    // as fontes mudam a largura do texto; remede quando elas chegam
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(medir);
+    var t;
+    window.addEventListener('resize', function(){ clearTimeout(t); t = setTimeout(medir, 150); });
+  }
+
   function iniciar(){
     fioDeProgresso();
     revelar();
     trilhaDoMetodo();
+    medirMarquee();
   }
 
   if(document.readyState === 'loading'){

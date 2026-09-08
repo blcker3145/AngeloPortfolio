@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Designer gráfico no Rio de Janeiro. Identidade visual, sites e conteúdo para redes sociais que fazem sua marca parecer tão profissional quanto ela é.">
 <title>Angelo Felipe — Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" media="print" onload="this.media=&quot;all&quot;">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap"></noscript>
 <style>
   :root{
     --preto: #000000;
@@ -1284,11 +1287,11 @@
 
   @keyframes marqueeEsquerda{
     from{ transform: translateX(0); }
-    to{ transform: translateX(-50%); }
+    to{ transform: translateX(var(--marquee, -50%)); }
   }
 
   @keyframes marqueeDireita{
-    from{ transform: translateX(-50%); }
+    from{ transform: translateX(var(--marquee, -50%)); }
     to{ transform: translateX(0); }
   }
 
@@ -3354,7 +3357,7 @@
     }
   }
 </style>
-<link href="teste.site/assets/css/qualifica.css" rel="stylesheet">
+<link rel="stylesheet" href="teste.site/assets/css/qualifica.css" media="print" onload="this.media=&quot;all&quot;">
 <script src="teste.site/assets/js/qualifica.js" defer></script>
 <link href="teste.site/assets/css/animacoes.css" rel="stylesheet">
 <script src="teste.site/assets/js/animacoes.js" defer></script>
@@ -3381,6 +3384,8 @@
       </button>
     </nav>
   </div>
+
+  <main id="conteudo">
 
   <section class="hero">
 
@@ -3526,7 +3531,7 @@
       <div class="proj-scroll">
 
         <div class="proj-card">
-          <a class="proj-thumb" href="case-ai-comet.html">
+          <a class="proj-thumb" href="case-ai-comet.html" aria-label="Ver o projeto AI Comet">
             <img loading="lazy" decoding="async" width="756" height="240" src="teste.site/assets/img/Imagens-Angelo.site/%5Bimg%5D%20thumb%20do%20projeto-3.webp" alt="AI Comet — landing page e identidade">
           </a>
           <div class="proj-meta">
@@ -3538,13 +3543,13 @@
             <div class="proj-col">
               <p class="proj-sub">CRM COM IA NATIVA</p>
               <span class="proj-rule"></span>
-              <a href="case-ai-comet.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+              <a href="case-ai-comet.html" class="proj-link" aria-label="Ver o projeto AI Comet">Ver projeto <span class="arrow">→</span></a>
             </div>
           </div>
         </div>
 
         <div class="proj-card">
-          <a class="proj-thumb" href="case-solar-ruby.html">
+          <a class="proj-thumb" href="case-solar-ruby.html" aria-label="Ver o projeto Solar Ruby">
             <img loading="lazy" decoding="async" width="398" height="240" src="teste.site/assets/img/Imagens-Angelo.site/%5Bimg%5D%20thumb%20do%20projeto-5.webp" alt="Solar Ruby — landing page">
           </a>
           <div class="proj-meta">
@@ -3556,13 +3561,13 @@
             <div class="proj-col">
               <p class="proj-sub">ENERGIA SOLAR</p>
               <span class="proj-rule"></span>
-              <a href="case-solar-ruby.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+              <a href="case-solar-ruby.html" class="proj-link" aria-label="Ver o projeto Solar Ruby">Ver projeto <span class="arrow">→</span></a>
             </div>
           </div>
         </div>
 
         <div class="proj-card">
-          <a class="proj-thumb" href="case-hard-flow.html">
+          <a class="proj-thumb" href="case-hard-flow.html" aria-label="Ver o projeto Hard Flow">
             <img loading="lazy" decoding="async" width="1440" height="900" src="teste.site/assets/img/case-hard-flow/showcase.webp" alt="Hard Flow — identidade, site e social media">
           </a>
           <div class="proj-meta">
@@ -3574,7 +3579,7 @@
             <div class="proj-col">
               <p class="proj-sub">GROWTH MARKETING</p>
               <span class="proj-rule"></span>
-              <a href="case-hard-flow.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+              <a href="case-hard-flow.html" class="proj-link" aria-label="Ver o projeto Hard Flow">Ver projeto <span class="arrow">→</span></a>
             </div>
           </div>
         </div>
@@ -3604,7 +3609,7 @@
       <div class="proj-scroll">
 
         <div class="proj-card">
-          <a class="proj-thumb" href="case-social-ai-comet.html">
+          <a class="proj-thumb" href="case-social-ai-comet.html" aria-label="Ver o projeto AI Comet · social media">
             <img loading="lazy" decoding="async" width="1600" height="1214" src="teste.site/assets/img/social-media/thumb-ai-comet.webp" alt="AI Comet — criativo para CRM">
           </a>
           <div class="proj-meta">
@@ -3616,13 +3621,13 @@
             <div class="proj-col">
               <p class="proj-sub">CRIATIVO PARA CRM</p>
               <span class="proj-rule"></span>
-              <a href="case-social-ai-comet.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+              <a href="case-social-ai-comet.html" class="proj-link" aria-label="Ver o projeto AI Comet · social media">Ver projeto <span class="arrow">→</span></a>
             </div>
           </div>
         </div>
 
         <div class="proj-card">
-          <a class="proj-thumb" href="case-social-ativasolar.html">
+          <a class="proj-thumb" href="case-social-ativasolar.html" aria-label="Ver o projeto AtivaSolar · social media">
             <img loading="lazy" decoding="async" width="1200" height="908" src="teste.site/assets/img/social-media/thumb-ativasolar.webp" alt="AtivaSolar — sistema de peças para redes sociais">
           </a>
           <div class="proj-meta">
@@ -3634,13 +3639,13 @@
             <div class="proj-col">
               <p class="proj-sub">CRIATIVOS EM VOLUME</p>
               <span class="proj-rule"></span>
-              <a href="case-social-ativasolar.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+              <a href="case-social-ativasolar.html" class="proj-link" aria-label="Ver o projeto AtivaSolar · social media">Ver projeto <span class="arrow">→</span></a>
             </div>
           </div>
         </div>
 
         <div class="proj-card">
-          <a class="proj-thumb" href="case-social-hive.html">
+          <a class="proj-thumb" href="case-social-hive.html" aria-label="Ver o projeto Hive · social media">
             <img loading="lazy" decoding="async" width="1200" height="908" src="teste.site/assets/img/social-media/thumb-hive.webp" alt="Hive — estudo de identidade">
           </a>
           <div class="proj-meta">
@@ -3652,7 +3657,7 @@
             <div class="proj-col">
               <p class="proj-sub">ESTUDO DE IDENTIDADE</p>
               <span class="proj-rule"></span>
-              <a href="case-social-hive.html" class="proj-link">Ver projeto <span class="arrow">→</span></a>
+              <a href="case-social-hive.html" class="proj-link" aria-label="Ver o projeto Hive · social media">Ver projeto <span class="arrow">→</span></a>
             </div>
           </div>
         </div>
@@ -3948,6 +3953,8 @@
       <p class="cta-final-nota">Sem cadastro e sem compromisso. Seus dados de contato só entram no último passo.</p>
     </div>
   </section>
+
+  </main>
 
   <footer class="rodape">
     <!-- bloco exclusivo do tablet: logo + bio curta, à esquerda do
