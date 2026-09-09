@@ -4628,6 +4628,26 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
   const SIG2  = 2 * SIGMA * SIGMA;
   const LIFT  = 92;               /* altura do morro sob o cursor */
 
+  /* Malha de pontos: a mesma física das partículas dos números da segunda
+     dobra, agora cobrindo o fundo inteiro da hero. Os pontos são empurrados
+     pra longe do cursor e voltam pro lugar por mola.
+
+     Entra no mesmo canvas e no mesmo loop das ondas de propósito — um
+     segundo canvas significaria um segundo requestAnimationFrame e outro
+     rastreamento de mouse pra fazer o que este já faz. */
+  const PONTO_GAP     = 26;    /* espaçamento da malha */
+  const PONTO_TAM     = 1.7;   /* lado de cada ponto */
+  const PONTO_RAIO    = 165;   /* alcance do empurrão */
+  const PONTO_RAIO2   = PONTO_RAIO * PONTO_RAIO;
+  const PONTO_EMPURRA = 1.15;
+  const PONTO_VOLTA   = 0.035; /* força da mola que traz de volta */
+  const PONTO_ATRITO  = 0.88;
+
+  /* A malha só existe onde existe cursor. Em celular e tablet ela seria
+     dois mil retângulos redesenhados por quadro sem nenhuma interação
+     possível em troca — custo de bateria puro. */
+  const temMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
   /* laranja da IDV (--laranja-400 #ff7a33): tom claro que soma bem no blend aditivo */
   const RGB = '255, 122, 51';
 
@@ -4635,13 +4655,82 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
 
   let W = 0, H = 0, cols = 0;
   let lines = [];
+  let pontos = [];
   let rafId = null;
   let visible = true;
   let t = 0;
 
   const mouse = { x: -9999, y: -9999, tx: -9999, ty: -9999, active: false };
 
+  function montarPontos(){
+    pontos = [];
+    if(!W || !H || !temMouse) return;
+
+    /* margem meio ponto pra malha ficar centrada e não colar nas bordas */
+    const sobraX = (W % PONTO_GAP) / 2;
+    const sobraY = (H % PONTO_GAP) / 2;
+
+    for(let y = sobraY; y < H; y += PONTO_GAP){
+      for(let x = sobraX; x < W; x += PONTO_GAP){
+        pontos.push({ x, y, ox: x, oy: y, vx: 0, vy: 0 });
+      }
+    }
+  }
+
+  function desenharPontos(){
+    if(!pontos.length) return;
+
+    const mx = mouse.x, my = mouse.y;
+    const ativo = mouse.active;
+
+    /* dois laços de desenho em vez de um: trocar fillStyle por ponto é a
+       parte cara do canvas, então os pontos em repouso saem todos de uma
+       vez e só os que estão perto do cursor entram no segundo lote, mais
+       aceso. São duas trocas de cor por quadro em vez de milhares. */
+    const perto = [];
+
+    ctx.fillStyle = 'rgba(' + RGB + ', 0.16)';
+
+    for(let i = 0; i < pontos.length; i++){
+      const p = pontos[i];
+
+      if(ativo){
+        const dx = p.x - mx;
+        const dy = p.y - my;
+        const d2 = dx * dx + dy * dy;
+
+        if(d2 < PONTO_RAIO2){
+          const d = Math.sqrt(d2) || 0.0001;
+          const forca = 1 - d / PONTO_RAIO;
+          /* smoothstep: o empurrão cresce e morre suave, sem degrau na
+             borda do raio */
+          const suave = forca * forca * (3 - 2 * forca);
+          p.vx += (dx / d) * suave * PONTO_EMPURRA;
+          p.vy += (dy / d) * suave * PONTO_EMPURRA;
+          perto.push(p);
+        }
+      }
+
+      /* mola de volta pro lugar de origem, com atrito */
+      p.vx = (p.vx + (p.ox - p.x) * PONTO_VOLTA) * PONTO_ATRITO;
+      p.vy = (p.vy + (p.oy - p.y) * PONTO_VOLTA) * PONTO_ATRITO;
+      p.x += p.vx;
+      p.y += p.vy;
+
+      ctx.fillRect(p.x, p.y, PONTO_TAM, PONTO_TAM);
+    }
+
+    if(perto.length){
+      ctx.fillStyle = 'rgba(' + RGB + ', 0.5)';
+      for(let i = 0; i < perto.length; i++){
+        const p = perto[i];
+        ctx.fillRect(p.x - 0.4, p.y - 0.4, PONTO_TAM + 0.8, PONTO_TAM + 0.8);
+      }
+    }
+  }
+
   function build(){
+    montarPontos();
     lines = [];
     const n = Math.ceil(H / LINE_GAP) + 2;
 
@@ -4733,6 +4822,8 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
       ctx.strokeStyle = `rgba(${RGB}, ${alpha.toFixed(3)})`;
       ctx.stroke();
     }
+
+    desenharPontos();
 
     ctx.globalCompositeOperation = 'source-over';
   }
