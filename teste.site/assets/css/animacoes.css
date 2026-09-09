@@ -703,3 +703,12 @@
   min-width: 32px;
   min-height: 32px;
 }
+
+/* ---------- ícone da marca no navbar ----------
+   O badge trazia uma foto redonda; o ícone é um quadrado arredondado, então
+   ele não pode herdar o border-radius de 50% que arredondava a foto. */
+.badge .badge-icone{
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+}
