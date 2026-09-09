@@ -704,11 +704,19 @@
   min-height: 32px;
 }
 
-/* ---------- ícone da marca no navbar ----------
-   O badge trazia uma foto redonda; o ícone é um quadrado arredondado, então
-   ele não pode herdar o border-radius de 50% que arredondava a foto. */
+/* ---------- marca no navbar ----------
+   Versão plana: só o "A", sem quadrado de fundo.
+
+   A foto que estava aqui era um bloco quadrado e preenchia a pílula de
+   ponta a ponta. A marca é um desenho aberto: com a mesma medida ela
+   encostava na curva da borda. Daí a altura menor e o respiro maior à
+   esquerda, onde o raio da pílula fecha. */
 .badge .badge-icone{
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
+  width: auto;
+  height: 19px;
+  border-radius: 0;
 }
+/* a pílula tinha 38px de altura com a foto de 26px. A marca é mais baixa,
+   então o padding vertical cresce pra manter a mesma altura no navbar —
+   e dá ao desenho a folga que ele não tinha. */
+.nav .badge{ padding: 8px 18px 8px 14px; gap: 11px; }
