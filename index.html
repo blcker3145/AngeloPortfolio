@@ -4651,11 +4651,19 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
      rastreamento de mouse pra fazer o que este já faz. */
   const PONTO_GAP     = 26;    /* espaçamento da malha */
   const PONTO_TAM     = 1.7;   /* lado de cada ponto */
-  const PONTO_RAIO    = 165;   /* alcance do empurrão */
+  const PONTO_RAIO    = 140;   /* alcance do empurrão */
   const PONTO_RAIO2   = PONTO_RAIO * PONTO_RAIO;
-  const PONTO_EMPURRA = 1.15;
+  /* mais suave que antes: com a lanterna, o centro da luz é justamente
+     onde a malha precisa estar visível — um empurrão forte abriria um
+     buraco vazio bem no ponto mais aceso */
+  const PONTO_EMPURRA = 0.7;
   const PONTO_VOLTA   = 0.035; /* força da mola que traz de volta */
   const PONTO_ATRITO  = 0.88;
+
+  /* Lanterna: o fundo fica quase apagado e acende onde o cursor passa. */
+  const LANTERNA_RAIO = 300;   /* alcance da luz sobre a malha */
+  const LANTERNA_PISO = 0.14;  /* fração da malha visível fora da luz */
+  const BRILHO_RAIO   = 360;   /* halo laranja sob o cursor */
 
   /* A malha só existe onde existe cursor. Em celular e tablet ela seria
      dois mil retângulos redesenhados por quadro sem nenhuma interação
@@ -4670,6 +4678,7 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
   let W = 0, H = 0, cols = 0;
   let lines = [];
   let pontos = [];
+  let luz = 0;       /* 0 = apagada, 1 = acesa; vai e volta suave */
   let rafId = null;
   let visible = true;
   let t = 0;
@@ -4697,13 +4706,10 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
     const mx = mouse.x, my = mouse.y;
     const ativo = mouse.active;
 
-    /* dois laços de desenho em vez de um: trocar fillStyle por ponto é a
-       parte cara do canvas, então os pontos em repouso saem todos de uma
-       vez e só os que estão perto do cursor entram no segundo lote, mais
-       aceso. São duas trocas de cor por quadro em vez de milhares. */
-    const perto = [];
-
-    ctx.fillStyle = 'rgba(' + RGB + ', 0.16)';
+    /* a malha sai toda de uma vez, acesa por igual; quem decide o quanto
+       cada ponto aparece é a máscara logo abaixo */
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = 'rgba(' + RGB + ', 0.7)';
 
     for(let i = 0; i < pontos.length; i++){
       const p = pontos[i];
@@ -4721,7 +4727,6 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
           const suave = forca * forca * (3 - 2 * forca);
           p.vx += (dx / d) * suave * PONTO_EMPURRA;
           p.vy += (dy / d) * suave * PONTO_EMPURRA;
-          perto.push(p);
         }
       }
 
@@ -4734,13 +4739,40 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
       ctx.fillRect(p.x, p.y, PONTO_TAM, PONTO_TAM);
     }
 
-    if(perto.length){
-      ctx.fillStyle = 'rgba(' + RGB + ', 0.5)';
-      for(let i = 0; i < perto.length; i++){
-        const p = perto[i];
-        ctx.fillRect(p.x - 0.4, p.y - 0.4, PONTO_TAM + 0.8, PONTO_TAM + 0.8);
-      }
-    }
+    /* A lanterna. destination-in multiplica o que já está desenhado pela
+       opacidade do degradê: no centro da luz a malha fica inteira, e ela
+       vai caindo até o piso na borda. Fora do raio o canvas repete a
+       última cor, então o resto do fundo fica todo no piso.
+
+       É um preenchimento só por quadro — mais barato que variar a cor
+       ponto a ponto, que obrigaria milhares de trocas de fillStyle. */
+    const acesa = LANTERNA_PISO + (1 - LANTERNA_PISO) * luz;
+    const meio  = (f) => (LANTERNA_PISO + (acesa - LANTERNA_PISO) * f).toFixed(3);
+    const mascara = ctx.createRadialGradient(mx, my, 0, mx, my, LANTERNA_RAIO);
+    mascara.addColorStop(0,    'rgba(0,0,0,' + acesa.toFixed(3) + ')');
+    mascara.addColorStop(0.35, 'rgba(0,0,0,' + meio(0.78) + ')');
+    mascara.addColorStop(0.7,  'rgba(0,0,0,' + meio(0.28) + ')');
+    mascara.addColorStop(1,    'rgba(0,0,0,' + LANTERNA_PISO + ')');
+
+    ctx.globalCompositeOperation = 'destination-in';
+    ctx.fillStyle = mascara;
+    ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  /* o halo: luz laranja difusa sob o cursor, somada ao fundo. É o que faz
+     parecer que o fundo inteiro acende, e não só os pontos */
+  function desenharBrilho(){
+    if(!pontos.length || luz < 0.01) return;
+
+    const mx = mouse.x, my = mouse.y;
+    const halo = ctx.createRadialGradient(mx, my, 0, mx, my, BRILHO_RAIO);
+    halo.addColorStop(0,    'rgba(' + RGB + ', ' + (0.14 * luz).toFixed(3) + ')');
+    halo.addColorStop(0.4,  'rgba(' + RGB + ', ' + (0.05 * luz).toFixed(3) + ')');
+    halo.addColorStop(1,    'rgba(' + RGB + ', 0)');
+
+    ctx.fillStyle = halo;
+    ctx.fillRect(mx - BRILHO_RAIO, my - BRILHO_RAIO, BRILHO_RAIO * 2, BRILHO_RAIO * 2);
   }
 
   function build(){
@@ -4786,7 +4818,16 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
     mouse.x += (mouse.tx - mouse.x) * 0.08;
     mouse.y += (mouse.ty - mouse.y) * 0.08;
 
+    /* a luz acende quando o cursor entra na hero e apaga quando sai, sem
+       estalar */
+    luz += ((mouse.active ? 1 : 0) - luz) * 0.08;
+
     ctx.clearRect(0, 0, W, H);
+
+    /* a malha vem PRIMEIRO: a máscara da lanterna age sobre tudo o que já
+       está no canvas, então as ondas precisam ser desenhadas depois dela
+       pra não serem apagadas junto */
+    desenharPontos();
 
     /* blend aditivo: cruzamentos somam e acendem */
     ctx.globalCompositeOperation = 'lighter';
@@ -4837,7 +4878,7 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
       ctx.stroke();
     }
 
-    desenharPontos();
+    desenharBrilho();
 
     ctx.globalCompositeOperation = 'source-over';
   }
@@ -4864,7 +4905,18 @@ document.querySelectorAll('.proj-section').forEach(configurarCarrossel);
     const rect = hero.getBoundingClientRect();
     mouse.tx = event.clientX - rect.left;
     mouse.ty = event.clientY - rect.top;
-    mouse.active = event.clientY >= rect.top && event.clientY <= rect.bottom;
+
+    const dentro = event.clientY >= rect.top && event.clientY <= rect.bottom;
+
+    /* ao ENTRAR na hero a luz nasce já embaixo do cursor. Sem isso ela
+       partia da última posição conhecida (ou de -9999, na primeira vez) e
+       atravessava a tela deslizando até o mouse. Quem acende suave é a
+       intensidade (luz), não a posição. */
+    if(dentro && !mouse.active){
+      mouse.x = mouse.tx;
+      mouse.y = mouse.ty;
+    }
+    mouse.active = dentro;
   }, { passive: true });
 
   window.addEventListener('mouseleave', () => {
