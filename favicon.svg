@@ -1,0 +1,17 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Angelo">
+  <!-- Ícone de marca: o mesmo "A" do logotipo (Vector-4.svg), em branco
+       sobre o quadrado arredondado no laranja da identidade. Vetorial de
+       propósito — fica nítido em qualquer tela e pesa menos de 1 KB. -->
+  <defs>
+    <linearGradient id="fundoA" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF7A33"/>
+      <stop offset="0.55" stop-color="#FF5900"/>
+      <stop offset="1" stop-color="#F04A00"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#fundoA)"/>
+  <g transform="translate(14.25 17) scale(0.887)" fill="#FFFFFF">
+    <path d="M23.1892 5.30155C24.1974 2.75858 22.3237 0 19.5881 0H14.2151C12.6268 0 11.1995 0.969555 10.6141 2.44605L0.276484 28.5197C-0.731742 31.0627 1.14203 33.8213 3.87757 33.8213H9.25055C10.8389 33.8213 12.2662 32.8517 12.8516 31.3752L23.1892 5.30155Z"/>
+    <path d="M27.4571 2.80408C27.8853 1.72409 29.2595 1.36602 29.6877 2.44601L40.0254 28.5197C41.0336 31.0626 39.1598 33.8213 36.4242 33.8213H31.0512C29.4629 33.8212 28.0356 32.8517 27.4502 31.3752L23.3468 21.0255C22.3467 18.503 22.3467 15.6939 23.3468 13.1714L27.4571 2.80408Z"/>
+  </g>
+</svg>
