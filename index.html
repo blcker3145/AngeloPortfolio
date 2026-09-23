@@ -56,6 +56,25 @@
   }
   a, button, .proj-scroll{ -webkit-tap-highlight-color: transparent; }
 
+  /* ---------- COR DOS LINKS ----------
+     Sem isso, todo <a> que não recebe cor de um componente cai no azul
+     padrão do navegador (e no roxo depois de visitado) — duas cores que
+     não existem na identidade. Herdando, o link assume a cor do texto ao
+     redor, que é sempre a cor certa para o lugar onde ele está.
+
+     Links de corpo de texto, que precisam se destacar para serem
+     reconhecidos como link, recebem o laranja explicitamente (.link). */
+  a{ color: inherit; }
+
+  .link{
+    color: var(--laranja-500);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,89,0,.45);
+    transition: color .2s ease, border-color .2s ease;
+  }
+  .link:hover{ color: var(--laranja-400); border-bottom-color: var(--laranja-400); }
+
+
 
   *{ box-sizing: border-box; margin: 0; padding: 0; }
 
