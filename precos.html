@@ -67,7 +67,7 @@
       <h1>Tabela de preços de design</h1>
       <p class="precos-lead">Uma régua prática para orçar trabalho de design sem cobrar no escuro. Os valores abaixo consolidam <strong>referências públicas brasileiras de 2026</strong> para freelancers e pequenas e médias empresas.</p>
       <p class="precos-lead">Cada linha traz <strong>um valor fixo</strong>, para escopo padrão e briefing razoavelmente organizado. O que move esse número está em <a class="link" href="#regras">Regras práticas para orçar</a>: prazo curto, direção criativa, copy, cessão ampla de direitos, arquivo aberto e revisões extras entram por ali.</p>
-      <p class="precos-lead">Impressão, mídia, tráfego, fotografia, bancos de imagem pagos, copy extensa e desenvolvimento <strong>não estão inclusos</strong>, salvo quando a linha disser o contrário.</p>
+      <p class="precos-ressalva">Impressão, mídia, tráfego, fotografia, bancos de imagem pagos, copy extensa e desenvolvimento <strong>não estão inclusos</strong>, salvo quando a linha disser o contrário.</p>
     </section>
 
     <div class="precos-destaques">
@@ -85,26 +85,29 @@
         </div>
     </div>
 
-    <div class="precos-barra">
-      <div class="precos-barra-inner">
-        <div class="precos-busca">
-          <input type="search" placeholder="Buscar serviço…" aria-label="Buscar serviço na tabela">
-          <button type="button" class="precos-limpar" aria-label="Limpar busca">&times;</button>
-        </div>
-        <div class="precos-chips">
-          <button type="button" class="precos-chip is-ativo" data-cat="tudo" aria-pressed="true">Tudo</button>
-          <button type="button" class="precos-chip" data-cat="social" aria-pressed="false">Social media e criativos</button>
-          <button type="button" class="precos-chip" data-cat="apresentacoes" aria-pressed="false">Apresentações e design editorial</button>
-          <button type="button" class="precos-chip" data-cat="marca" aria-pressed="false">Marca e identidade visual</button>
-          <button type="button" class="precos-chip" data-cat="impressos" aria-pressed="false">Impressos e grandes formatos</button>
-          <button type="button" class="precos-chip" data-cat="web" aria-pressed="false">Web, landing pages e UI/UX</button>
-          <button type="button" class="precos-chip" data-cat="motion" aria-pressed="false">Motion e ilustração</button>
-        </div>
-        <p class="precos-contagem"></p>
-      </div>
-    </div>
-
     <div class="precos-corpo">
+
+      <aside class="precos-nav">
+        <div class="precos-nav-sticky">
+          <p class="precos-nav-titulo">Buscar na tabela</p>
+          <div class="precos-busca">
+            <input type="search" placeholder="Nome do serviço…" aria-label="Buscar serviço na tabela">
+            <button type="button" class="precos-limpar" aria-label="Limpar busca">&times;</button>
+          </div>
+          <nav class="precos-chips" aria-label="Filtrar por categoria">
+            <button type="button" class="precos-chip is-ativo" data-cat="tudo" aria-pressed="true">Tudo</button>
+          <button type="button" class="precos-chip" data-cat="social" aria-pressed="false">Social media</button>
+          <button type="button" class="precos-chip" data-cat="apresentacoes" aria-pressed="false">Apresentações</button>
+          <button type="button" class="precos-chip" data-cat="marca" aria-pressed="false">Marca e identidade</button>
+          <button type="button" class="precos-chip" data-cat="impressos" aria-pressed="false">Impressos</button>
+          <button type="button" class="precos-chip" data-cat="web" aria-pressed="false">Web e UI/UX</button>
+          <button type="button" class="precos-chip" data-cat="motion" aria-pressed="false">Motion e ilustração</button>
+          </nav>
+          <p class="precos-contagem"></p>
+        </div>
+      </aside>
+
+      <div class="precos-lista">
 
       <section class="precos-cat" id="social">
         <div class="precos-cat-head">
@@ -193,7 +196,6 @@
             </tbody>
           </table>
         </div>
-        <p class="precos-fontes-linha">Bases: MuralFreela · FreelaSemCrise · Alíria Marketing · Cronoshare · 99Freelas</p>
       </section>
 
       <section class="precos-cat" id="apresentacoes">
@@ -289,7 +291,6 @@
             </tbody>
           </table>
         </div>
-        <p class="precos-fontes-linha">Bases: MuralFreela · FreelaSemCrise · Alíria Marketing · BRFreelas</p>
       </section>
 
       <section class="precos-cat" id="marca">
@@ -361,7 +362,6 @@
             </tbody>
           </table>
         </div>
-        <p class="precos-fontes-linha">Bases: MuralFreela · FreelaSemCrise · ProposalDrop · Stagency · Loy Digital · BRFreelas</p>
       </section>
 
       <section class="precos-cat" id="impressos">
@@ -463,7 +463,6 @@
             </tbody>
           </table>
         </div>
-        <p class="precos-fontes-linha">Bases: FreelaSemCrise · Alíria Marketing · MuralFreela · Ucaju · Atrivo · Cronoshare</p>
       </section>
 
       <section class="precos-cat" id="web">
@@ -547,7 +546,6 @@
             </tbody>
           </table>
         </div>
-        <p class="precos-fontes-linha">Bases: MuralFreela · FreelaSemCrise · Freelancer.com.br · Duopus · Atomic Studio · Freelans · Propoz</p>
       </section>
 
       <section class="precos-cat" id="motion">
@@ -631,7 +629,6 @@
             </tbody>
           </table>
         </div>
-        <p class="precos-fontes-linha">Bases: MuralFreela · FreelaSemCrise · Lancei · ProposalDrop</p>
       </section>
 
       <section class="precos-cat precos-regras" id="regras">
@@ -773,6 +770,7 @@
         <p class="precos-formula" style="margin-top:24px"><b>Nota final:</b> o preço justo precisa pagar seu tempo, seus custos e sua margem. Se a média do mercado ficar abaixo do seu custo real, ela não é um preço sustentável para você.</p>
       </section>
 
+      </div>
     </div>
 
     <section class="precos-cta">

@@ -96,25 +96,15 @@
     });
   });
 
-  /* ---------- encaixe da barra sob o menu ----------
-     Os dois são sticky no topo. O menu muda de altura entre desktop,
-     tablet e celular, então em vez de chutar um valor por breakpoint a
-     altura real é medida e entregue pela variável. */
+  /* ---------- altura do menu ----------
+     A coluna de navegação e as âncoras das categorias precisam parar
+     abaixo do menu, que é sticky e muda de altura entre desktop, tablet
+     e celular. Em vez de chutar um valor por breakpoint, a altura real é
+     medida e entregue pela variável. */
   function medirTopo(){
     var cabecalho = document.querySelector('.header-wrap');
-    var barra = document.querySelector('.precos-barra');
     if(!cabecalho) return;
-
-    var alturaMenu = Math.round(cabecalho.getBoundingClientRect().height);
-    document.documentElement.style.setProperty('--topo-header', alturaMenu + 'px');
-
-    /* as duas barras somadas dão o quanto uma âncora precisa descer pra o
-       título da categoria não parar atrás delas. A barra de filtros quebra
-       em duas linhas no celular, então a altura dela também é medida. */
-    if(barra){
-      var alturaBarra = Math.round(barra.getBoundingClientRect().height);
-      document.documentElement.style.setProperty('--topo-total', (alturaMenu + alturaBarra) + 'px');
-    }
+    document.documentElement.style.setProperty('--topo-header', Math.round(cabecalho.getBoundingClientRect().height) + 'px');
   }
 
   medirTopo();
