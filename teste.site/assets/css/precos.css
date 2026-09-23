@@ -1,13 +1,13 @@
 /* ==========================================================================
-   TABELA DE PREÇOS
+   TABELA DE PREÇOS — vitrine
 
    Complementa o case-study.css, que já carrega as variáveis de cor e o
    cabeçalho/rodapé. Aqui mora só o que é da página de preços.
 
-   A versão anterior colocava busca e filtros numa barra grudada no topo.
-   Somada ao menu, ela ocupava 210px de uma tela de 900 — o conteúdo lia
-   numa fresta e sumia atrás da barra ao rolar. Agora a navegação é uma
-   coluna à esquerda: ocupa largura, que sobra, em vez de altura, que não.
+   Esta página já foi uma tabela de verdade, com cinco colunas e 64 linhas.
+   Lia como planilha: o cliente tinha que cruzar coluna com linha pra achar
+   o número dele. Agora cada serviço é um cartão — nome, o que entra, o
+   valor e o botão de pedir. Nada pra cruzar, nada pra interpretar.
    ========================================================================== */
 
 /* ---------- topo ---------- */
@@ -35,18 +35,18 @@
 }
 .precos-lead{
   max-width: 660px;   /* trava de medida: acima disso a linha fica longa demais pra ler */
-  margin: 0 0 16px;
-  font-size: 17px;
+  margin: 0;
+  font-size: 18px;
   line-height: 1.6;
   color: var(--neutro-400);
 }
 .precos-lead strong{ color: var(--neutro-100); font-weight: 600; }
 
-/* a terceira frase é uma ressalva, não argumento: entra menor e mais
-   apagada, pra não disputar atenção com as duas de cima */
+/* a ressalva não é argumento de venda: entra menor e mais apagada, pra
+   não disputar atenção com a frase de cima */
 .precos-ressalva{
   max-width: 660px;
-  margin: 24px 0 0;
+  margin: 28px 0 0;
   padding-left: 16px;
   border-left: 2px solid var(--linha);
   font-size: 14px;
@@ -55,7 +55,7 @@
 }
 .precos-ressalva strong{ color: var(--neutro-400); font-weight: 600; }
 
-/* ---------- os três números de referência ---------- */
+/* ---------- as três condições gerais ---------- */
 .precos-destaques{
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -65,7 +65,7 @@
   padding: 0 64px;
 }
 .precos-destaque{
-  padding: 28px;
+  padding: 26px 28px;
   border: 1px solid var(--linha);
   border-radius: 20px;
   background: #0d0d0d;
@@ -75,7 +75,7 @@
   margin-bottom: 10px;
   font-family: 'Archivo', sans-serif;
   font-weight: 700;
-  font-size: 28px;
+  font-size: 24px;
   letter-spacing: -0.02em;
   color: var(--laranja-500);
 }
@@ -86,41 +86,37 @@
 }
 
 /* ==========================================================================
-   MIOLO — navegação à esquerda, tabelas à direita
+   FILTROS
+   Só duas coisas: buscar pelo nome e escolher a categoria. Qualquer
+   controle a mais aqui vira uma decisão a mais antes de ver preço.
    ========================================================================== */
 .precos-corpo{
-  display: grid;
-  grid-template-columns: 210px 1fr;
-  gap: 56px;
   max-width: 1240px;
   margin: 0 auto;
   padding: 72px 64px 0;
 }
 
-/* só a coluna da esquerda acompanha a rolagem, e logo abaixo do menu */
-.precos-nav-sticky{
-  position: sticky;
-  top: calc(var(--topo-header, 99px) + 28px);
-}
-.precos-nav-titulo{
-  margin: 0 0 16px;
-  font-weight: 500;
-  font-size: 11px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: #7d7d7d;
+.precos-filtros{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  margin-bottom: 56px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--linha);
 }
 
 .precos-busca{
   position: relative;
-  margin-bottom: 24px;
+  flex: none;
+  width: 260px;
 }
 .precos-busca input{
   width: 100%;
   height: 44px;
   padding: 0 38px 0 16px;
   border: 1px solid var(--linha);
-  border-radius: 12px;
+  border-radius: 100px;
   background: #101010;
   color: var(--branco);
   font-family: inherit;
@@ -133,13 +129,13 @@
 .precos-busca input:focus{ outline: none; border-color: var(--laranja-500); }
 .precos-limpar{
   position: absolute;
-  right: 6px; top: 50%;
+  right: 8px; top: 50%;
   transform: translateY(-50%);
   display: none;
-  width: 30px; height: 30px;
+  width: 28px; height: 28px;
   padding: 0;
   border: 0;
-  border-radius: 8px;
+  border-radius: 100px;
   background: none;
   color: var(--neutro-400);
   font-size: 17px;
@@ -149,46 +145,43 @@
 .precos-limpar.is-visivel{ display: block; }
 .precos-limpar:hover{ color: var(--branco); }
 
-/* ---------- lista de categorias ---------- */
 .precos-chips{
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 .precos-chip{
-  width: 100%;
-  padding: 11px 14px;
-  border: 0;
-  /* o filete à esquerda marca a categoria escolhida sem precisar de fundo
-     forte: numa lista vertical ele lê melhor do que a pílula */
-  border-left: 2px solid transparent;
+  padding: 10px 18px;
+  border: 1px solid var(--linha);
+  border-radius: 100px;
   background: none;
   color: var(--neutro-400);
   font-family: inherit;
   font-size: 14px;
-  line-height: 1.35;
-  text-align: left;
+  white-space: nowrap;
   cursor: pointer;
   transition: color .2s ease, background .2s ease, border-color .2s ease;
 }
-.precos-chip:hover{ color: var(--branco); background: rgba(255,255,255,.04); }
+.precos-chip:hover{ color: var(--branco); border-color: var(--neutro-600); }
 .precos-chip.is-ativo{
-  border-left-color: var(--laranja-500);
-  background: rgba(255,89,0,.09);
-  color: var(--branco);
+  border-color: var(--laranja-500);
+  background: var(--laranja-500);
+  color: #fff;
 }
 
 .precos-contagem{
-  margin: 20px 0 0;
-  padding-top: 20px;
-  border-top: 1px solid var(--linha);
+  margin: 0 0 0 auto;
+  flex: none;
   font-size: 13px;
   color: #7d7d7d;
+  white-space: nowrap;
 }
 
-/* ---------- categorias ---------- */
+/* ==========================================================================
+   CATEGORIAS E CARTÕES
+   ========================================================================== */
 .precos-cat{
-  margin-bottom: 88px;
+  margin-bottom: 72px;
   scroll-margin-top: calc(var(--topo-header, 99px) + 32px);
 }
 .precos-cat[hidden]{ display: none; }
@@ -221,129 +214,122 @@
   color: var(--neutro-400);
 }
 
-/* ---------- a tabela ---------- */
-.precos-tabela-wrap{
+/* auto-fill em vez de número fixo de colunas: a grade acha sozinha quantos
+   cartões cabem, então não existe breakpoint pra acertar aqui */
+.precos-grade{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+  gap: 16px;
+}
+
+.precos-card{
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
   border: 1px solid var(--linha);
   border-radius: 20px;
-  overflow: hidden;
-}
-.precos-tabela{
-  width: 100%;
-  border-collapse: collapse;
-}
-.precos-tabela th{
-  padding: 15px 24px;
-  border-bottom: 1px solid var(--linha);
   background: #0d0d0d;
-  font-weight: 500;
-  font-size: 11px;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-  text-align: left;
-  color: #7d7d7d;
-  white-space: nowrap;
+  transition: border-color .22s ease, transform .22s ease, background .22s ease;
 }
-/* linhas largas de propósito: são 64 delas seguidas, e o que cansa numa
-   tabela longa não é o tamanho da letra, é a falta de ar entre as linhas */
-.precos-tabela td{
-  padding: 20px 24px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  line-height: 1.5;
-  color: var(--neutro-400);
-  vertical-align: top;
+.precos-card[hidden]{ display: none; }
+.precos-card:hover{
+  border-color: rgba(255,89,0,.55);
+  background: #111;
+  transform: translateY(-3px);
 }
-.precos-tabela tr:last-child td{ border-bottom: 0; }
-.precos-tabela tbody tr{ transition: background .18s ease; }
-.precos-tabela tbody tr:hover{ background: rgba(255,255,255,0.03); }
-.precos-tabela tr[hidden]{ display: none; }
 
-.col-servico{
-  width: 27%;
-  color: var(--branco);
-  font-weight: 500;
-  font-size: 16px;
-}
-.col-cobranca{
-  width: 13%;
-  white-space: nowrap;
-  font-size: 13px;
-  color: #7d7d7d;
-}
-/* o preço é a informação que a pessoa veio buscar: é o único dado da
-   linha em laranja, pra achar varrendo a coluna com o olho */
-.col-base{
-  width: 13%;
-  white-space: nowrap;
+/* o miolo estica pra empurrar o pé do cartão pra baixo: assim o preço e o
+   botão ficam na mesma linha entre cartões vizinhos, mesmo com textos de
+   tamanhos diferentes */
+.precos-card-topo{ flex: 1; margin-bottom: 22px; }
+
+.precos-card-nome{
+  margin: 0 0 10px;
+  font-family: 'Archivo', sans-serif;
   font-weight: 600;
-  font-size: 17px;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--branco);
+}
+.precos-card-escopo{
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--neutro-400);
+}
+
+.precos-card-pe{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+/* o preço é a informação que a pessoa veio buscar: é o maior número do
+   cartão e o único elemento em laranja */
+.precos-card-valor{
+  margin: 0;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
   color: var(--laranja-500);
 }
-.col-escopo{ width: 47%; font-size: 14px; }
+.precos-card-valor span{
+  display: block;
+  margin-top: 5px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0;
+  color: #7d7d7d;
+}
+
+.precos-card-btn{
+  flex: none;
+  height: 38px;
+  padding: 0 18px;
+  border: 1px solid var(--neutro-600);
+  border-radius: 100px;
+  background: none;
+  color: var(--neutro-100);
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 14px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+.precos-card-btn:hover,
+.precos-card:hover .precos-card-btn{
+  border-color: var(--laranja-500);
+  background: var(--laranja-500);
+  color: #fff;
+}
 
 /* ---------- nada encontrado ---------- */
 .precos-vazio{
   display: none;
-  padding: 64px 0 88px;
+  padding: 56px 0 80px;
   text-align: center;
   color: var(--neutro-400);
 }
 .precos-vazio.is-visivel{ display: block; }
 .precos-vazio b{ display: block; margin-bottom: 8px; color: var(--branco); font-size: 19px; }
 
-/* ---------- regras práticas ---------- */
-.precos-regras .col-servico{ width: 24%; }
-.precos-regras .col-faixa{
-  width: 19%;
-  color: var(--branco);
-  font-size: 15px;
-}
-.precos-regras .col-escopo{ width: 45%; }
-.precos-regras .col-impacto{ width: 12%; white-space: nowrap; font-size: 13px; }
-.impacto-sobe{ color: #ff8a52; }
-.impacto-desce{ color: #72e587; }
-/* só sobrou na tabela de regras (seção 07) */
-.col-faixa{ white-space: nowrap; }
+/* ==========================================================================
+   CHAMADA FINAL E ORIGEM DOS VALORES
 
-.precos-formula{
-  margin: 24px 0 0;
-  padding: 24px 28px;
-  border: 1px solid rgba(255,89,0,.3);
-  border-radius: 18px;
-  background: rgba(255,89,0,.06);
-  font-size: 15px;
-  line-height: 1.65;
-  color: var(--neutro-100);
-}
-.precos-formula b{ color: var(--laranja-500); }
-
-/* ---------- fontes ---------- */
-.precos-metodologia{ margin-bottom: 88px; }
-.precos-fonte{
-  display: grid;
-  grid-template-columns: 290px 1fr;
-  gap: 28px;
-  padding: 20px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.precos-fonte a{
-  color: var(--branco);
-  font-weight: 500;
-  font-size: 15px;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(255,89,0,.5);
-  align-self: start;
-  justify-self: start;
-}
-.precos-fonte a:hover{ color: var(--laranja-500); }
-.precos-fonte p{ margin: 0; font-size: 14px; line-height: 1.6; color: var(--neutro-400); }
-
-/* ---------- chamada final ----------
-   O rodapé já traz 120px de respiro no topo, então aqui o espaço de baixo
-   é curto de propósito: somados, os dois abriam um vão preto enorme. */
+   O rodapé já traz 120px de respiro no topo, então o espaço de baixo aqui
+   é curto de propósito: somados, os dois abriam um vão preto enorme.
+   ========================================================================== */
 .precos-cta{
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 64px 32px;
+  padding: 16px 64px 32px;
 }
 .precos-cta-inner{
   display: flex;
@@ -365,134 +351,104 @@
 }
 .precos-cta p{ margin: 0; max-width: 560px; font-size: 15px; line-height: 1.6; color: var(--neutro-400); }
 
-/* ==========================================================================
-   TABLET — a coluna de navegação vira uma faixa horizontal
+/* a procedência dos valores fica recolhida: quem quiser conferir abre,
+   e quem só quer saber o preço não tropeça em dez fontes no caminho */
+.precos-origem{
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--linha);
+}
+.precos-origem summary{
+  font-size: 14px;
+  color: #7d7d7d;
+  cursor: pointer;
+  list-style: none;
+}
+.precos-origem summary::-webkit-details-marker{ display: none; }
+.precos-origem summary::before{
+  content: "+";
+  display: inline-block;
+  width: 16px;
+  color: var(--laranja-500);
+}
+.precos-origem[open] summary::before{ content: "–"; }
+.precos-origem summary:hover{ color: var(--neutro-100); }
+.precos-origem p{
+  max-width: 760px;
+  margin: 16px 0 0 16px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--neutro-400);
+}
+.precos-origem ul{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 14px 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.precos-origem a{
+  font-size: 13px;
+  color: #7d7d7d;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,89,0,.35);
+}
+.precos-origem a:hover{ color: var(--laranja-500); }
 
-   Abaixo de 1100px não sobra largura pra duas colunas. A navegação volta
-   pro topo, mas sem grudar: rolar e perder o conteúdo atrás dela foi
-   justamente o problema da versão anterior.
+/* ==========================================================================
+   TABLET
    ========================================================================== */
 @media (max-width: 1100px){
   .precos-hero{ padding: 64px 40px 40px; }
   .precos-hero h1{ font-size: 42px; }
+  .precos-lead{ font-size: 16px; }
   .precos-destaques{ padding: 0 40px; gap: 16px; }
   .precos-destaque{ padding: 22px; }
-  .precos-destaque b{ font-size: 24px; }
+  .precos-destaque b{ font-size: 21px; }
 
-  .precos-corpo{
-    display: block;
-    padding: 48px 40px 0;
-  }
-  .precos-nav{
-    margin-bottom: 48px;
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--linha);
-  }
-  .precos-nav-sticky{ position: static; }
-  .precos-busca{ max-width: 360px; }
+  .precos-corpo{ padding: 48px 40px 0; }
+  .precos-filtros{ margin-bottom: 44px; }
+  .precos-busca{ width: 100%; }
+  .precos-contagem{ margin-left: 0; }
 
-  .precos-chips{
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .precos-chip{
-    width: auto;
-    padding: 9px 16px;
-    border: 1px solid var(--linha);
-    border-radius: 100px;
-    font-size: 13px;
-  }
-  .precos-chip.is-ativo{ border-color: var(--laranja-500); }
-
-  .precos-contagem{ margin-top: 20px; padding-top: 0; border-top: 0; }
-
-  .precos-cat{ margin-bottom: 64px; }
+  .precos-cat{ margin-bottom: 56px; }
   .precos-cat-head h2{ font-size: 26px; }
-  .precos-tabela th{ padding: 13px 16px; }
-  .precos-tabela td{ padding: 16px; }
-  .col-servico{ font-size: 15px; }
-  .col-base{ font-size: 16px; }
-  .col-escopo{ font-size: 13px; }
+  .precos-grade{ grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
 
-  .precos-fonte{ grid-template-columns: 1fr; gap: 6px; }
-  .precos-cta{ padding: 0 40px 32px; }
+  .precos-cta{ padding: 8px 40px 32px; }
   .precos-cta-inner{ flex-direction: column; align-items: flex-start; padding: 32px; }
 }
 
 /* ==========================================================================
-   CELULAR — a tabela deixa de ser tabela
-
-   Quatro colunas não cabem em 390px, e rolar na horizontal pra ler preço
-   é terrível. Cada linha vira um cartão, com o rótulo da coluna ao lado
-   do dado. O <table> continua no HTML: a semântica e a leitura por leitor
-   de tela seguem corretas, muda só a apresentação.
+   CELULAR — um cartão por linha
    ========================================================================== */
 @media (max-width: 640px){
   .precos-hero{ padding: 40px 20px 28px; }
   .precos-hero h1{ font-size: 32px; }
   .precos-lead{ font-size: 15px; }
-  .precos-ressalva{ font-size: 13px; }
+  .precos-ressalva{ font-size: 13px; margin-top: 22px; }
   .precos-destaques{ grid-template-columns: 1fr; padding: 0 20px; gap: 12px; }
   .precos-destaque{ padding: 20px; }
-  .precos-destaque b{ font-size: 22px; }
+  .precos-destaque b{ font-size: 20px; }
 
   .precos-corpo{ padding: 36px 20px 0; }
-  .precos-nav{ margin-bottom: 36px; padding-bottom: 24px; }
-  .precos-busca{ max-width: none; }
-  .precos-chips{ flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
-  .precos-chip{ white-space: nowrap; }
+  .precos-filtros{ margin-bottom: 32px; padding-bottom: 20px; }
+  /* os filtros rolam de lado em vez de empilhar em três linhas */
+  .precos-chips{ flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; }
+  .precos-chip{ padding: 9px 16px; font-size: 13px; }
 
-  .precos-cat{ margin-bottom: 48px; }
+  .precos-cat{ margin-bottom: 44px; }
   .precos-cat-head h2{ font-size: 22px; }
   .precos-cat-nota{ font-size: 14px; margin-bottom: 20px; }
 
-  .precos-tabela-wrap{ border: 0; border-radius: 0; overflow: visible; }
-  .precos-tabela, .precos-tabela tbody, .precos-tabela tr, .precos-tabela td{ display: block; width: auto; }
-  .precos-tabela thead{ display: none; }
+  .precos-grade{ grid-template-columns: 1fr; gap: 12px; }
+  .precos-card{ padding: 20px; }
+  .precos-card-topo{ margin-bottom: 18px; }
+  .precos-card-nome{ font-size: 17px; }
 
-  .precos-tabela tr{
-    margin-bottom: 12px;
-    padding: 18px;
-    border: 1px solid var(--linha);
-    border-radius: 16px;
-    background: #0d0d0d;
-  }
-  .precos-tabela td{
-    padding: 0;
-    border: 0;
-    font-size: 14px;
-  }
-  /* o nome do serviço vira o título do cartão */
-  .precos-tabela td.col-servico{
-    margin-bottom: 14px;
-    font-size: 16px;
-    line-height: 1.35;
-  }
-  /* as demais células ganham o rótulo da coluna à esquerda */
-  .precos-tabela td:not(.col-servico){
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 16px;
-    padding: 8px 0;
-    border-top: 1px solid rgba(255,255,255,0.06);
-    text-align: right;
-  }
-  .precos-tabela td:not(.col-servico)::before{
-    content: attr(data-rotulo);
-    flex: none;
-    font-size: 11px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    color: #7d7d7d;
-    text-align: left;
-  }
-  .precos-tabela td.col-escopo{ flex-direction: column; gap: 4px; text-align: left; }
-
-  .precos-formula{ padding: 18px 20px; font-size: 14px; }
-  .precos-metodologia{ margin-bottom: 56px; }
-  .precos-cta{ padding: 0 20px 24px; }
+  .precos-cta{ padding: 8px 20px 24px; }
   .precos-cta-inner{ padding: 26px; }
   .precos-cta h2{ font-size: 22px; }
+  .precos-origem ul{ flex-direction: column; gap: 10px; }
 }

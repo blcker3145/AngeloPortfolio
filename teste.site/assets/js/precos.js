@@ -1,67 +1,61 @@
 /* ==========================================================================
    TABELA DE PREÇOS — busca e filtro
 
-   São ~60 linhas em 6 categorias. Sem um jeito de achar a linha certa, a
-   pessoa rola a página inteira procurando com o olho.
+   São 64 serviços em 6 categorias. Sem um jeito de achar o que interessa,
+   a pessoa rola a página inteira procurando com o olho.
 
-   A tabela inteira já vem no HTML: sem JS, a página continua completa e
+   Todos os cartões já vêm no HTML: sem JS, a página continua completa e
    legível. Isto aqui só esconde o que não interessa.
    ========================================================================== */
 (function(){
   'use strict';
 
-  var campo   = document.querySelector('.precos-busca input');
-  var limpar  = document.querySelector('.precos-limpar');
-  var chips   = [].slice.call(document.querySelectorAll('.precos-chip'));
-  var cats    = [].slice.call(document.querySelectorAll('.precos-cat'));
-  var vazio   = document.querySelector('.precos-vazio');
-  var contagem= document.querySelector('.precos-contagem');
+  var campo    = document.querySelector('.precos-busca input');
+  var limpar   = document.querySelector('.precos-limpar');
+  var chips    = [].slice.call(document.querySelectorAll('.precos-chip'));
+  var cats     = [].slice.call(document.querySelectorAll('.precos-cat'));
+  var vazio    = document.querySelector('.precos-vazio');
+  var contagem = document.querySelector('.precos-contagem');
   if(!campo || !cats.length) return;
 
-  /* o texto de busca de cada linha é montado uma vez só, aqui. Fazer isso a
-     cada tecla obrigaria a ler o DOM de 60 linhas por caractere digitado. */
-  var linhas = [];
-  cats.forEach(function(cat){
-    [].slice.call(cat.querySelectorAll('tbody tr')).forEach(function(tr){
-      /* a seção 07 são regras de orçamento, não serviços: entra na busca
-         (quem procura "urgência" precisa achar) mas fica fora da contagem */
-      linhas.push({
-        tr: tr,
-        cat: cat,
-        servico: !cat.classList.contains('precos-regras'),
-        texto: normalizar(tr.textContent)
-      });
-    });
-  });
-
-  var total = linhas.filter(function(l){ return l.servico; }).length;
-  var categoriaAtiva = 'tudo';
-
-  /* sem acento e em minúscula dos dois lados: quem digita "grafico" precisa
-     achar "gráfico", e quem digita "Thumbnail" precisa achar "thumbnail" */
+  /* sem acento e em minúscula dos dois lados: quem digita "grafico"
+     precisa achar "gráfico", e quem digita "Thumbnail" precisa achar
+     "thumbnail" */
   function normalizar(t){
     return t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   }
+
+  /* o texto de busca de cada cartão é montado uma vez só, aqui. Fazer isso
+     a cada tecla obrigaria a ler o DOM de 64 cartões por caractere. */
+  var itens = [];
+  cats.forEach(function(cat){
+    [].slice.call(cat.querySelectorAll('.precos-card')).forEach(function(card){
+      itens.push({ el: card, cat: cat, texto: normalizar(card.textContent) });
+    });
+  });
+
+  var total = itens.length;
+  var categoriaAtiva = 'tudo';
 
   function filtrar(){
     var termo = normalizar(campo.value.trim());
     var termos = termo ? termo.split(/\s+/) : [];
     var visiveis = 0;
 
-    linhas.forEach(function(l){
-      var daCategoria = categoriaAtiva === 'tudo' || l.cat.id === categoriaAtiva;
-      /* todos os termos precisam bater, em qualquer ordem: "banner 500"
-         acha a linha que tem as duas coisas */
-      var bate = termos.every(function(t){ return l.texto.indexOf(t) !== -1; });
+    itens.forEach(function(i){
+      var daCategoria = categoriaAtiva === 'tudo' || i.cat.id === categoriaAtiva;
+      /* todos os termos precisam bater, em qualquer ordem: "banner pack"
+         acha o cartão que tem as duas palavras */
+      var bate = termos.every(function(t){ return i.texto.indexOf(t) !== -1; });
       var mostrar = daCategoria && bate;
-      l.tr.hidden = !mostrar;
-      if(mostrar && l.servico) visiveis++;
+      i.el.hidden = !mostrar;
+      if(mostrar) visiveis++;
     });
 
-    /* categoria sem nenhuma linha visível sai de cena inteira, com título e
-       tudo — senão sobra um cabeçalho órfão sobre uma tabela vazia */
+    /* categoria sem nenhum cartão visível sai de cena inteira, com título e
+       tudo — senão sobra um cabeçalho órfão sobre um espaço vazio */
     cats.forEach(function(cat){
-      var alguma = [].slice.call(cat.querySelectorAll('tbody tr')).some(function(tr){ return !tr.hidden; });
+      var alguma = [].slice.call(cat.querySelectorAll('.precos-card')).some(function(c){ return !c.hidden; });
       cat.hidden = !alguma;
     });
 
@@ -97,10 +91,9 @@
   });
 
   /* ---------- altura do menu ----------
-     A coluna de navegação e as âncoras das categorias precisam parar
-     abaixo do menu, que é sticky e muda de altura entre desktop, tablet
-     e celular. Em vez de chutar um valor por breakpoint, a altura real é
-     medida e entregue pela variável. */
+     As âncoras das categorias precisam parar abaixo do menu, que é sticky
+     e muda de altura entre desktop, tablet e celular. Em vez de chutar um
+     valor por breakpoint, a altura real é medida e entregue pela variável. */
   function medirTopo(){
     var cabecalho = document.querySelector('.header-wrap');
     if(!cabecalho) return;
