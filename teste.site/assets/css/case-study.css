@@ -54,6 +54,13 @@ a, button, .proj-scroll{ -webkit-tap-highlight-color: transparent; }
    reconhecidos como link, recebem o laranja explicitamente (.link). */
 a{ color: inherit; }
 
+/* ---------- CURSOR DOS BOTÕES ----------
+   <button> nasce com cursor de seta, diferente de <a>. Sem isto, um
+   botão estilizado como link não parece clicável ao passar o mouse. */
+button{ cursor: pointer; }
+button:disabled{ cursor: default; }
+
+
 .link{
   color: var(--laranja-500);
   text-decoration: none;
@@ -1349,3 +1356,13 @@ img{ display: block; max-width: 100%; }
   .nav-links{ display: flex; gap: 24px; font-size: 13px; }
   .nav-menu{ display: none; }
 }
+
+/* o chevron do botão voltar: antes era o caractere "←", que muda de
+   desenho conforme a fonte instalada e não casava com o traço do resto */
+.nav-back .arrow{
+  width: 17px;
+  height: 17px;
+  display: block;
+  transition: transform .25s cubic-bezier(.22,.61,.36,1);
+}
+.nav-back:hover .arrow{ transform: translateX(-2px); }

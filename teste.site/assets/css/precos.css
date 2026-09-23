@@ -215,18 +215,39 @@
   cursor: pointer;
   transition: border-color .2s ease, background .2s ease, color .2s ease, opacity .2s ease;
 }
+.precos-seta svg{ width: 17px; height: 17px; display: block; }
 .precos-seta:hover{ border-color: var(--laranja-500); background: var(--laranja-500); color: #fff; }
 /* na ponta do trilho a seta não some, só apaga: sumir muda a posição da
    outra e o par fica pulando de lugar a cada rolagem */
 .precos-seta[disabled]{ opacity: .3; cursor: default; }
 .precos-seta[disabled]:hover{ border-color: var(--linha); background: none; color: var(--neutro-100); }
 .precos-setas[hidden]{ display: none; }
+/* mesmo corpo do título: a 12px, ao lado de um título de 30, o número
+   lia como etiqueta solta em vez de índice da seção */
 .precos-cat-n{
-  font-weight: 500;
-  font-size: 12px;
-  letter-spacing: .08em;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--laranja-500);
+  opacity: .55;
+}
+
+/* o desenho da categoria: traço fino, mesma linguagem do chevron */
+.precos-cat-icone{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  align-self: center;
+  border: 1px solid var(--linha);
+  border-radius: 12px;
   color: var(--laranja-500);
 }
+.precos-cat-icone svg{ width: 22px; height: 22px; }
 .precos-cat-head h2{
   margin: 0;
   font-family: 'Archivo', sans-serif;
@@ -237,7 +258,7 @@
 }
 .precos-cat-nota{
   max-width: 720px;
-  margin: 0 0 28px;
+  margin: 0 0 18px;
   font-size: 15px;
   line-height: 1.6;
   color: var(--neutro-400);
@@ -257,8 +278,11 @@
      meio — é o que faz a rolagem parecer controlada e não solta */
   scroll-snap-type: x mandatory;
   scroll-padding-left: 0;
-  /* espaço embaixo pro cartão poder subir no hover sem ser recortado */
-  padding-bottom: 8px;
+  /* overflow-x recorta tudo que sai da caixa, e o cartão sobe 3px no
+     hover: sem esta folga em cima, o filete laranja da borda superior
+     ficava cortado. Embaixo, a folga é pra sombra do cartão. */
+  padding-top: 10px;
+  padding-bottom: 12px;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -269,7 +293,7 @@
 .precos-carrossel::after{
   content: "";
   position: absolute;
-  top: 0; right: -1px; bottom: 8px;
+  top: 10px; right: -1px; bottom: 12px;
   width: 64px;
   pointer-events: none;
   background: linear-gradient(90deg, rgba(0,0,0,0), var(--preto));
@@ -367,11 +391,14 @@
   cursor: pointer;
   transition: background .2s ease, border-color .2s ease, color .2s ease;
 }
+/* verde só no botão, e só no hover: é o sinal de "pode seguir", e não
+   compete com o laranja porque nunca aparecem juntos no mesmo estado */
 .precos-card-btn:hover,
 .precos-card:hover .precos-card-btn{
-  border-color: var(--laranja-500);
-  background: var(--laranja-500);
-  color: #fff;
+  border-color: #34c759;
+  background: #34c759;
+  color: #04220e;
+  font-weight: 600;
 }
 
 /* ---------- nada encontrado ---------- */
@@ -478,6 +505,9 @@
 
   .precos-cat{ margin-bottom: 56px; }
   .precos-cat-head h2{ font-size: 26px; }
+  .precos-cat-n{ font-size: 26px; }
+  .precos-cat-icone{ width: 38px; height: 38px; border-radius: 11px; }
+  .precos-cat-icone svg{ width: 20px; height: 20px; }
   .precos-grade{ grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
 
   .precos-cta{ padding: 8px 40px 32px; }
@@ -504,6 +534,10 @@
 
   .precos-cat{ margin-bottom: 44px; }
   .precos-cat-head h2{ font-size: 22px; }
+  .precos-cat-n{ font-size: 22px; }
+  .precos-cat-icone{ width: 34px; height: 34px; border-radius: 10px; }
+  .precos-cat-icone svg{ width: 18px; height: 18px; }
+  .precos-cat-head{ gap: 10px; }
   .precos-cat-nota{ font-size: 14px; margin-bottom: 20px; }
 
   .precos-grade{ grid-template-columns: 1fr; gap: 12px; }

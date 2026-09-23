@@ -150,6 +150,10 @@
         arrastando = true; andou = false;
         partiuEm = e.clientX;
         scrollInicial = trilho.scrollLeft;
+        /* prende o ponteiro ao trilho: sem isso, arrastar pra fora da
+           caixa faz os eventos irem pro elemento de baixo e a rolagem
+           trava no meio do gesto */
+        try{ trilho.setPointerCapture(e.pointerId); }catch(err){}
       });
 
       trilho.addEventListener('pointermove', function(e){
@@ -162,14 +166,18 @@
         }
       });
 
-      function soltar(){
+      function soltar(e){
         if(!arrastando) return;
         arrastando = false;
         trilho.style.scrollSnapType = '';
+        if(e && e.pointerId !== undefined){
+          try{ trilho.releasePointerCapture(e.pointerId); }catch(err){}
+        }
       }
       trilho.addEventListener('pointerup', soltar);
       trilho.addEventListener('pointercancel', soltar);
-      trilho.addEventListener('pointerleave', soltar);
+      /* pointerleave saiu daqui: com a captura, sair da caixa não termina
+         mais o arrasto — era exatamente isso que travava a rolagem */
 
       /* o clique que fecha um arrasto não deve virar clique de botão */
       trilho.addEventListener('click', function(e){
