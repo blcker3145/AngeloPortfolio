@@ -64,6 +64,8 @@
     contagem.textContent = visiveis === total
       ? total + ' serviços'
       : visiveis + ' de ' + total + ' serviços';
+
+    recalcularPrateleiras();
   }
 
   campo.addEventListener('input', filtrar);
@@ -90,6 +92,105 @@
     });
   });
 
+/* ==========================================================================
+     PRATELEIRAS
+
+     Cada categoria rola pro lado. O trilho já rola sozinho por toque e
+     trackpad; isto aqui acrescenta as setas, o arrastar com o mouse e o
+     aviso de que ainda tem coisa fora da tela.
+     ========================================================================== */
+  function prateleiras(){
+    cats.forEach(function(cat){
+      var carrossel = cat.querySelector('.precos-carrossel');
+      var trilho    = cat.querySelector('.precos-trilho');
+      var setas     = cat.querySelector('.precos-setas');
+      if(!trilho || !carrossel) return;
+
+      var botoes = [].slice.call(setas ? setas.querySelectorAll('.precos-seta') : []);
+
+      /* 1px de folga na comparação: a largura do trilho costuma cair em
+         valores fracionados, e sem isso a seta do fim nunca desliga */
+      function atualizar(){
+        var sobra = trilho.scrollWidth - trilho.clientWidth;
+        var rolavel = sobra > 1;
+
+        if(setas) setas.hidden = !rolavel;
+        carrossel.classList.toggle('tem-mais', rolavel && trilho.scrollLeft < sobra - 1);
+
+        botoes.forEach(function(b){
+          var paraFrente = b.dataset.dir === '1';
+          b.disabled = paraFrente ? trilho.scrollLeft >= sobra - 1 : trilho.scrollLeft <= 1;
+        });
+      }
+
+      /* rola quase uma tela cheia de cada vez, deixando um cartão de
+         sobra como referência visual de onde a pessoa estava */
+      botoes.forEach(function(b){
+        b.addEventListener('click', function(){
+          trilho.scrollBy({ left: trilho.clientWidth * 0.8 * Number(b.dataset.dir), behavior: 'smooth' });
+        });
+      });
+
+      var agendado = false;
+      trilho.addEventListener('scroll', function(){
+        if(agendado) return;
+        agendado = true;
+        requestAnimationFrame(function(){ agendado = false; atualizar(); });
+      }, { passive: true });
+
+      /* ---------- arrastar com o mouse ----------
+         Quem está no desktop sem trackpad não tem como rolar de lado a não
+         ser pelas setas. Arrastar resolve, mas precisa distinguir arrasto
+         de clique: sem isso, soltar o mouse em cima de um cartão dispararia
+         o botão "Solicitar". */
+      var arrastando = false, partiuEm = 0, scrollInicial = 0, andou = false;
+
+      trilho.addEventListener('pointerdown', function(e){
+        if(e.pointerType !== 'mouse') return;
+        arrastando = true; andou = false;
+        partiuEm = e.clientX;
+        scrollInicial = trilho.scrollLeft;
+      });
+
+      trilho.addEventListener('pointermove', function(e){
+        if(!arrastando) return;
+        var dx = e.clientX - partiuEm;
+        if(Math.abs(dx) > 4){
+          andou = true;
+          trilho.style.scrollSnapType = 'none';   /* o encaixe atrapalha durante o arrasto */
+          trilho.scrollLeft = scrollInicial - dx;
+        }
+      });
+
+      function soltar(){
+        if(!arrastando) return;
+        arrastando = false;
+        trilho.style.scrollSnapType = '';
+      }
+      trilho.addEventListener('pointerup', soltar);
+      trilho.addEventListener('pointercancel', soltar);
+      trilho.addEventListener('pointerleave', soltar);
+
+      /* o clique que fecha um arrasto não deve virar clique de botão */
+      trilho.addEventListener('click', function(e){
+        if(andou){ e.preventDefault(); e.stopPropagation(); andou = false; }
+      }, true);
+
+      cat._atualizarPrateleira = atualizar;
+      atualizar();
+    });
+  }
+
+  /* depois de filtrar, a prateleira tem outro tamanho: volta pro começo e
+     recalcula seta e névoa */
+  function recalcularPrateleiras(){
+    cats.forEach(function(cat){
+      var trilho = cat.querySelector('.precos-trilho');
+      if(trilho) trilho.scrollLeft = 0;
+      if(cat._atualizarPrateleira) cat._atualizarPrateleira();
+    });
+  }
+
   /* ---------- altura do menu ----------
      As âncoras das categorias precisam parar abaixo do menu, que é sticky
      e muda de altura entre desktop, tablet e celular. Em vez de chutar um
@@ -100,8 +201,14 @@
     document.documentElement.style.setProperty('--topo-header', Math.round(cabecalho.getBoundingClientRect().height) + 'px');
   }
 
+  prateleiras();
+
   medirTopo();
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(medirTopo);
+  /* as fontes mudam a largura dos textos, e com ela a do trilho */
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(recalcularPrateleiras);
+  var reajuste;
+  window.addEventListener('resize', function(){ clearTimeout(reajuste); reajuste = setTimeout(recalcularPrateleiras, 150); });
   var remedir;
   window.addEventListener('resize', function(){ clearTimeout(remedir); remedir = setTimeout(medirTopo, 150); });
 

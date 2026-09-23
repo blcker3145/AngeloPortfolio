@@ -192,6 +192,35 @@
   gap: 14px;
   margin-bottom: 10px;
 }
+/* as setas ficam na ponta direita da linha do título */
+.precos-setas{
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+  align-self: center;
+}
+.precos-seta{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--linha);
+  border-radius: 100px;
+  background: none;
+  color: var(--neutro-100);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color .2s ease, background .2s ease, color .2s ease, opacity .2s ease;
+}
+.precos-seta:hover{ border-color: var(--laranja-500); background: var(--laranja-500); color: #fff; }
+/* na ponta do trilho a seta não some, só apaga: sumir muda a posição da
+   outra e o par fica pulando de lugar a cada rolagem */
+.precos-seta[disabled]{ opacity: .3; cursor: default; }
+.precos-seta[disabled]:hover{ border-color: var(--linha); background: none; color: var(--neutro-100); }
+.precos-setas[hidden]{ display: none; }
 .precos-cat-n{
   font-weight: 500;
   font-size: 12px;
@@ -214,15 +243,44 @@
   color: var(--neutro-400);
 }
 
-/* auto-fill em vez de número fixo de colunas: a grade acha sozinha quantos
-   cartões cabem, então não existe breakpoint pra acertar aqui */
-.precos-grade{
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+/* ---------- prateleira ----------
+   Empilhados, os 64 cartões chegavam todos na tela ao mesmo tempo e
+   sobrecarregavam quem só queria achar um serviço. Em prateleira, cada
+   categoria ocupa uma faixa: a tela mostra seis linhas, não 64 blocos. */
+.precos-carrossel{ position: relative; }
+
+.precos-trilho{
+  display: flex;
   gap: 16px;
+  overflow-x: auto;
+  /* o encaixe para o cartão sempre alinhado à margem, nunca cortado no
+     meio — é o que faz a rolagem parecer controlada e não solta */
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 0;
+  /* espaço embaixo pro cartão poder subir no hover sem ser recortado */
+  padding-bottom: 8px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+.precos-trilho::-webkit-scrollbar{ display: none; }
+
+/* a névoa na direita avisa que tem mais coisa pro lado. Some ao chegar
+   no fim, senão vira sujeira permanente na borda. */
+.precos-carrossel::after{
+  content: "";
+  position: absolute;
+  top: 0; right: -1px; bottom: 8px;
+  width: 64px;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(0,0,0,0), var(--preto));
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.precos-carrossel.tem-mais::after{ opacity: 1; }
 
 .precos-card{
+  flex: 0 0 286px;
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   padding: 24px;
@@ -257,6 +315,12 @@
   font-size: 14px;
   line-height: 1.55;
   color: var(--neutro-400);
+  /* trava em 3 linhas: numa prateleira, cartões de alturas diferentes
+     deixam a linha dos preços serrilhada */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .precos-card-pe{
