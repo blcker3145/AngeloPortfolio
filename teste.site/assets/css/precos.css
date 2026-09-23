@@ -238,18 +238,19 @@
 .precos-tabela tbody tr:hover{ background: rgba(255,255,255,0.025); }
 .precos-tabela tr[hidden]{ display: none; }
 
-.col-servico{ width: 27%; color: var(--branco); font-weight: 500; }
-.col-cobranca{ width: 11%; white-space: nowrap; font-size: 13px; }
-.col-faixa{ width: 15%; white-space: nowrap; }
+.col-servico{ width: 30%; color: var(--branco); font-weight: 500; }
+.col-cobranca{ width: 12%; white-space: nowrap; font-size: 13px; }
+/* só sobrou na tabela de regras (seção 07) */
+.col-faixa{ white-space: nowrap; }
 /* o preço-base é a informação que a pessoa veio buscar: é o único dado
    da linha em laranja, pra achar varrendo a coluna com o olho */
 .col-base{
-  width: 12%;
+  width: 14%;
   white-space: nowrap;
   font-weight: 600;
   color: var(--laranja-500);
 }
-.col-escopo{ width: 35%; font-size: 14px; }
+.col-escopo{ width: 44%; font-size: 14px; }
 
 .precos-fontes-linha{
   margin: 14px 0 0;
